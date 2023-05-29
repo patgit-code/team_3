@@ -100,7 +100,7 @@ st.subheader('Österreich')
 # TODO change font
 st.text('Im Vergleich mit Deutschland und der Schweiz hat Österreich...')
 # CSV-Daten laden
-dat = pd.read_csv(r"data\CovidFaelle_Altersgruppe.csv", delimiter=';')
+dat = pd.read_csv("data//CovidFaelle_Altersgruppe.csv", delimiter=';')
 
 # Konvertiere 'Time' in ein Datumsformat
 dat['Time'] = pd.to_datetime(dat['Time'], format='%d.%m.%Y %H:%M:%S')
@@ -135,7 +135,7 @@ st.subheader('')
 # Schweiz
 st.subheader('Schweiz')
 # Daten laden
-data = pd.read_csv(r'data\COVID19Death_geoRegion_AKL10_w.csv')
+data = pd.read_csv('data//COVID19Death_geoRegion_AKL10_w.csv')
 
 # Filtern der Daten von 2021 bis 2023
 data = data[data['datum'].astype(str).str[:4].astype(int).between(2021, 2023)]
@@ -163,7 +163,7 @@ st.pyplot(fig)
 st.subheader('Deutschland')
 
 # Daten laden
-df = pd.read_csv(r'data\Aktuell Deutschland COVID Infektionen.csv', delimiter=';')
+df = pd.read_csv('data//Aktuell Deutschland COVID Infektionen.csv', delimiter=';')
 
 # Datumsspalten in datetime umwandeln
 df['Meldedatum'] = pd.to_datetime(df['Meldedatum'], format='%Y-%m-%d')
@@ -265,7 +265,7 @@ st.subheader('')
 st.subheader('Schweiz')
 
 # Getting the coords for applying the information per canton
-cantons = gpd.read_file(r'data\shapefiles\swissboundaries\swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp')
+cantons = gpd.read_file('data//shapefiles//swissboundaries//swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp')
 cantons['coords'] = cantons['geometry'].apply(lambda x: x.representative_point().coords[:])
 
 cantons['coords'] = [coords[0] for coords in cantons['coords']]
@@ -335,7 +335,7 @@ st.pyplot(fig)
 st.subheader('Deutschland')
 
 # Getting the coords for applying the information per canton
-germany = gpd.read_file(r"data\shapefiles\deutschland\vg2500_bld.shp")
+germany = gpd.read_file('data//shapefiles//deutschland//vg2500_bld.shp')
 
 fig, ax_map_germany = plt.subplots(figsize=(20, 20), dpi=96)
 ax_map_germany.set_axis_off()
@@ -349,7 +349,7 @@ st.pyplot(fig)
 st.subheader('Österreich')
 
 # Getting the coords for applying the information per canton
-austria = gpd.read_file(r'data\shapefiles\oesterreich\Bundeslaender_50.shp')
+austria = gpd.read_file('data//shapefiles//oesterreich//Bundeslaender_50.shp')
 
 fig, ax_map_austria = plt.subplots(figsize=(20, 20), dpi=96)
 ax_map_austria.set_axis_off()
