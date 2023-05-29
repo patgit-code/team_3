@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1909abe4-50f4-4068-aca3-ac18e94d6b79" name="Changes" comment="">
+    <list default="true" id="1909abe4-50f4-4068-aca3-ac18e94d6b79" name="Changes" comment="conf files">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -12,7 +12,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ChangesViewManager">
+  <component name="ChangesViewManager" show_ignored="true">
     <option name="groupingKeys">
       <option value="directory" />
     </option>
@@ -28,8 +28,8 @@
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
-        <option name="accountId" value="4174e716-86ac-4a55-86cd-77c7624bdcde" />
-        <option name="url" value="https://github.zhaw.ch/haeuspa2/team_3.git" />
+        <option name="accountId" value="c642d92d-c359-423d-97a2-99af96ca3398" />
+        <option name="url" value="https://github.com/patgit-code/team_3.git" />
       </UrlAndAccount>
     </option>
   </component>
@@ -46,7 +46,8 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/zh10118/vdss/team_3/team_3_streamlit"
+    "last_opened_file_path": "C:/Users/zh10118/PycharmProjects/team_3",
+    "settings.editor.selected.configurable": "vcs.Git"
   },
   "keyToStringList": {
     "ChangesTree.GroupingKeys": [
@@ -61,6 +62,9 @@
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\zh10118\AppData\Roaming\Subversion</configuration>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="1909abe4-50f4-4068-aca3-ac18e94d6b79" name="Changes" comment="" />
@@ -69,6 +73,32 @@
       <option name="presentableId" value="Default" />
       <updated>1685022071436</updated>
     </task>
+    <task id="LOCAL-00001" summary="conf files">
+      <created>1685312765798</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1685312765798</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+    <MESSAGE value="conf files" />
+    <option name="LAST_COMMIT_MESSAGE" value="conf files" />
   </component>
 </project>
