@@ -67,7 +67,7 @@ st.pyplot(fig)
 st.subheader('Deutschland')
 
 # Daten einlesen
-df = pd.read_csv(r'data\Aktuell Deutschland COVID Infektionen.csv', delimiter=';')
+df = pd.read_csv('data//Aktuell Deutschland COVID Infektionen.csv', delimiter=';')
 
 # Meldedatum in DateTime-Format umwandeln
 df['Meldedatum'] = pd.to_datetime(df['Meldedatum'])
