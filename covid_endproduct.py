@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -29,7 +30,9 @@ st.subheader('')
 # Schweiz
 st.subheader('Schweiz')
 st.text('Der Verlauf in der Schweiz...')
-covid_ww = pd.read_csv(r'data\WHO-COVID-19-global-data.csv')
+
+
+covid_ww = pd.read_csv(os.path.join('data', 'WHO-COVID-19-global-data.csv'))
 
 # Daten für die Schweiz filtern
 switzerland = covid_ww[covid_ww['Country_code'] == 'CH']
