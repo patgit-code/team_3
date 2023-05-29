@@ -343,13 +343,16 @@ st.subheader('Österreich')
 austria = gpd.read_file('data\shapefiles\oesterreich\Bundeslaender_50.shp')
 
 
-fig, ax_map_austria = plt.subplots(figsize = (20,20), dpi = 96)
+fig, ax_map_austria = plt.subplots(figsize=(20,20), dpi=96)
 ax_map_austria.set_axis_off()
 
 austria.plot(ax=ax_map_austria, column='FL_KM', cmap='autumn')
 
 plt.title('Todesfälle pro Bundesland', fontsize=30)
 st.pyplot(fig)
+
+st.header('Impfungen')
+st.subheader('')
 
 # Problem
 st.header('')
@@ -360,7 +363,7 @@ st.header('')
 st.subheader('')
 
 # Fazit
-st.header('')
-st.subheader('')
+st.header('Fazit')
+st.subheader('Durch die Erkenntnisse können wir die Menschen beruhigen. Mit dem analytischen Rückblick auf die vergangenen Jahre können bei zukünftigen Pandemien verbesserte Massnahmen bestimmt werden.')
 
 st.caption('Céline Felix, Katharina Azevedo, Kirishana Kiritharan, Patrick Häusermann')
