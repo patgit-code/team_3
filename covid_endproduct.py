@@ -10,7 +10,7 @@ from pandas.api.types import CategoricalDtype
 import geopandas as gpd
 from bokeh.io import output_notebook, show, output_file
 from bokeh.plotting import figure, show, output_notebook
-from bokeh.models import GeoJSONDataSource, LinearColorMapper, ColorBar
+from bokeh.models import GeoJSONDataSource, LinearColorMapper, ColorBar, HoverTool
 from bokeh.palettes import brewer
 
 output_notebook()
@@ -279,8 +279,6 @@ st.subheader('Schweiz')
 
 # Getting the coords for applying the information per canton
 cantons = gpd.read_file("data//shapefiles//swissboundaries//swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp")
-geo_source_switzerland = GeoJSONDataSource(geojson=cantons.to_json())
-
 cantons['coords'] = cantons['geometry'].apply(lambda x: x.representative_point().coords[:])
 
 cantons['coords'] = [coords[0] for coords in cantons['coords']]
@@ -322,27 +320,13 @@ dict_canton = {
 }
 
 cantons['deaths'] = ''
-
+# TODO correct the death values
 for index, row in cantons.iterrows():
     cantons.loc[index, 'deaths'] = \
-    death_count_canton[death_count_canton['geoRegion'] == dict_canton[row['NAME']]]['entries'].values[0]
+    int(death_count_canton[death_count_canton['geoRegion'] == dict_canton[row['NAME']]]['entries'].values[0])
 
-fig, ax_map_switzerland = plt.subplots(figsize=(20, 20), dpi=96)
-ax_map_switzerland.set_axis_off()
+geo_source_switzerland = GeoJSONDataSource(geojson=cantons.to_json())
 
-
-# color graph
-colours = ["#ff9900", "#ff3300"]
-cmap = colors.LinearSegmentedColormap.from_list("colour_map", colours, N=256)
-norm = colors.Normalize(cantons['deaths'].min(), cantons['deaths'].max())
-
-# ADD Custom Colormap, and maybe add quanntile management of colors
-cantons.plot(ax=ax_map_switzerland, column='deaths', cmap='autumn')
-
-for idx, row in cantons.iterrows():
-    # we want only to annotate each cantons once
-    if not np.isnan(row['KANTONSFLA']):
-        plt.annotate(row['deaths'], xy=row['coords'], horizontalalignment='center', color='black', size=20)
 
 plt.title('Todesfälle pro Kanton', fontsize=30)
 
@@ -362,6 +346,11 @@ bokeh_swiss.sizing_mode = 'scale_width'
 
 bokeh_swiss.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_switzerland, fill_color="#999DA0")
 
+# Hover Tool Death
+
+hover = bokeh_swiss.select(dict(type=HoverTool))
+hover.tooltips = [("Canton", "@NAME"), ("Tote insgesamt", "@deaths"), ]
+hover.mode = 'mouse'
 
 
 # TEST
