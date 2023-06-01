@@ -331,11 +331,6 @@ geo_source_switzerland = GeoJSONDataSource(geojson=cantons.to_json())
 plt.title('Todesfälle pro Kanton', fontsize=30)
 
 # bokeh map
-
-#st.pyplot(fig)
-
-#geo_source_switzerland = GeoJSONDataSource(geojson=cantons.to_json())
-
 bokeh_swiss = figure(tools='wheel_zoom, hover')
 
 bokeh_swiss.axis.visible = False
@@ -358,7 +353,7 @@ st.bokeh_chart(bokeh_swiss)
 
 # Deutschland
 st.subheader('Deutschland')
-
+# TODO get csv for all deaths
 # Getting the coords for applying the information per canton
 germany = gpd.read_file("data//shapefiles//deutschland//vg2500_bld.shp")
 
@@ -373,7 +368,8 @@ st.pyplot(fig)
 # Österreich
 st.subheader('Österreich')
 
-# Getting the coords for applying the information per canton
+# Getting the coords for applying the information per
+# TODO get csv for all deaths
 austria = gpd.read_file("data//shapefiles//oesterreich//Bundeslaender_50.shp")
 
 fig, ax_map_austria = plt.subplots(figsize=(20, 20), dpi=96)
