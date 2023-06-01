@@ -1,4 +1,5 @@
 import os
+import json
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -8,9 +9,11 @@ import numpy as np
 from pandas.api.types import CategoricalDtype
 import geopandas as gpd
 from bokeh.io import output_notebook, show, output_file
-from bokeh.plotting import figure
+from bokeh.plotting import figure, show, output_notebook
 from bokeh.models import GeoJSONDataSource, LinearColorMapper, ColorBar
 from bokeh.palettes import brewer
+
+output_notebook()
 
 image = "pexels-photo-3943882.jpeg"
 st.image(image)
@@ -61,6 +64,9 @@ plt.title('Kumulative COVID-19-Fälle in der Schweiz (quartalsweise)')
 plt.xticks(rotation=45)
 plt.tight_layout()
 plt.grid(True)
+
+# figure.patch.set_alpha(0.0)
+
 st.pyplot(fig)
 
 # Deutschland
@@ -262,10 +268,19 @@ st.header('Geografische Verteilung')
 st.subheader('')
 
 # Schweiz
+# static map
+
 st.subheader('Schweiz')
+
+# TODO REMOVE THIS CODE AND SAVE TO CORRECTED CSV in a seperate folder in teams \
+#  so we load the already corrected data into the streamlit
+# any other changes to the data should be done in a def function above \
+# so this is better readable aka def the graph above and here we can see the structure of the article
 
 # Getting the coords for applying the information per canton
 cantons = gpd.read_file("data//shapefiles//swissboundaries//swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp")
+geo_source_switzerland = GeoJSONDataSource(geojson=cantons.to_json())
+
 cantons['coords'] = cantons['geometry'].apply(lambda x: x.representative_point().coords[:])
 
 cantons['coords'] = [coords[0] for coords in cantons['coords']]
@@ -315,6 +330,7 @@ for index, row in cantons.iterrows():
 fig, ax_map_switzerland = plt.subplots(figsize=(20, 20), dpi=96)
 ax_map_switzerland.set_axis_off()
 
+
 # color graph
 colours = ["#ff9900", "#ff3300"]
 cmap = colors.LinearSegmentedColormap.from_list("colour_map", colours, N=256)
@@ -329,7 +345,27 @@ for idx, row in cantons.iterrows():
         plt.annotate(row['deaths'], xy=row['coords'], horizontalalignment='center', color='black', size=20)
 
 plt.title('Todesfälle pro Kanton', fontsize=30)
-st.pyplot(fig)
+
+# bokeh map
+
+#st.pyplot(fig)
+
+#geo_source_switzerland = GeoJSONDataSource(geojson=cantons.to_json())
+
+bokeh_swiss = figure(tools='wheel_zoom, hover')
+
+bokeh_swiss.axis.visible = False
+bokeh_swiss.xgrid.visible = False
+bokeh_swiss.ygrid.visible = False
+bokeh_swiss.outline_line_color = None
+bokeh_swiss.sizing_mode = 'scale_width'
+
+bokeh_swiss.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_switzerland, fill_color="#999DA0")
+
+
+
+# TEST
+st.bokeh_chart(bokeh_swiss)
 
 # Deutschland
 st.subheader('Deutschland')
@@ -360,7 +396,7 @@ plt.title('Todesfälle pro Bundesland', fontsize=30)
 st.pyplot(fig)
 
 st.header('Impfungen')
-st.subheader('')
+st.subheader('Wirksamkeit der Unterschiedlichen Impfungen')
 
 # Problem
 st.header('')
