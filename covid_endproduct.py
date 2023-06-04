@@ -409,9 +409,9 @@ bokeh_austria.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_sou
 
 # Hover Tool Death
 
-bokeh_austria = bokeh_austria.select(dict(type=HoverTool))
-bokeh_austria.tooltips = [("Bundesländer", "@BL"), ("Tote insgesamt", "@Deaths"), ]
-bokeh_austria.mode = 'mouse'
+hover_austria = bokeh_austria.select(dict(type=HoverTool))
+hover_austria.tooltips = [("Bundesländer", "@BL"), ("Tote insgesamt", "@Deaths"), ]
+hover_austria.mode = 'mouse'
 
 st.bokeh_chart(bokeh_austria)
 
