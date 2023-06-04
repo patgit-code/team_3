@@ -219,12 +219,6 @@ st.pyplot(fig)
 # Österreich
 st.subheader('Österreich')
 
-# Daten laden
-# dat = pd.read_csv("CovidFaelle_Altersgruppe.csv", delimiter=';')
-
-# Datumsspalte in datetime umwandeln
-# dat['Time'] = pd.to_datetime(dat['Time'], format='%d.%m.%Y %H:%M:%S')
-
 # Filtern der Daten von 2021 bis 2023
 dat = dat[dat['Time'].dt.year.between(2021, 2023)]
 
@@ -327,7 +321,6 @@ for index, row in cantons.iterrows():
 
 geo_source_switzerland = GeoJSONDataSource(geojson=cantons.to_json())
 
-
 plt.title('Todesfälle pro Kanton', fontsize=30)
 
 # bokeh map
@@ -339,31 +332,52 @@ bokeh_swiss.ygrid.visible = False
 bokeh_swiss.outline_line_color = None
 bokeh_swiss.sizing_mode = 'scale_width'
 
-bokeh_swiss.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_switzerland, fill_color="#999DA0")
+bokeh_swiss.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_switzerland, fill_color="#008800")
 
 # Hover Tool Death
 
-hover = bokeh_swiss.select(dict(type=HoverTool))
-hover.tooltips = [("Canton", "@NAME"), ("Tote insgesamt", "@deaths"), ]
-hover.mode = 'mouse'
+hover_switzerland = bokeh_swiss.select(dict(type=HoverTool))
+hover_switzerland.tooltips = [("Canton", "@NAME"), ("Tote insgesamt", "@deaths"), ]
+hover_switzerland.mode = 'mouse'
 
-
-# TEST
 st.bokeh_chart(bokeh_swiss)
 
 # Deutschland
 st.subheader('Deutschland')
+
 # TODO get csv for all deaths
+
+death_de = pd.read_csv("data//statistic_id1100750_fallzahl-des-coronavirus--covid-19--nach-bundeslaendern-2023.csv",
+                 delimiter = ';')
+
 # Getting the coords for applying the information per canton
 germany = gpd.read_file("data//shapefiles//deutschland//vg2500_bld.shp")
 
-fig, ax_map_germany = plt.subplots(figsize=(20, 20), dpi=96)
-ax_map_germany.set_axis_off()
+germany['Deaths'] = ''
 
-germany.plot(ax=ax_map_germany, column='RS', cmap='autumn')
+for index, row in germany.iterrows():
+    germany.loc[index, 'Deaths'] = \
+    int(death_de[death_de['Bundesländer'] == row['GEN']]['Todesfälle'].values[0])
 
-plt.title('Todesfälle pro Bundesland', fontsize=30)
-st.pyplot(fig)
+geo_source_germany = GeoJSONDataSource(geojson=germany.to_json())
+
+bokeh_germany = figure(tools='wheel_zoom, hover')
+
+bokeh_germany.axis.visible = False
+bokeh_germany.xgrid.visible = False
+bokeh_germany.ygrid.visible = False
+bokeh_germany.outline_line_color = None
+bokeh_germany.sizing_mode = 'scale_width'
+
+bokeh_germany.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_germany, fill_color="#008800")
+
+# Hover Tool Death
+
+hover_germany = bokeh_germany.select(dict(type=HoverTool))
+hover_germany.tooltips = [("Bundesländer", "@GEN"), ("Tote insgesamt", "@Deaths"), ]
+hover_germany.mode = 'mouse'
+
+st.bokeh_chart(bokeh_germany)
 
 # Österreich
 st.subheader('Österreich')
@@ -372,16 +386,106 @@ st.subheader('Österreich')
 # TODO get csv for all deaths
 austria = gpd.read_file("data//shapefiles//oesterreich//Bundeslaender_50.shp")
 
-fig, ax_map_austria = plt.subplots(figsize=(20, 20), dpi=96)
-ax_map_austria.set_axis_off()
+death_at = pd.read_csv("data//statistic_id1104271_todesfaelle-mit-dem-coronavirus--covid-19--in-oesterreich-nach-bundesland-2023.csv",
+                 delimiter = ';')
 
-austria.plot(ax=ax_map_austria, column='FL_KM', cmap='autumn')
+austria['Deaths'] = ''
 
-plt.title('Todesfälle pro Bundesland', fontsize=30)
-st.pyplot(fig)
+for index, row in austria.iterrows():
+    austria.loc[index, 'Deaths'] = \
+    int(death_at[death_at['Bundesländer'] == row['BL']]['Anzahl Tode'].values[0])
+
+geo_source_austria = GeoJSONDataSource(geojson=austria.to_json())
+
+bokeh_austria = figure(tools='wheel_zoom, hover')
+
+bokeh_austria.axis.visible = False
+bokeh_austria.xgrid.visible = False
+bokeh_austria.ygrid.visible = False
+bokeh_austria.outline_line_color = None
+bokeh_austria.sizing_mode = 'scale_width'
+
+bokeh_austria.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_austria, fill_color="#008800")
+
+# Hover Tool Death
+
+bokeh_austria = bokeh_austria.select(dict(type=HoverTool))
+bokeh_austria.tooltips = [("Bundesländer", "@BL"), ("Tote insgesamt", "@Deaths"), ]
+bokeh_austria.mode = 'mouse'
+
+st.bokeh_chart(bokeh_austria)
 
 st.header('Impfungen')
-st.subheader('Wirksamkeit der Unterschiedlichen Impfungen')
+
+st.subheader('Schweiz')
+
+# Daten einlesen
+vacc_ch = pd.read_csv('data//COVID19Cases_vaccpersons_AKL10_w.csv')
+
+# Datum in DateTime-Format umwandeln
+vacc_ch['date'] = pd.to_datetime(vacc_ch['date'])
+
+# Liniendiagramm erstellen
+fig, ax_vacc_swiss = plt.subplots()
+ax_vacc_swiss.ticklabel_format(style='plain')
+ax_vacc_swiss.plot(vacc_ch['date'], vacc_ch['entries'])
+plt.xlabel('Datum')
+plt.ylabel('Anzahl der Impfungen')
+plt.title('Gesamtzahl der Impfungen in der Schweiz')
+
+# X-Achse anpassen, um quartalsweise Beschriftungen anzuzeigen
+quarter_labels = vacc_ch['date'].dt.to_period('Q').astype(str)
+plt.xticks(vacc_ch['date'], quarter_labels, rotation=45)
+
+plt.tight_layout()
+st.pyplot(fig)
+
+st.subheader('Deutschland')
+
+vacc_ak = pd.read_csv('data//Geimpfte altersgruppe und landeskreis ID.csv', delimiter=';')
+
+# Impfdatum in DateTime-Format umwandeln
+vacc_ak['Impfdatum'] = pd.to_datetime(vacc_ak['Impfdatum'])
+
+# Gruppieren nach Impfdatum und Summieren der Anzahl der Impfungen
+daily_vaccinations = vacc_ak.groupby('Impfdatum')['Anzahl'].sum().reset_index()
+
+# Liniendiagramm erstellen
+fig, ax_vacc_germany = plt.subplots()
+ax_vacc_germany.ticklabel_format(style='plain')
+ax_vacc_germany.plot(daily_vaccinations['Impfdatum'], daily_vaccinations['Anzahl'])
+plt.xlabel('Impfdatum')
+plt.ylabel('Anzahl der Impfungen')
+plt.title('Anzahl der Impfungen')
+plt.grid(True)
+plt.xticks(rotation=45)
+plt.tight_layout()
+st.pyplot(fig)
+
+st.subheader('Österreich')
+
+# Daten einlesen
+vacc_ak = pd.read_csv("data//CovidFaelle_Altersgruppe.csv", delimiter=';')
+
+# Datumsformat konvertieren
+vacc_ak['Time'] = pd.to_datetime(vacc_ak['Time'], format='%d.%m.%Y %H:%M:%S')
+
+# Summe der Impfungen für jeden Zeitpunkt berechnen
+total_vaccinations = vacc_ak.groupby('Time')['Anzahl'].sum()
+
+# Liniendiagramm erstellen
+fig, ax_vacc_austria = plt.subplots()
+ax_vacc_austria.ticklabel_format(style='plain')
+ax_vacc_austria.plot(total_vaccinations.index, total_vaccinations.values)
+plt.xlabel('Datum')
+plt.ylabel('Gesamtimpfungen')
+plt.title('Gesamtimpfungen über alle Daten')
+plt.xticks(rotation=45)
+plt.grid(True)
+plt.tight_layout()
+st.pyplot(fig)
+
+#st.subheader('Wirksamkeit der Unterschiedlichen Impfungen')
 
 # Problem
 st.header('')
