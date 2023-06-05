@@ -14,12 +14,12 @@ from bokeh.models import GeoJSONDataSource, LinearColorMapper, ColorBar, HoverTo
 from bokeh.palettes import brewer
 
 
-#output_notebook()
-
 # Bild als Header für den Benutzer als Einstieg in den Artikel
 image = "pexels-photo-3943882.jpeg"
 st.image(image)
 st.caption('Bild von Pexels')
+
+# Titel des Artikel mit Unterschrift
 st.title(body='Ein Rückblick auf die Covid Pandemie im Deutschsprachigen Raum')
 st.subheader(
     'Es ist bereits ein Jahr her, als die Massnahmen gegen den Corona Virus in Deutschland, Österreich und Schweiz '
@@ -44,7 +44,6 @@ covid_ww = pd.read_csv(os.path.join('data', 'WHO-COVID-19-global-data.csv'))
 # Datum in DateTime-Format konvertieren
 covid_ww['Date_reported'] = pd.to_datetime(covid_ww['Date_reported'])
 
-
 # Daten für die Schweiz filtern
 switzerland = covid_ww[covid_ww['Country_code'] == 'CH']
 
@@ -63,6 +62,7 @@ start_date_switzerland = pd.to_datetime('2020-03-16')
 # Vertikale Line des Start Datums anzeigen
 plt.axvline(start_date_switzerland, 0, max(switzerland_quarterly['Cumulative_cases']),
             label='Start der Corona Massnahmen am 16.03.2020', color='red')
+
 # Legenden für den Leser damit die Linie verständlich ist
 plt.legend()
 
@@ -110,6 +110,7 @@ start_date_germany = pd.to_datetime('2020-02-27')
 # Vertikale Line des Start Datums anzeigen
 plt.axvline(start_date_germany, 0, max(germany_quarterly['Cumulative_cases']), label='Start der Corona Massnahmen am 27.02.2020',
             color='red')
+# Legenden für den Leser damit die Linie verständlich ist
 plt.legend()
 
 plt.xticks(rotation=45)
@@ -121,11 +122,6 @@ st.pyplot(fig)
 st.subheader('Österreich')
 
 st.text('Im Vergleich mit Deutschland und der Schweiz hat Österreich...')
-# CSV-Daten laden
-#dat = pd.read_csv("data//CovidFaelle_Altersgruppe.csv", delimiter=';')
-
-# Konvertiere 'Time' in ein Datumsformat
-#dat['Time'] = pd.to_datetime(dat['Time'], format='%d.%m.%Y %H:%M:%S')
 
 # Summe der Covid-Fälle für alle Daten berechnen
 #total_cases = dat.groupby('Time')['Anzahl'].sum()
@@ -146,6 +142,7 @@ start_date_austria = pd.to_datetime('2020-03-11')
 # Vertikale Line des Start Datums anzeigen
 plt.axvline(start_date_austria, 0, max(austria_quarterly['Cumulative_cases']), label='Start der Corona Massnahmen am 11.03.2020',
             color='red')
+# Legenden für den Leser damit die Linie verständlich ist
 plt.legend()
 
 plt.xlabel('Datum')
@@ -241,6 +238,12 @@ st.pyplot(fig)
 # Österreich
 st.subheader('Österreich')
 
+# CSV-Daten laden
+dat = pd.read_csv("data//CovidFaelle_Altersgruppe.csv", delimiter=';')
+
+# Konvertiere 'Time' in ein Datumsformat
+dat['Time'] = pd.to_datetime(dat['Time'], format='%d.%m.%Y %H:%M:%S')
+
 # Filtern der Daten von 2021 bis 2023
 dat = dat[dat['Time'].dt.year.between(2021, 2023)]
 
@@ -296,11 +299,9 @@ st.subheader('Schweiz')
 # so this is better readable aka def the graph above and here we can see the structure of the article
 # TODO add comments to this and remove any not needed code
 
-# Getting the coords for applying the information per canton
+# Shapefile der Schweiz von admin.ch laden. (https://www.swisstopo.admin.ch/de/geodata/landscape/boundaries3d.html)
+# Wir wählen die Kantonsgebiet Variante, für die Visualisierung.
 cantons = gpd.read_file("data//shapefiles//swissboundaries//swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp")
-cantons['coords'] = cantons['geometry'].apply(lambda x: x.representative_point().coords[:])
-
-cantons['coords'] = [coords[0] for coords in cantons['coords']]
 
 # Lesen der Datei mit den Informationen zu den Anzahl Todesfälle pro Kanton
 death = pd.read_csv("data//COVID19Death_geoRegion.csv")
@@ -345,45 +346,55 @@ dict_canton = {
 
 # Erstellen der Spalte für die Todesfälle
 cantons['deaths'] = ''
-# TODO correct the death values
+
+# Setzen der Todesfälle auf den korrekten Kanton.
+# Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
 for index, row in cantons.iterrows():
     cantons.loc[index, 'deaths'] = \
     int(death_count_canton[death_count_canton['geoRegion'] == dict_canton[row['NAME']]]['entries'].values[0])
 
 geo_source_switzerland = GeoJSONDataSource(geojson=cantons.to_json())
 
-# bokeh map
 bokeh_swiss = figure(tools='wheel_zoom, hover')
 
+# Entfernen der Raster und Achsen
 bokeh_swiss.axis.visible = False
 bokeh_swiss.xgrid.visible = False
 bokeh_swiss.ygrid.visible = False
 bokeh_swiss.outline_line_color = None
+
+# Grösse des Graphen auf die Breite skalieren
 bokeh_swiss.sizing_mode = 'scale_width'
 
+# Erstellen der Karte und befüllen mit Farbe
 bokeh_swiss.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_switzerland, fill_color="#008800")
 
-# Hover Tool Death
-
+# Hover Tool für die Todesfälle erstellen.
+# Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
 hover_switzerland = bokeh_swiss.select(dict(type=HoverTool))
 hover_switzerland.tooltips = [("Canton", "@NAME"), ("Todesfälle", "@deaths"), ]
 hover_switzerland.mode = 'mouse'
 
+# Anzeigen der Karte
 st.bokeh_chart(bokeh_swiss)
 
 # Deutschland
 st.subheader('Deutschland')
 
 # TODO ungefähre Anzahl pro Bundesland bzw. Land / Menschen Ratio herraussuchen
-
+# TODO explain this csv where did we get the data here
 death_de = pd.read_csv("data//statistic_id1100750_fallzahl-des-coronavirus--covid-19--nach-bundeslaendern-2023.csv",
                  delimiter = ';')
 
-# Getting the coords for applying the information per canton
+# Shapefile Deutschland von bund.de laden. (https://gdz.bkg.bund.de/index.php/default/digitale-geodaten/verwaltungsgebiete.html)
+# Wir wählen die Bundesland Variante, für die Visualisierung.
 germany = gpd.read_file("data//shapefiles//deutschland//vg2500_bld.shp")
 
+# Erstellen der Spalte für die Todesfälle
 germany['Deaths'] = ''
 
+# Setzen der Todesfälle auf den korrekten Kanton.
+# Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
 for index, row in germany.iterrows():
     germany.loc[index, 'Deaths'] = \
     int(death_de[death_de['Bundesländer'] == row['GEN']]['Todesfälle'].values[0])
@@ -392,56 +403,71 @@ geo_source_germany = GeoJSONDataSource(geojson=germany.to_json())
 
 bokeh_germany = figure(tools='wheel_zoom, hover')
 
+# Entfernen der Raster und Achsen
 bokeh_germany.axis.visible = False
 bokeh_germany.xgrid.visible = False
 bokeh_germany.ygrid.visible = False
 bokeh_germany.outline_line_color = None
+
+# Grösse des Graphen auf die Breite skalieren
 bokeh_germany.sizing_mode = 'scale_width'
 
+# Erstellen der Karte und befüllen mit Farbe
 bokeh_germany.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_germany, fill_color="#008800")
 
-# Hover Tool Death
-
+# Hover Tool für die Todesfälle erstellen.
+# Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
 hover_germany = bokeh_germany.select(dict(type=HoverTool))
 hover_germany.tooltips = [("Bundesländer", "@GEN"), ("Todesfälle", "@Deaths"), ]
 hover_germany.mode = 'mouse'
 
+# Anzeigen der Karte
 st.bokeh_chart(bokeh_germany)
 
 # Österreich
 st.subheader('Österreich')
 
-# Getting the coords for applying the information per
-# TODO get csv for all deaths
+# Shapefile Österreich von arcgis.com laden.(https://data-synergis.opendata.arcgis.com/maps/a16c7b8ef72f4ec2b36f7c7ebbcdf2e5)
+# Wir wählen die Bundesland Variante, für die Visualisierung.
 austria = gpd.read_file("data//shapefiles//oesterreich//Bundeslaender_50.shp")
 
+# TODO explain this csv where did we get the data here
 death_at = pd.read_csv("data//statistic_id1104271_todesfaelle-mit-dem-coronavirus--covid-19--in-oesterreich-nach-bundesland-2023.csv",
                  delimiter = ';')
 
+# Erstellen der Spalte für die Todesfälle
 austria['Deaths'] = ''
 
+# Setzen der Todesfälle auf den korrekten Kanton.
+# Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
 for index, row in austria.iterrows():
     austria.loc[index, 'Deaths'] = \
     int(death_at[death_at['Bundesländer'] == row['BL']]['Anzahl Tode'].values[0])
 
+# TODO add comment
 geo_source_austria = GeoJSONDataSource(geojson=austria.to_json())
 
 bokeh_austria = figure(tools='wheel_zoom, hover')
 
+# Entfernen der Raster und Achsen
 bokeh_austria.axis.visible = False
 bokeh_austria.xgrid.visible = False
 bokeh_austria.ygrid.visible = False
 bokeh_austria.outline_line_color = None
+
+# Grösse des Graphen auf die Breite skalieren
 bokeh_austria.sizing_mode = 'scale_width'
 
+# Erstellen der Karte und befüllen mit Farbe
 bokeh_austria.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_austria, fill_color="#008800")
 
-# Hover Tool Death
-
+# Hover Tool für die Todesfälle erstellen.
+# Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
 hover_austria = bokeh_austria.select(dict(type=HoverTool))
 hover_austria.tooltips = [("Bundesländer", "@BL"), ("Todesfälle", "@Deaths"), ]
 hover_austria.mode = 'mouse'
 
+# Anzeigen der Karte
 st.bokeh_chart(bokeh_austria)
 
 st.header('Impfungen')
