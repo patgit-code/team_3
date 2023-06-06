@@ -20,7 +20,6 @@ st.image(image)
 st.caption('Bild von Pexels')
 
 # Titel des Artikel mit Unterschrift
-st.title(body='Ein Rückblick auf die Covid Pandemie im Deutschsprachigen Raum')
 st.title(body='Ein Rückblick auf die Covid-19 Pandemie im deutschsprachigen Raum')
 st.subheader(
     'Es ist bereits ein Jahr her, seit die Massnahmen gegen Covid-19 in Deutschland, Österreich und der Schweiz '
