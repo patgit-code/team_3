@@ -31,12 +31,15 @@ st.header('Verlauf des Virus')
 st.subheader('')
 
 #Erläuterung zur Grafik
-st.text("Die Schweiz implementierte im Vergleich zu Österreich und Deutschland als letzte erste Coronamassnahmen."
-        "Auch im Verlauf der Pandemie waren die Massnahmen verglichen mit unseren Nachbarsländern stets weniger streng."
-         "In Betracht auf die Fallzahlen, war die Schweiz auf Platz zwei mit durchschnittlich 50'573 Fällen auf 100'000 Einwohner.")
-st.text("Anfang des Jahres 2022 gab es in allen drei Ländern eine drastische Steigung der Fallzahlen. Dies vor allem deswegen, "
-        "weil die Massnahmen gelockert wurden und die Bevölkerung fahrlässiger handelte. Da zu diesem Zeitpunkt die Impfungen" 
-        "schon recht fortgeschritten waren, nahm man die ganze Situation etwas lockerer.")
+st.text("Die Schweiz implementierte im Vergleich zu Österreich und Deutschland als letzte \n"
+        "erste Coronamassnahmen. Auch im Verlauf der Pandemie waren die Massnahmen \n"
+         "verglichen mit unseren Nachbarsländern stets weniger streng. In Betracht auf  \n"
+        "die Fallzahlen, war die Schweiz auf Platz zwei mit durchschnittlich 50'573 Fällen \n"
+        "auf 100'000 Einwohner.")
+st.text("Anfang des Jahres 2022 gab es in allen drei Ländern eine drastische Steigung der \n"
+        "Fallzahlen. Dies vor allem deswegen, weil die Massnahmen gelockert wurden und \n" 
+        "die Bevölkerung fahrlässiger handelte. Da zu diesem Zeitpunkt die Impfungen schon \n" 
+        "recht fortgeschritten waren, nahm man die ganze Situation etwas lockerer.")
 
 # TODO Start all Visualisations at the same date
 # TODO Get Info how many tests were made at start and end of pandemic
@@ -168,9 +171,9 @@ st.text('')
 
 # Schweiz
 st.subheader('Schweiz')
-st.text('In der Schweiz sind vor allem ältere Menschen, ab 70 Jahren gestorben und dies mehrheitlich'
-        'zu Beginn der Pandemie 2021. Ende 2021 / Beginn 2022 stiegen die Zahlen nochmals, weshalb '
-        'auch da eine höhere Todesrate ersichtlich ist.')
+st.text('In der Schweiz sind vor allem ältere Menschen, ab 70 Jahren gestorben und dies \n'
+        'mehrheitlich zu Beginn der Pandemie 2021. Ende 2021 / Beginn 2022 stiegen die \n'
+        'Zahlen nochmals, weshalb auch da eine höhere Todesrate ersichtlich ist.')
 # Daten laden
 data = pd.read_csv("data//COVID19Death_geoRegion_AKL10_w.csv")
 
@@ -562,25 +565,38 @@ st.pyplot(fig)
 
 st.subheader('Deutschland')
 
-vacc_ak = pd.read_csv('data//Geimpfte altersgruppe und landeskreis ID.csv', delimiter=';')
+df_vacc = pd.read_csv('data//Aktuell_Deutschland_Bundeslaender_COVID-19-Impfungen.csv', 
+                     delimiter=',')
 
-# Impfdatum in DateTime-Format umwandeln
-vacc_ak['Impfdatum'] = pd.to_datetime(vacc_ak['Impfdatum'])
+# Sortieren Sie den DataFrame nach dem Impfdatum
+df_vacc_sorted = df_vacc.sort_values('Impfdatum')
 
-# Gruppieren nach Impfdatum und Summieren der Anzahl der Impfungen
-daily_vaccinations = vacc_ak.groupby('Impfdatum')['Anzahl'].sum().reset_index()
+# Gruppieren Sie den DataFrame nach dem Impfdatum und summiere die Anzahl
+df_vacc_grouped = df_vacc_sorted.groupby('Impfdatum')['Anzahl'].sum().reset_index()
+
+# Berechne die kumulierten Impfungen pro Tag
+df_vacc_grouped['kumulierte Impfungen'] = df_vacc_grouped['Anzahl'].cumsum()
+
 
 # Liniendiagramm erstellen
-fig, ax_vacc_germany = plt.subplots()
-ax_vacc_germany.ticklabel_format(style='plain')
-ax_vacc_germany.plot(daily_vaccinations['Impfdatum'], daily_vaccinations['Anzahl'])
-plt.xlabel('Impfdatum')
-plt.ylabel('Anzahl der Impfungen')
-plt.title('Gesamtzahl der Impfungen in Deutschland')
-plt.grid(True)
+# Meldedatum in DateTime-Format umwandeln
+df_vacc_grouped['Impfdatum'] = pd.to_datetime(df_vacc_grouped['Impfdatum'])
+
+# Gruppieren nach Meldedatum und Summieren der Anzahl der Fälle
+daily_cases = df_vacc_grouped.groupby('Impfdatum')['kumulierte Impfungen'].sum().reset_index()
+
+
+# Liniendiagramm erstellen
+plt.plot(df_vacc_grouped['Impfdatum'], df_vacc_grouped['kumulierte Impfungen'])
+plt.xlabel('Datum')
+plt.ylabel('Anzahl der kumulierten Impfungen')
+plt.title('COVID-19 Impfungen in Deutschland')
+plt.ticklabel_format(style='plain', axis='y')
+
+plt.tight_layout()
 plt.xticks(rotation=45)
 plt.tight_layout()
-st.pyplot(fig)
+plt.show()
 
 st.subheader('Österreich')
 
