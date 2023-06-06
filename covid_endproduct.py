@@ -372,6 +372,7 @@ bokeh_swiss.axis.visible = False
 bokeh_swiss.xgrid.visible = False
 bokeh_swiss.ygrid.visible = False
 bokeh_swiss.outline_line_color = None
+bokeh_swiss.background_fill_color = None
 
 # Grösse des Graphen auf die Breite skalieren
 bokeh_swiss.sizing_mode = 'scale_width'
