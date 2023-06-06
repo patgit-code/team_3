@@ -425,6 +425,7 @@ bokeh_germany.axis.visible = False
 bokeh_germany.xgrid.visible = False
 bokeh_germany.ygrid.visible = False
 bokeh_germany.outline_line_color = None
+bokeh_germany.background_fill_color = None
 
 # Grösse des Graphen auf die Breite skalieren
 bokeh_germany.sizing_mode = 'scale_width'
@@ -471,6 +472,7 @@ bokeh_austria.axis.visible = False
 bokeh_austria.xgrid.visible = False
 bokeh_austria.ygrid.visible = False
 bokeh_austria.outline_line_color = None
+bokeh_austria.background_fill_color = None
 
 # Grösse des Graphen auf die Breite skalieren
 bokeh_austria.sizing_mode = 'scale_width'
