@@ -31,7 +31,7 @@ st.header('Verlauf des Virus')
 st.subheader('')
 
 #Erläuterung zur Grafik
-st.text('Die Schweiz implementierte im Vergleich zu Österreich und Deutschland als letzte erste Coronamassnahmen. Auch im Verlauf der Pandemie waren die Massnahmen verglichen mit unseren Nachbarsländern stets weniger streng. In Betracht auf die Fallzahlen, war die Schweiz auf Platz zwei mit durchschnittlich 50'573 Fällen auf 100'000 Einwohner.')
+st.text("Die Schweiz implementierte im Vergleich zu Österreich und Deutschland als letzte erste Coronamassnahmen. Auch im Verlauf der Pandemie waren die Massnahmen verglichen mit unseren Nachbarsländern stets weniger streng. In Betracht auf die Fallzahlen, war die Schweiz auf Platz zwei mit durchschnittlich 50'573 Fällen auf 100'000 Einwohner.")
 st.text('Anfang des Jahres 2022 gab es in allen drei Ländern eine drastische Steigung der Fallzahlen. Dies vor allem deswegen, weil die Massnahmen gelockert wurden und die Bevölkerung fahrlässiger handelte. Da zu diesem Zeitpunkt die Impfungen schon recht fortgeschritten waren, nahm man die ganze Situation etwas lockerer.')
 
 # TODO Start all Visualisations at the same date
