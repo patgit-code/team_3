@@ -289,7 +289,6 @@ plt.yticks(rotation=0)
 
 # Anpassung der Farbskala basierend auf den Werten
 norm = plt.Normalize(percentage_table.min().min(), percentage_table.max().max())
-sns.set(rc={'axes.facecolor':'#000000', 'figure.facecolor':(0,0,0,0)})
 heatmap = sns.heatmap(percentage_table, cmap=cmap, annot=True, fmt='.1f', cbar=True, norm=norm)
 heatmap.collections[0].colorbar.set_label("Prozent")
 
@@ -309,6 +308,8 @@ Gibt es einen Unterschied zwischen dem Land und der Stadt')
 # static map
 
 st.subheader('Schweiz')
+
+population = pd.read_csv("data//population.csv", delimiter=';')
 
 # TODO REMOVE THIS CODE AND SAVE TO CORRECTED CSV in a seperate folder in teams \
 #  so we load the already corrected data into the streamlit
@@ -363,12 +364,22 @@ dict_canton = {
 
 # Erstellen der Spalte für die Todesfälle
 cantons['deaths'] = ''
+cantons['Population'] = ''
+cantons['ProcentageOfDeathPop'] = ''
+cantons['YearOfPopulation'] = ''
 
 # Setzen der Todesfälle auf den korrekten Kanton.
 # Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
 for index, row in cantons.iterrows():
     cantons.loc[index, 'deaths'] = \
     int(death_count_canton[death_count_canton['geoRegion'] == dict_canton[row['NAME']]]['entries'].values[0])
+    cantons.loc[index, 'Population'] = \
+    int(population[population['Bundesländer'] == row['NAME']]['Population'].values[0])
+    cantons.loc[index, 'YearOfPopulation'] = \
+    int(population[population['Bundesländer'] == row['NAME']]['Stand'].values[0])
+    cantons.loc[index, 'ProcentageOfDeathPop'] = \
+    "{:.2f}".format((death_count_canton[death_count_canton['geoRegion'] == dict_canton[row['NAME']]]['entries'].values[0] /
+    population[population['Bundesländer'] == row['NAME']]['Population'].values[0]) * 100000)
 
 geo_source_switzerland = GeoJSONDataSource(geojson=cantons.to_json())
 
@@ -390,7 +401,11 @@ bokeh_swiss.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_sourc
 # Hover Tool für die Todesfälle erstellen.
 # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
 hover_switzerland = bokeh_swiss.select(dict(type=HoverTool))
-hover_switzerland.tooltips = [("Canton", "@NAME"), ("Todesfälle", "@deaths"), ]
+hover_switzerland.tooltips = [
+    ("Kanton", "@NAME"), ("Todesfälle", "@deaths"),
+    ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"),
+    ("Prozentualer Anteil der Todesfälle pro Bevölkerung", '@ProcentageOfDeathPop')
+                              ]
 hover_switzerland.mode = 'mouse'
 
 # Anzeigen der Karte
@@ -410,7 +425,9 @@ germany = gpd.read_file("data//shapefiles//deutschland//vg2500_bld.shp")
 
 # Erstellen der Spalte für die Todesfälle
 germany['Deaths'] = ''
-
+germany['Population'] = ''
+germany['ProcentageOfDeathPop'] = ''
+germany['YearOfPopulation'] = ''
 # Infos zu den Bevölkerunganzahl von Statista (https://de.statista.com/statistik/daten/studie/75536/umfrage/schweiz-bevoelkerung-nach-kanton-zeitreihe/)
 
 # Setzen der Todesfälle auf den korrekten Kanton.
@@ -418,6 +435,13 @@ germany['Deaths'] = ''
 for index, row in germany.iterrows():
     germany.loc[index, 'Deaths'] = \
     int(death_de[death_de['Bundesländer'] == row['GEN']]['Todesfälle'].values[0])
+    germany.loc[index, 'Population'] = \
+    int(population[population['Bundesländer'] == row['GEN']]['Population'].values[0])
+    germany.loc[index, 'YearOfPopulation'] = \
+    int(population[population['Bundesländer'] == row['GEN']]['Stand'].values[0])
+    germany.loc[index, 'ProcentageOfDeathPop'] = \
+    "{:.2f}".format((death_de[death_de['Bundesländer'] == row['GEN']]['Todesfälle'].values[0] /
+    population[population['Bundesländer'] == row['GEN']]['Population'].values[0]) * 100000)
 
 geo_source_germany = GeoJSONDataSource(geojson=germany.to_json())
 
@@ -439,7 +463,11 @@ bokeh_germany.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_sou
 # Hover Tool für die Todesfälle erstellen.
 # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
 hover_germany = bokeh_germany.select(dict(type=HoverTool))
-hover_germany.tooltips = [("Bundesländer", "@GEN"), ("Todesfälle", "@Deaths"), ]
+hover_germany.tooltips = [
+    ("Bundesland", "@GEN"), ("Todesfälle", "@Deaths"),
+    ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"),
+    ("Prozentualer Anteil der Todesfälle pro Bevölkerung", '@ProcentageOfDeathPop')
+                          ]
 hover_germany.mode = 'mouse'
 
 # Anzeigen der Karte
@@ -457,18 +485,22 @@ austria = gpd.read_file("data//shapefiles//oesterreich//Bundeslaender_50.shp")
 death_at = pd.read_csv("data//statistic_id1104271_todesfaelle-mit-dem-coronavirus--covid-19--in-oesterreich-nach-bundesland-2023.csv",
                  delimiter = ';')
 
-population = pd.read_csv("data//population.csv")
-
 # Erstellen der Spalte für die Todesfälle
 austria['Deaths'] = ''
+austria['Population'] = ''
 austria['ProcentageOfDeathPop'] = ''
+austria['YearOfPopulation'] = ''
 # Setzen der Todesfälle auf den korrekten Kanton.
 # Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
 for index, row in austria.iterrows():
     austria.loc[index, 'Deaths'] = \
     int(death_at[death_at['Bundesländer'] == row['BL']]['Anzahl Tode'].values[0])
+    austria.loc[index, 'Population'] = \
+    int(population[population['Bundesländer'] == row['BL']]['Population'].values[0])
+    austria.loc[index, 'YearOfPopulation'] = \
+    int(population[population['Bundesländer'] == row['BL']]['Stand'].values[0])
     austria.loc[index, 'ProcentageOfDeathPop'] = \
-    int(population['Bundesländer'] == row['BL']['Population'].values[0])
+    "{:.2f}".format((death_at[death_at['Bundesländer'] == row['BL']]['Anzahl Tode'].values[0] / population[population['Bundesländer'] == row['BL']]['Population'].values[0]) * 100000)
 
 
  # TODO add comment
@@ -492,7 +524,12 @@ bokeh_austria.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_sou
 # Hover Tool für die Todesfälle erstellen.
 # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
 hover_austria = bokeh_austria.select(dict(type=HoverTool))
-hover_austria.tooltips = [("Bundesländer", "@BL"), ("Todesfälle", "@Deaths"), ("Bevölkerung", "@ProcentageOfDeathPop")]
+hover_austria.tooltips = [
+    ("Bundesland", "@BL"), ("Todesfälle", "@Deaths"), \
+    ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"), \
+    ("Prozentualer Anteil der Todesfälle pro Bevölkerung", '@ProcentageOfDeathPop')
+]
+
 hover_austria.mode = 'mouse'
 
 # Anzeigen der Karte
