@@ -289,6 +289,7 @@ plt.yticks(rotation=0)
 
 # Anpassung der Farbskala basierend auf den Werten
 norm = plt.Normalize(percentage_table.min().min(), percentage_table.max().max())
+sns.set(rc={'figure.facecolor':(0,0,0,0)})
 heatmap = sns.heatmap(percentage_table, cmap=cmap, annot=True, fmt='.1f', cbar=True, norm=norm)
 heatmap.collections[0].colorbar.set_label("Prozent")
 
