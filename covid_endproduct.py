@@ -289,7 +289,7 @@ plt.yticks(rotation=0)
 
 # Anpassung der Farbskala basierend auf den Werten
 norm = plt.Normalize(percentage_table.min().min(), percentage_table.max().max())
-sns.set(rc={'figure.facecolor':(0,0,0,0)})
+sns.set(rc={'axes.facecolor':'#000000', 'figure.facecolor':(0,0,0,0)})
 heatmap = sns.heatmap(percentage_table, cmap=cmap, annot=True, fmt='.1f', cbar=True, norm=norm)
 heatmap.collections[0].colorbar.set_label("Prozent")
 
@@ -411,6 +411,8 @@ germany = gpd.read_file("data//shapefiles//deutschland//vg2500_bld.shp")
 # Erstellen der Spalte für die Todesfälle
 germany['Deaths'] = ''
 
+# Infos zu den Bevölkerunganzahl von Statista (https://de.statista.com/statistik/daten/studie/75536/umfrage/schweiz-bevoelkerung-nach-kanton-zeitreihe/)
+
 # Setzen der Todesfälle auf den korrekten Kanton.
 # Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
 for index, row in germany.iterrows():
@@ -451,19 +453,25 @@ st.subheader('Österreich')
 austria = gpd.read_file("data//shapefiles//oesterreich//Bundeslaender_50.shp")
 
 # TODO explain this csv where did we get the data here
+# Statista csv
 death_at = pd.read_csv("data//statistic_id1104271_todesfaelle-mit-dem-coronavirus--covid-19--in-oesterreich-nach-bundesland-2023.csv",
                  delimiter = ';')
 
+population = pd.read_csv("data//population.csv")
+
 # Erstellen der Spalte für die Todesfälle
 austria['Deaths'] = ''
-
+austria['ProcentageOfDeathPop'] = ''
 # Setzen der Todesfälle auf den korrekten Kanton.
 # Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
 for index, row in austria.iterrows():
     austria.loc[index, 'Deaths'] = \
     int(death_at[death_at['Bundesländer'] == row['BL']]['Anzahl Tode'].values[0])
+    austria.loc[index, 'ProcentageOfDeathPop'] = \
+    int(population['Bundesländer'] == row['BL']['Population'].values[0])
 
-# TODO add comment
+
+ # TODO add comment
 geo_source_austria = GeoJSONDataSource(geojson=austria.to_json())
 
 bokeh_austria = figure(tools='wheel_zoom, hover')
@@ -484,7 +492,7 @@ bokeh_austria.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_sou
 # Hover Tool für die Todesfälle erstellen.
 # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
 hover_austria = bokeh_austria.select(dict(type=HoverTool))
-hover_austria.tooltips = [("Bundesländer", "@BL"), ("Todesfälle", "@Deaths"), ]
+hover_austria.tooltips = [("Bundesländer", "@BL"), ("Todesfälle", "@Deaths"), ("Bevölkerung", "@ProcentageOfDeathPop")]
 hover_austria.mode = 'mouse'
 
 # Anzeigen der Karte
