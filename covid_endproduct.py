@@ -292,6 +292,7 @@ plt.yticks(rotation=0)
 
 # Anpassung der Farbskala basierend auf den Werten
 norm = plt.Normalize(percentage_table.min().min(), percentage_table.max().max())
+sns.set(rc={'figure.facecolor':(0,0,0,0)})
 heatmap = sns.heatmap(percentage_table, cmap=cmap, annot=True, fmt='.1f', cbar=True, norm=norm)
 heatmap.collections[0].colorbar.set_label("Prozent")
 
@@ -381,6 +382,7 @@ bokeh_swiss.axis.visible = False
 bokeh_swiss.xgrid.visible = False
 bokeh_swiss.ygrid.visible = False
 bokeh_swiss.outline_line_color = None
+bokeh_swiss.background_fill_color = None
 
 # Grösse des Graphen auf die Breite skalieren
 bokeh_swiss.sizing_mode = 'scale_width'
@@ -427,6 +429,7 @@ bokeh_germany.axis.visible = False
 bokeh_germany.xgrid.visible = False
 bokeh_germany.ygrid.visible = False
 bokeh_germany.outline_line_color = None
+bokeh_germany.background_fill_color = None
 
 # Grösse des Graphen auf die Breite skalieren
 bokeh_germany.sizing_mode = 'scale_width'
@@ -473,6 +476,7 @@ bokeh_austria.axis.visible = False
 bokeh_austria.xgrid.visible = False
 bokeh_austria.ygrid.visible = False
 bokeh_austria.outline_line_color = None
+bokeh_austria.background_fill_color = None
 
 # Grösse des Graphen auf die Breite skalieren
 bokeh_austria.sizing_mode = 'scale_width'
