@@ -146,6 +146,10 @@ data = pd.read_csv("data//COVID19Death_geoRegion_AKL10_w.csv")
 # Filtern der Daten von 2021 bis 2023
 data = data[data['datum'].astype(str).str[:4].astype(int).between(2021, 2023)]
 
+#Zeilen mit Unbekannt löschen
+data = data[data['altersklasse_covid19'] != 'Unbekannt']
+
+
 # Extrahieren des Quartals aus dem Datum
 data['quartal'] = data['datum'].astype(str).str[:4] + '-Q' + data['datum'].astype(str).str[4:5]
 
