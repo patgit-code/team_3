@@ -520,7 +520,7 @@ st.pyplot(fig)
 
 st.subheader('Deutschland')
 
-df_vacc = pd.read_csv("Aktuell_Deutschland_Bundeslaender_COVID-19-Impfungen.csv", 
+df_vacc = pd.read_csv('data//Aktuell_Deutschland_Bundeslaender_COVID-19-Impfungen.csv', 
                      delimiter=',')
 
 # Sortieren Sie den DataFrame nach dem Impfdatum
