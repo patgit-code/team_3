@@ -20,7 +20,8 @@ st.image(image)
 st.caption('Bild von Pexels')
 
 # Titel des Artikel mit Unterschrift
-st.title(body='Ein Rückblick auf die Pandemie im deutschsprachigen Raum. Was können wir davon mitnehmen?')
+st.title(body='COVID-19 - Ein Rückblick auf die Pandemie im deutschsprachigen Raum. '
+         'Was können wir davon mitnehmen?')
 st.subheader(
     'Es ist bereits ein Jahr her, seit die Massnahmen gegen Covid-19 in Deutschland, Österreich und der Schweiz '
     'aufgehoben wurden. Das Leben hat sich wieder normalisiert und der Virus verschwindet langsam aus unseren Köpfen. '
@@ -565,8 +566,10 @@ st.pyplot(fig)
 
 st.subheader('Deutschland')
 
-df_vacc = pd.read_csv('data//Aktuell_Deutschland_Bundeslaender_COVID-19-Impfungen.csv', 
-                     delimiter=',')
+df_vacc = pd.read_csv('data//Aktuell_Deutschland_Bundeslaender_COVID-19-Impfungen.csv', delimiter=',')
+
+#Daten nur von Impfserie 1 nehmen
+df_vacc = df_vacc[df_vacc['Impfserie'] == 1]
 
 # Sortieren Sie den DataFrame nach dem Impfdatum
 df_vacc_sorted = df_vacc.sort_values('Impfdatum')
@@ -596,7 +599,7 @@ plt.ticklabel_format(style='plain', axis='y')
 plt.tight_layout()
 plt.xticks(rotation=45)
 plt.tight_layout()
-plt.show()
+plt.show() 
 
 st.subheader('Österreich')
 
