@@ -31,8 +31,12 @@ st.header('Verlauf des Virus')
 st.subheader('')
 
 #Erläuterung zur Grafik
-st.text("Die Schweiz implementierte im Vergleich zu Österreich und Deutschland als letzte erste Coronamassnahmen. Auch im Verlauf der Pandemie waren die Massnahmen verglichen mit unseren Nachbarsländern stets weniger streng. In Betracht auf die Fallzahlen, war die Schweiz auf Platz zwei mit durchschnittlich 50'573 Fällen auf 100'000 Einwohner.")
-st.text('Anfang des Jahres 2022 gab es in allen drei Ländern eine drastische Steigung der Fallzahlen. Dies vor allem deswegen, weil die Massnahmen gelockert wurden und die Bevölkerung fahrlässiger handelte. Da zu diesem Zeitpunkt die Impfungen schon recht fortgeschritten waren, nahm man die ganze Situation etwas lockerer.')
+st.text("Die Schweiz implementierte im Vergleich zu Österreich und Deutschland als letzte erste Coronamassnahmen."
+        "Auch im Verlauf der Pandemie waren die Massnahmen verglichen mit unseren Nachbarsländern stets weniger streng."
+         "In Betracht auf die Fallzahlen, war die Schweiz auf Platz zwei mit durchschnittlich 50'573 Fällen auf 100'000 Einwohner.")
+st.text("Anfang des Jahres 2022 gab es in allen drei Ländern eine drastische Steigung der Fallzahlen. Dies vor allem deswegen, "
+        "weil die Massnahmen gelockert wurden und die Bevölkerung fahrlässiger handelte. Da zu diesem Zeitpunkt die Impfungen" 
+        "schon recht fortgeschritten waren, nahm man die ganze Situation etwas lockerer.")
 
 # TODO Start all Visualisations at the same date
 # TODO Get Info how many tests were made at start and end of pandemic
@@ -164,7 +168,9 @@ st.text('')
 
 # Schweiz
 st.subheader('Schweiz')
-st.text('In der Schweiz sind vor allem ältere Menschen, ab 70 Jahren gestorben und dies mehrheitlich zu Beginn der Pandemie 2021. Ende 2021 / Beginn 2022 stiegen die Zahlen nochmals, weshalb auch da eine höhere Todesrate ersichtlich ist.')
+st.text('In der Schweiz sind vor allem ältere Menschen, ab 70 Jahren gestorben und dies mehrheitlich'
+        'zu Beginn der Pandemie 2021. Ende 2021 / Beginn 2022 stiegen die Zahlen nochmals, weshalb '
+        'auch da eine höhere Todesrate ersichtlich ist.')
 # Daten laden
 data = pd.read_csv("data//COVID19Death_geoRegion_AKL10_w.csv")
 
