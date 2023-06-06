@@ -18,11 +18,11 @@ output_notebook()
 image = "pexels-photo-3943882.jpeg"
 st.image(image)
 st.caption('Bild von Pexels')
-st.title(body='Ein Rückblick auf die Covid Pandemie im Deutschsprachigen Raum')
+st.title(body='Ein Rückblick auf die Covid-19 Pandemie im deutschsprachigen Raum')
 st.subheader(
-    'Es ist bereits ein Jahr her, als die Massnahmen gegen den Corona Virus in Deutschland, Österreich und Schweiz '
+    'Es ist bereits ein Jahr her, seit die Massnahmen gegen Covid-19 in Deutschland, Österreich und der Schweiz '
     'aufgehoben wurden. Das Leben hat sich wieder normalisiert und der Virus verschwindet langsam aus den Köpfen der '
-    'Menschen. Doch was können wir aus den vergangenen Pandemie Jahren lernen?')
+    'Menschen. Doch was können wir aus der vergangenen Pandemie lernen?')
 
 # Umstände
 st.header('Verlauf des Virus')
