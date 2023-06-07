@@ -338,10 +338,14 @@ def on_country_dropdown_change(country):
 on_country_dropdown_change(country_dropdown)
 
 # Schweiz
-st.subheader('Schweiz')
-st.text('In der Schweiz sind vor allem ältere Menschen, ab 70 Jahren gestorben und dies \n'
-        'mehrheitlich zu Beginn der Pandemie 2021. Ende 2021 / Beginn 2022 stiegen die \n'
-        'Zahlen nochmals, weshalb auch da eine höhere Todesrate ersichtlich ist.')
+st.subheader('Grafische Analyse')
+st.text('In der Heatmap werden die Todesfälle nach Quartal und Altersgruppe in Deutschland,\n'
+        'der Schweiz und Österreich dargestellt. Mithilfe des Dropdown-Menüs können Leser das\n'
+        'Land auswählen und die Todesfallzahlen für den Zeitraum von 2021 bis 2023 anzeigen. \n'
+        'Dunklere Felder zeigen eine höhere Anzahl von COVID-19-bedingten Todesfällen. Als Beispiel\n'
+        'verdeutlichen die Daten für die Schweiz, dass vor allem ältere Menschen, insbesondere ab 70\n'
+        'Jahren,während des ersten Pandemiejahres 2021 verstorben sind. Ende 2021/Anfang 2022 stiegen\n'
+        'die Zahlen erneut an, was auf eine erhöhte Todesrate hinweist.\n')
 
 
 st.header('Geografische Verteilung')
