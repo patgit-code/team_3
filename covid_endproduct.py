@@ -337,49 +337,6 @@ def on_country_dropdown_change(country):
 # Dropdown-Widget anzeigen und Änderungen überwachen
 on_country_dropdown_change(country_dropdown)
 
-<html>
-<head>
-    <title>Grafik-Erläuterung</title>
-    <style>
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 300px;
-            height: 200px;
-            background-color: #f1f1f1;
-            padding: 20px;
-            border: 1px solid #ccc;
-        }
-    </style>
-</head>
-<body>
-    <h2>Erläuterung zur Grafik</h2>
-    <p>Klicken Sie auf das Feld, um weitere Informationen anzuzeigen.</p>
-    
-    <div id="popupBox" class="popup">
-        <h3>Zusätzliche Informationen</h3>
-        <p>Hier steht der Text mit der Erläuterung zur Grafik.</p>
-        <button onclick="closePopup()">Schließen</button>
-    </div>
-    
-    <script>
-        function openPopup() {
-            document.getElementById("popupBox").style.display = "block";
-        }
-        
-        function closePopup() {
-            document.getElementById("popupBox").style.display = "none";
-        }
-        
-        document.querySelector("h2").addEventListener("click", openPopup);
-    </script>
-</body>
-</html>
-
-
 # Schweiz
 st.subheader('Schweiz')
 st.text('In der Schweiz sind vor allem ältere Menschen, ab 70 Jahren gestorben und dies \n'
