@@ -10,11 +10,12 @@ from pandas.api.types import CategoricalDtype
 import geopandas as gpd
 from bokeh.io import output_notebook, show, output_file
 from bokeh.plotting import figure, show, output_notebook
-from bokeh.models import GeoJSONDataSource, LinearColorMapper, ColorBar, HoverTool
+from bokeh.models import GeoJSONDataSource, LinearColorMapper, ColorBar, HoverTool, ColumnDataSource, Legend
 from bokeh.palettes import brewer
 from IPython.display import display
 from IPython.display import clear_output
-
+from datetime import datetime
+from bokeh.embed import components
 
 # Bild als Header für den Benutzer als Einstieg in den Artikel
 image = "pexels-photo-3943882.jpeg"
@@ -30,8 +31,8 @@ st.subheader(
     'Doch was können wir aus der vergangenen Pandemie lernen?')
 
 # Umstände
-st.header('Verlauf des Virus')
-st.subheader('')
+st.subheader('COVID-19 Fälle in der Schweiz, Deutschland und Österreuch')
+#st.subheader('')
 
 #Erläuterung zur Grafik
 st.text("Die Schweiz implementierte im Vergleich zu Österreich und Deutschland als letzte \n"
@@ -44,13 +45,13 @@ st.text("Anfang des Jahres 2022 gab es in allen drei Ländern eine drastische St
         "die Bevölkerung fahrlässiger handelte. Da zu diesem Zeitpunkt die Impfungen schon \n" 
         "recht fortgeschritten waren, nahm man die ganze Situation etwas lockerer.")
 
+
 # TODO Start all Visualisations at the same date
 # TODO Get Info how many tests were made at start and end of pandemic
 # TODO check if WHO-COVID-19-global-data has all austria and germany than we make all the graphs with the same data
 
 # Schweiz
-st.subheader('Schweiz')
-st.text('Der Verlauf in der Schweiz...')
+#st.subheader('Schweiz')
 
 # Lesen des WHO Datensatz für den die drei Visualisierungen erstellt werden.
 covid_ww = pd.read_csv(os.path.join('data', 'WHO-COVID-19-global-data.csv'))
@@ -60,37 +61,21 @@ covid_ww['Date_reported'] = pd.to_datetime(covid_ww['Date_reported'])
 
 # Daten für die Schweiz filtern
 switzerland = covid_ww[covid_ww['Country_code'] == 'CH']
+swiss_population = 8703000 #Stand 2021
 
 # Daten nach Quartal gruppieren und kumulative Fälle berechnen
 switzerland_quarterly = switzerland.groupby(pd.Grouper(key='Date_reported', freq='Q')).agg({'Cumulative_cases': 'max'})
 
-# Liniendiagramm erstellen
-fig, ax_virus_process_switzerland = plt.subplots()
-#
-ax_virus_process_switzerland.ticklabel_format(style='plain')
-ax_virus_process_switzerland.plot(switzerland_quarterly.index, switzerland_quarterly['Cumulative_cases'])
+# Daten nach Quartal gruppieren und kumulative Fälle berechnen
+switzerland_quarterly = switzerland.groupby(pd.Grouper(key='Date_reported', freq='Q')).agg({'Cumulative_cases': 'max'})
 
-# TODO add source for all three countries
-# Start der Corona Massnahmen für die Schweiz (Quelle: )
-start_date_switzerland = pd.to_datetime('2020-03-16')
-# Vertikale Line des Start Datums anzeigen
-plt.axvline(start_date_switzerland, 0, max(switzerland_quarterly['Cumulative_cases']),
-            label='Start der Corona Massnahmen am 16.03.2020', color='red')
+#Zahlen prozentual auf Bevölkerung reduzieren und auf 100'000 Einwohner rechnen
+for index, row in switzerland_quarterly.iterrows():
+    switzerland_quarterly.loc[index, 'Cumulative_cases'] = (row['Cumulative_cases'] / swiss_population) * 100000
 
-# Legenden für den Leser damit die Linie verständlich ist
-plt.legend()
-
-plt.xlabel('Quartal')
-plt.ylabel('Kumulative Fälle')
-plt.title('Kumulative COVID-19-Fälle in der Schweiz (quartalsweise)')
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.grid(True)
-
-st.pyplot(fig)
 
 # Deutschland
-st.subheader('Deutschland')
+#st.subheader('Deutschland')
 
 # Daten einlesen
 #df = pd.read_csv('data//Aktuell Deutschland COVID Infektionen.csv', delimiter=';')
@@ -100,73 +85,76 @@ st.subheader('Deutschland')
 
 # Daten für Deutschland filtern
 germany_process_data = covid_ww[covid_ww['Country_code'] == 'DE']
+germany_population = 83200000 #Stand 2021
 
 # Daten nach Quartal gruppieren und kumulative Fälle berechnen
 germany_quarterly = germany_process_data.groupby(pd.Grouper(key='Date_reported', freq='Q')).agg({'Cumulative_cases': 'max'})
 
-# Gruppieren nach Meldedatum und Summieren der Anzahl der Fälle
-#daily_cases = df.groupby('Meldedatum')['AnzahlFall'].sum().reset_index()
+#Zahlen prozentual auf Bevölkerung reduzieren und auf 100'000 Einwohner rechnen
+for index, row in germany_quarterly.iterrows():
+    germany_quarterly.loc[index, 'Cumulative_cases'] = (row['Cumulative_cases'] / germany_population) * 100000
+    
 
-# Liniendiagramm erstellen
-fig, ax_virus_process_germany = plt.subplots()
-
-ax_virus_process_germany.ticklabel_format(style='plain')
-ax_virus_process_germany.plot(germany_quarterly.index, germany_quarterly['Cumulative_cases'])
-
-#ax_virus_process_switzerland.plot(switzerland_quarterly.index, switzerland_quarterly['Cumulative_cases'])
-
-plt.xlabel('Datum')
-plt.ylabel('Anzahl der Fälle')
-plt.title('COVID-Fälle in Deutschland')
-
-# Start der Corona Massnahmen in Deutschland (Quelle: )
-start_date_germany = pd.to_datetime('2020-02-27')
-# Vertikale Line des Start Datums anzeigen
-plt.axvline(start_date_germany, 0, max(germany_quarterly['Cumulative_cases']), label='Start der Corona Massnahmen am 27.02.2020',
-            color='red')
-# Legenden für den Leser damit die Linie verständlich ist
-plt.legend()
-
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.grid(True)
-st.pyplot(fig)
-
-# Österreich
-st.subheader('Österreich')
-
-st.text('Im Vergleich mit Deutschland und der Schweiz hat Österreich...')
-
+#Österreich
 # Summe der Covid-Fälle für alle Daten berechnen
 #total_cases = dat.groupby('Time')['Anzahl'].sum()
 
 # Daten für Österreich filtern
 austria_process_data = covid_ww[covid_ww['Country_code'] == 'AT']
+austria_population = 8956000 #Stand 2021
 
 # Daten nach Quartal gruppieren und kumulative Fälle berechnen
 austria_quarterly = austria_process_data.groupby(pd.Grouper(key='Date_reported', freq='Q')).agg({'Cumulative_cases': 'max'})
 
-# Linien-Diagramm erstellen
-fig, ax_virus_process_austria = plt.subplots()
-ax_virus_process_austria.ticklabel_format(style='plain')
-ax_virus_process_austria.plot(austria_quarterly.index, austria_quarterly['Cumulative_cases'])
+#Zahlen prozentual auf Bevölkerung reduzieren und auf 100'000 Einwohner rechnen
+for index, row in austria_quarterly.iterrows():
+    austria_quarterly.loc[index, 'Cumulative_cases'] = (row['Cumulative_cases'] / austria_population) * 100000
+    
 
-# Start der Corona Massnahmen in Österreich (Quelle: )
-start_date_austria = pd.to_datetime('2020-03-11')
-# Vertikale Line des Start Datums anzeigen
-plt.axvline(start_date_austria, 0, max(austria_quarterly['Cumulative_cases']), label='Start der Corona Massnahmen am 11.03.2020',
-            color='red')
-# Legenden für den Leser damit die Linie verständlich ist
-plt.legend()
+# Linien-Diagramm erstellen für alle
 
-plt.xlabel('Datum')
-plt.ylabel('Anzahl der Covid-Fälle')
-plt.title('Covid-Fälle in Österreich')
-plt.xticks(rotation=45)
-plt.grid(True)
+# Convert the index of quarterly DataFrames to a separate column 'date'
+switzerland_quarterly['date'] = switzerland_quarterly.index
+germany_quarterly['date'] = germany_quarterly.index
+austria_quarterly['date'] = austria_quarterly.index
 
-# Diagramm anzeigen
-st.pyplot(fig)
+# Create ColumnDataSources
+switzerland_source = ColumnDataSource(data=switzerland_quarterly)
+germany_source = ColumnDataSource(data=germany_quarterly)
+austria_source = ColumnDataSource(data=austria_quarterly)
+
+# Create a figure object
+p = figure(x_axis_type='datetime', title='COVID-19 Fälle in der Schweiz, Deutschland und Österreich',
+           x_axis_label='Datum', y_axis_label="Anzahl der Covid-Fälle pro 100'000 Einwohner")
+
+# Lines for Switzerland
+switzerland_line = p.line(x='date', y='Cumulative_cases', source=switzerland_source, color='gold', line_width=2,
+                          legend_label='Schweiz')
+
+# Lines for Germany
+germany_line = p.line(x='date', y='Cumulative_cases', source=germany_source, color='darkorange', line_width=2,
+                      legend_label='Deutschland')
+
+# Lines for Austria
+austria_line = p.line(x='date', y='Cumulative_cases', source=austria_source, color='red', line_width=2,
+                      legend_label='Österreich')
+
+# Interactivity - Click to hide lines
+p.legend.click_policy = 'hide'
+p.legend.location = "top_left"
+
+# Hover-Tool
+hover = HoverTool(tooltips=[('Datum', '@date{%F}'), ('Anzahl der Fälle', '@Cumulative_cases{0,0}')],
+                  formatters={'@date': 'datetime'})
+p.add_tools(hover)
+
+# Convert the Bokeh plot to HTML components
+script, div = components(p)
+
+# Display the HTML components using Streamlit
+st.bokeh_chart(p)
+
+
 
 st.header('Die tödliche Wirkung von COVID-19')
 st.subheader('Ein Blick auf Quartal und Altersgruppe in der Schweiz, Deutschland und Österreich')
