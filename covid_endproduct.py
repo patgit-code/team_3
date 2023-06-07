@@ -337,7 +337,6 @@ def on_country_dropdown_change(country):
 # Dropdown-Widget anzeigen und Änderungen überwachen
 on_country_dropdown_change(country_dropdown)
 
-<!DOCTYPE html>
 <html>
 <head>
     <title>Grafik-Erläuterung</title>
