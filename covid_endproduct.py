@@ -612,40 +612,43 @@ st.pyplot(fig)
 
 st.subheader('Deutschland')
 
-df_vacc = pd.read_csv('data//Aktuell_Deutschland_Bundeslaender_COVID-19-Impfungen.csv', delimiter=',')
+de_vacc = pd.read_csv('data//Aktuell_Deutschland_Bundeslaender_COVID-19-Impfungen.csv', delimiter=',')
 
 #Daten nur von Impfserie 1 nehmen
-df_vacc = df_vacc[df_vacc['Impfserie'] == 1]
+de_vacc = de_vacc[de_vacc['Impfserie'] == 1]
 
 # Sortieren Sie den DataFrame nach dem Impfdatum
-df_vacc_sorted = df_vacc.sort_values('Impfdatum')
+de_vacc_sorted = de_vacc.sort_values('Impfdatum')
 
 # Gruppieren Sie den DataFrame nach dem Impfdatum und summiere die Anzahl
-df_vacc_grouped = df_vacc_sorted.groupby('Impfdatum')['Anzahl'].sum().reset_index()
+de_vacc_grouped = de_vacc_sorted.groupby('Impfdatum')['Anzahl'].sum().reset_index()
 
 # Berechne die kumulierten Impfungen pro Tag
-df_vacc_grouped['kumulierte Impfungen'] = df_vacc_grouped['Anzahl'].cumsum()
+de_vacc_grouped['kumulierte Impfungen'] = de_vacc_grouped['Anzahl'].cumsum()
 
 
 # Liniendiagramm erstellen
 # Meldedatum in DateTime-Format umwandeln
-df_vacc_grouped['Impfdatum'] = pd.to_datetime(df_vacc_grouped['Impfdatum'])
+de_vacc_grouped['Impfdatum'] = pd.to_datetime(de_vacc_grouped['Impfdatum'])
 
 # Gruppieren nach Meldedatum und Summieren der Anzahl der Fälle
-daily_cases = df_vacc_grouped.groupby('Impfdatum')['kumulierte Impfungen'].sum().reset_index()
+daily_cases = de_vacc_grouped.groupby('Impfdatum')['kumulierte Impfungen'].sum().reset_index()
 
 
 # Liniendiagramm erstellen
-plt.plot(df_vacc_grouped['Impfdatum'], df_vacc_grouped['kumulierte Impfungen'])
+fig, ax_vacc_germany = plt.subplots()
+ax_vacc_germany.ticklabel_format(style='plain')
+ax_vacc_germany.plot(de_vacc_grouped['Impfdatum'], de_vacc_grouped['kumulierte Impfungen'])
+
 plt.xlabel('Datum')
 plt.ylabel('Anzahl der kumulierten Impfungen')
 plt.title('COVID-19 Impfungen in Deutschland')
-plt.ticklabel_format(style='plain', axis='y')
 
-plt.tight_layout()
 plt.xticks(rotation=45)
 plt.tight_layout()
-plt.show() 
+plt.grid(True)
+st.pyplot(fig)
+
 
 st.subheader('Österreich')
 
