@@ -1,5 +1,7 @@
 import os
 import json
+
+import matplotlib.style
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -16,6 +18,7 @@ from IPython.display import display
 from IPython.display import clear_output
 from datetime import datetime
 from bokeh.embed import components
+matplotlib.style.use('classic')
 
 # Bild als Header für den Benutzer als Einstieg in den Artikel
 image = "pexels-photo-3943882.jpeg"
