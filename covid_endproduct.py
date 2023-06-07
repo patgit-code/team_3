@@ -172,6 +172,169 @@ st.header('Todesfälle in der Schweiz, Österreich und Deutschland')
 st.subheader('')
 st.text('')
 
+# Funktionen zur Erstellung der Heatmaps
+
+def create_heatmap_schweiz():
+    # Daten laden
+    data_alt = pd.read_csv('data//COVID19Death_geoRegion_AKL10_w.csv')
+
+    # 'Unbekannt' aus der Altersklasse entfernen
+    data = data_alt[data_alt['altersklasse_covid19'] != 'Unbekannt']
+
+    # Filtern der Daten von 2021 bis 2023
+    data = data[data['datum'].astype(str).str[:4].astype(int).between(2021, 2023)]
+
+    # Extrahieren des Jahres und der Woche aus dem Datum
+    data['jahr'] = data['datum'].astype(str).str[:4]
+    data['woche'] = data['datum'].astype(str).str[4:].astype(int)
+
+    # Funktion zum Zuordnen des Quartals basierend auf der Woche
+    def map_quartal(woche):
+        if 1 <= woche <= 13:
+            return 'Q1'
+        elif 14 <= woche <= 26:
+            return 'Q2'
+        elif 27 <= woche <= 39:
+            return 'Q3'
+        else:
+            return 'Q4'
+
+    # Quartalsspalte erstellen
+    data['quartal'] = data['woche'].map(map_quartal)
+
+    # Pivot-Tabelle erstellen
+    pivot_table = pd.pivot_table(data, values='entries', index='altersklasse_covid19', columns=['jahr', 'quartal'])
+
+    # Farbpalette definieren
+    cmap = sns.color_palette("Reds", as_cmap=True)
+
+    # Heatmap erstellen
+    plt.figure(figsize=(12, 8))
+    sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='.0f', cbar=True)
+    plt.xlabel('Quartal')
+    plt.ylabel('Altersklasse')
+    plt.title('Anzahl der Todesfälle nach Quartal und Altersgruppe in der Schweiz')
+
+    plt.tight_layout()
+    st.pyplot()
+
+def create_heatmap_österreich():
+    # Daten laden
+    dat = pd.read_csv("data//CovidFaelle_Altersgruppe.csv", delimiter=';')
+
+    # Änderung von Altersnotation
+    dat['Altersgruppe'] = dat['Altersgruppe'].replace('<5', '0-5')
+    dat['Altersgruppe'] = dat['Altersgruppe'].replace('>84', '84+')
+    dat['Altersgruppe'] = dat['Altersgruppe'].replace('5-14', '05-14')
+    dat = dat[dat['Bundesland'] != 'Österreich']
+
+    # Datumsspalte in datetime umwandeln
+    dat['Time'] = pd.to_datetime(dat['Time'], format='%d.%m.%Y %H:%M:%S')
+
+    # Filtern der Daten von 2021 bis 2023
+    dat = dat[dat['Time'].dt.year.between(2021, 2023)]
+
+    # Quartalsinformationen hinzufügen
+    dat['Quarter'] = dat['Time'].dt.to_period('Q')
+
+    # Pivot-Tabelle erstellen
+    pivot_table = pd.pivot_table(dat, values='AnzahlTot', index='Altersgruppe', columns='Quarter')
+
+    # Quartalsüberschriften formatieren
+    quarter_labels = pivot_table.columns.strftime('%Y Q%q')
+
+    # Spalte 'AnzahlTot' in ganze Zahlen umwandeln
+    dat['AnzahlTot'] = dat['AnzahlTot'].astype(int)
+
+    # Farbpalette definieren
+    cmap = sns.color_palette("Reds", as_cmap=True)
+
+    # Heatmap erstellen
+    plt.figure(figsize=(12, 8))
+    sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='.0f', cbar=True)
+    plt.xlabel('Quartal')
+    plt.ylabel('Altersgruppe')
+    plt.title('Anzahl der Todesfälle nach Quartal und Altersgruppe in Österreich')
+    plt.xticks(ticks=np.arange(len(quarter_labels))+0.5, labels=quarter_labels, rotation=45, ha='right')
+
+    # Umkehrung der y-Achse
+    plt.yticks(ticks=np.arange(len(pivot_table.index))[::-1]+0.5, labels=pivot_table.index[::-1], rotation=0, va='center')
+
+    plt.tight_layout()
+    st.pyplot()
+
+def create_heatmap_deutschland():
+    # Daten laden
+    df_alt = pd.read_csv('data//Aktuell Deutschland COVID Infektionen.csv', delimiter=';')
+
+    df_alt['Altersgruppe'] = df_alt['Altersgruppe'].replace({'A00-A04': '00-04',
+                                                            'A05-A14': '05-14',
+                                                            'A15-A34': '15-34',
+                                                            'A35-A59': '35-59',
+                                                            'A60-A79': '60-79',
+                                                            'A80+ ': '80+'})
+
+    # 'Unbekannt' aus der Altersklasse rauslöschen
+    df = df_alt[df_alt['Altersgruppe'] != 'unbekannt']
+
+    # Datumsspalten in datetime umwandeln
+    df['Meldedatum'] = pd.to_datetime(df['Meldedatum'], format='%Y-%m-%d')
+    df['Refdatum'] = pd.to_datetime(df['Refdatum'], format='%Y-%m-%d')
+
+    # Filtern der Daten von 2021 bis 2023
+    df = df[df['Meldedatum'].dt.year.between(2021, 2023)]
+
+    # Quartalsinformationen hinzufügen
+    df['Quartal'] = df['Meldedatum'].dt.to_period('Q')
+
+    # Pivot-Tabelle erstellen
+    pivot_table = pd.pivot_table(df, values='AnzahlTodesfall', index='Altersgruppe', columns='Quartal', aggfunc='sum', fill_value=0)
+
+    # Konvertieren in ganze Anzahlen
+    pivot_table = pivot_table.astype(int)
+
+    # Quartalsüberschriften formatieren
+    quarter_labels = pivot_table.columns.strftime('%Y-Q%q')
+
+    # Farbpalette definieren
+    cmap = sns.color_palette("Reds", as_cmap=True)
+
+    # Heatmap erstellen
+    plt.figure(figsize=(12, 8))
+    sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='d', cbar=True)
+    plt.xlabel('Quartal')
+    plt.ylabel('Altersgruppe')
+    plt.title('Anzahl der Todesfälle nach Quartal und Altersgruppe in Deutschland')
+    plt.xticks(ticks=np.arange(len(quarter_labels))+0.5, labels=quarter_labels, rotation=45, ha='right')
+    plt.yticks(rotation=0)
+
+    # Anpassung der Farbskala basierend auf den Werten
+    norm = plt.Normalize(pivot_table.min().min(), pivot_table.max().max())
+    heatmap = sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='d', cbar=False, norm=norm)
+
+    plt.tight_layout()
+    st.pyplot()
+
+
+# Dropdown-Widget für Länderauswahl erstellen
+country_dropdown = st.selectbox(
+    'Land:',
+    ['Schweiz', 'Österreich', 'Deutschland']
+)
+
+# Funktion zur Handhabung der Dropdown-Änderungen erstellen
+def on_country_dropdown_change(country):
+    if country == 'Schweiz':
+        create_heatmap_schweiz()
+    elif country == 'Österreich':
+        create_heatmap_österreich()
+    elif country == 'Deutschland':
+        create_heatmap_deutschland()
+
+# Dropdown-Widget anzeigen und Änderungen überwachen
+on_country_dropdown_change(country_dropdown)
+
+
 # Schweiz
 st.subheader('Schweiz')
 st.text('In der Schweiz sind vor allem ältere Menschen, ab 70 Jahren gestorben und dies \n'
