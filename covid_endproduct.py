@@ -12,7 +12,6 @@ from bokeh.io import output_notebook, show, output_file
 from bokeh.plotting import figure, show, output_notebook
 from bokeh.models import GeoJSONDataSource, LinearColorMapper, ColorBar, HoverTool
 from bokeh.palettes import brewer
-import ipywidgets as widgets
 from IPython.display import display
 from IPython.display import clear_output
 
