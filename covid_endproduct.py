@@ -168,8 +168,8 @@ plt.grid(True)
 # Diagramm anzeigen
 st.pyplot(fig)
 
-st.header('Todesfälle in der Schweiz, Österreich und Deutschland')
-st.subheader('')
+st.header('Die tödliche Wirkung von COVID-19')
+st.subheader('Ein Blick auf Quartal und Altersgruppe in Deutschland, der Schweiz und Österreich')
 st.text('')
 
 # Funktionen zur Erstellung der Heatmaps
