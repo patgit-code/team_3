@@ -169,7 +169,7 @@ plt.grid(True)
 st.pyplot(fig)
 
 st.header('Die tödliche Wirkung von COVID-19')
-st.subheader('Ein Blick auf Quartal und Altersgruppe in Deutschland, der Schweiz und Österreich')
+st.subheader('Ein Blick auf Quartal und Altersgruppe in der Schweiz, Deutschland und Österreich')
 st.text('')
 
 # Funktionen zur Erstellung der Heatmaps
