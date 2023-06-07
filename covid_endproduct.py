@@ -131,7 +131,7 @@ p = figure(x_axis_type='datetime', title='COVID-19 Fälle in der Schweiz, Deutsc
            x_axis_label='Datum', y_axis_label="Anzahl der Covid-Fälle pro 100'000 Einwohner")
 
 # Lines for Switzerland
-switzerland_line = p.line(x='date', y='Cumulative_cases', source=switzerland_source, color='indianred', line_width=2.5,
+switzerland_line = p.line(x='date', y='Cumulative_cases', source=switzerland_source, color='tomato', line_width=2.5,
                           legend_label='Schweiz')
 
 # Lines for Germany
@@ -139,7 +139,7 @@ germany_line = p.line(x='date', y='Cumulative_cases', source=germany_source, col
                       legend_label='Deutschland')
 
 # Lines for Austria
-austria_line = p.line(x='date', y='Cumulative_cases', source=austria_source, color='peru', line_width=2.5,
+austria_line = p.line(x='date', y='Cumulative_cases', source=austria_source, color='orange', line_width=2.5,
                       legend_label='Österreich')
 
 # Interactivity - Click to hide lines
@@ -437,7 +437,7 @@ bokeh_swiss.background_fill_color = None
 bokeh_swiss.sizing_mode = 'scale_width'
 
 # Erstellen der Karte und befüllen mit Farbe
-bokeh_swiss.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_switzerland, fill_color="indianred")
+bokeh_swiss.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_switzerland, fill_color="tomato")
 
 # Hover Tool für die Todesfälle erstellen.
 # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
@@ -560,7 +560,7 @@ bokeh_austria.background_fill_color = None
 bokeh_austria.sizing_mode = 'scale_width'
 
 # Erstellen der Karte und befüllen mit Farbe
-bokeh_austria.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_austria, fill_color="peru")
+bokeh_austria.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_austria, fill_color="orange")
 
 # Hover Tool für die Todesfälle erstellen.
 # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
