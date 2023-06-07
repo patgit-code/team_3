@@ -209,14 +209,14 @@ def create_heatmap_schweiz():
     cmap = sns.color_palette("Reds", as_cmap=True)
 
     # Heatmap erstellen
-    plt.figure(figsize=(12, 8))
-    sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='.0f', cbar=True)
-    plt.xlabel('Quartal')
-    plt.ylabel('Altersklasse')
-    plt.title('Anzahl der Todesfälle nach Quartal und Altersgruppe in der Schweiz')
+    fig, ax = plt.subplots(figsize=(12, 8))
+    sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='.0f', cbar=True, ax=ax)
+    ax.set_xlabel('Quartal')
+    ax.set_ylabel('Altersklasse')
+    ax.set_title('Anzahl der Todesfälle nach Quartal und Altersgruppe in der Schweiz')
 
     plt.tight_layout()
-    st.pyplot()
+    st.pyplot(fig)
 
 def create_heatmap_österreich():
     # Daten laden
@@ -250,18 +250,20 @@ def create_heatmap_österreich():
     cmap = sns.color_palette("Reds", as_cmap=True)
 
     # Heatmap erstellen
-    plt.figure(figsize=(12, 8))
-    sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='.0f', cbar=True)
-    plt.xlabel('Quartal')
-    plt.ylabel('Altersgruppe')
-    plt.title('Anzahl der Todesfälle nach Quartal und Altersgruppe in Österreich')
-    plt.xticks(ticks=np.arange(len(quarter_labels))+0.5, labels=quarter_labels, rotation=45, ha='right')
+    fig, ax = plt.subplots(figsize=(12, 8))
+    sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='.0f', cbar=True, ax=ax)
+    ax.set_xlabel('Quartal')
+    ax.set_ylabel('Altersgruppe')
+    ax.set_title('Anzahl der Todesfälle nach Quartal und Altersgruppe in Österreich')
+    ax.set_xticks(np.arange(len(quarter_labels))+0.5)
+    ax.set_xticklabels(quarter_labels, rotation=45, ha='right')
 
     # Umkehrung der y-Achse
-    plt.yticks(ticks=np.arange(len(pivot_table.index))[::-1]+0.5, labels=pivot_table.index[::-1], rotation=0, va='center')
+    ax.set_yticks(np.arange(len(pivot_table.index))[::-1]+0.5)
+    ax.set_yticklabels(pivot_table.index[::-1], rotation=0, va='center')
 
     plt.tight_layout()
-    st.pyplot()
+    st.pyplot(fig)
 
 def create_heatmap_deutschland():
     # Daten laden
@@ -300,20 +302,21 @@ def create_heatmap_deutschland():
     cmap = sns.color_palette("Reds", as_cmap=True)
 
     # Heatmap erstellen
-    plt.figure(figsize=(12, 8))
-    sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='d', cbar=True)
-    plt.xlabel('Quartal')
-    plt.ylabel('Altersgruppe')
-    plt.title('Anzahl der Todesfälle nach Quartal und Altersgruppe in Deutschland')
-    plt.xticks(ticks=np.arange(len(quarter_labels))+0.5, labels=quarter_labels, rotation=45, ha='right')
-    plt.yticks(rotation=0)
+    fig, ax = plt.subplots(figsize=(12, 8))
+    sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='d', cbar=True, ax=ax)
+    ax.set_xlabel('Quartal')
+    ax.set_ylabel('Altersgruppe')
+    ax.set_title('Anzahl der Todesfälle nach Quartal und Altersgruppe in Deutschland')
+    ax.set_xticks(np.arange(len(quarter_labels))+0.5)
+    ax.set_xticklabels(quarter_labels, rotation=45, ha='right')
+    ax.set_yticklabels(pivot_table.index[::-1], rotation=0)
 
     # Anpassung der Farbskala basierend auf den Werten
     norm = plt.Normalize(pivot_table.min().min(), pivot_table.max().max())
-    heatmap = sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='d', cbar=False, norm=norm)
+    heatmap = sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='d', cbar=False, norm=norm, ax=ax)
 
     plt.tight_layout()
-    st.pyplot()
+    st.pyplot(fig)
 
 
 # Dropdown-Widget für Länderauswahl erstellen
@@ -333,6 +336,7 @@ def on_country_dropdown_change(country):
 
 # Dropdown-Widget anzeigen und Änderungen überwachen
 on_country_dropdown_change(country_dropdown)
+
 
 
 # Schweiz
