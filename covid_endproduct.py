@@ -321,7 +321,7 @@ def create_heatmap_deutschland():
 
 # Dropdown-Widget für Länderauswahl erstellen
 country_dropdown = st.selectbox(
-    'Land:',
+    'Wählen Sie Ihr Land: :',
     ['Schweiz', 'Österreich', 'Deutschland']
 )
 
