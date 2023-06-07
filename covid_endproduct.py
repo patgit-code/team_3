@@ -12,6 +12,9 @@ from bokeh.io import output_notebook, show, output_file
 from bokeh.plotting import figure, show, output_notebook
 from bokeh.models import GeoJSONDataSource, LinearColorMapper, ColorBar, HoverTool
 from bokeh.palettes import brewer
+import ipywidgets as widgets
+from IPython.display import display
+from IPython.display import clear_output
 
 
 # Bild als Header für den Benutzer als Einstieg in den Artikel
@@ -166,7 +169,7 @@ plt.grid(True)
 # Diagramm anzeigen
 st.pyplot(fig)
 
-st.header('Todesfälle (Heatmaps)')
+st.header('Todesfälle in der Schweiz, Österreich und Deutschland')
 st.subheader('')
 st.text('')
 
