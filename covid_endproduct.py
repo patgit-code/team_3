@@ -128,15 +128,15 @@ p = figure(x_axis_type='datetime', title='COVID-19 Fälle in der Schweiz, Deutsc
            x_axis_label='Datum', y_axis_label="Anzahl der Covid-Fälle pro 100'000 Einwohner")
 
 # Lines for Switzerland
-switzerland_line = p.line(x='date', y='Cumulative_cases', source=switzerland_source, color='gold', line_width=2,
+switzerland_line = p.line(x='date', y='Cumulative_cases', source=switzerland_source, color='indianred', line_width=2.5,
                           legend_label='Schweiz')
 
 # Lines for Germany
-germany_line = p.line(x='date', y='Cumulative_cases', source=germany_source, color='darkorange', line_width=2,
+germany_line = p.line(x='date', y='Cumulative_cases', source=germany_source, color='maroon', line_width=2.5,
                       legend_label='Deutschland')
 
 # Lines for Austria
-austria_line = p.line(x='date', y='Cumulative_cases', source=austria_source, color='red', line_width=2,
+austria_line = p.line(x='date', y='Cumulative_cases', source=austria_source, color='peru', line_width=2.5,
                       legend_label='Österreich')
 
 # Interactivity - Click to hide lines
@@ -339,7 +339,7 @@ st.text('In der Heatmap werden die Todesfälle nach Quartal und Altersgruppe in 
 
 st.header('Geografische Verteilung')
 st.subheader('Wo sind die unterschieder der Todesfälle. \
-Können wir einen Unterschied sehen zwischen den Kantonen bzw. Bundesländer? \
+Können wir einen Unterschied sehen zwischen den Kantonen bzw. Bundesländern? \
 Gibt es einen Unterschied zwischen dem Land und der Stadt')
 
 # Schweiz
@@ -434,7 +434,7 @@ bokeh_swiss.background_fill_color = None
 bokeh_swiss.sizing_mode = 'scale_width'
 
 # Erstellen der Karte und befüllen mit Farbe
-bokeh_swiss.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_switzerland, fill_color="#008800")
+bokeh_swiss.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_switzerland, fill_color="indianred")
 
 # Hover Tool für die Todesfälle erstellen.
 # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
@@ -496,7 +496,7 @@ bokeh_germany.background_fill_color = None
 bokeh_germany.sizing_mode = 'scale_width'
 
 # Erstellen der Karte und befüllen mit Farbe
-bokeh_germany.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_germany, fill_color="#008800")
+bokeh_germany.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_germany, fill_color="maroon")
 
 # Hover Tool für die Todesfälle erstellen.
 # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
@@ -557,7 +557,7 @@ bokeh_austria.background_fill_color = None
 bokeh_austria.sizing_mode = 'scale_width'
 
 # Erstellen der Karte und befüllen mit Farbe
-bokeh_austria.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_austria, fill_color="#008800")
+bokeh_austria.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_austria, fill_color="peru")
 
 # Hover Tool für die Todesfälle erstellen.
 # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
