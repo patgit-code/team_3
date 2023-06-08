@@ -420,7 +420,7 @@ for index, row in cantons.iterrows():
     int(population[population['Bundesländer'] == row['NAME']]['Stand'].values[0])
     cantons.loc[index, 'ProcentageOfDeathPop'] = \
     "{:.2f}".format((death_count_canton[death_count_canton['geoRegion'] == dict_canton[row['NAME']]]['entries'].values[0] /
-    population[population['Bundesländer'] == row['NAME']]['Population'].values[0]) * 100000)
+    population[population['Bundesländer'] == row['NAME']]['Population'].values[0]) * 1000)
 
 geo_source_switzerland = GeoJSONDataSource(geojson=cantons.to_json())
 
@@ -445,7 +445,7 @@ hover_switzerland = bokeh_swiss.select(dict(type=HoverTool))
 hover_switzerland.tooltips = [
     ("Kanton", "@NAME"), ("Todesfälle", "@deaths"),
     ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"),
-    ("Prozentualer Anteil der Todesfälle pro Bevölkerung", '@ProcentageOfDeathPop')
+    ("Sterberate", '@ProcentageOfDeathPop')
                               ]
 hover_switzerland.mode = 'mouse'
 
@@ -482,7 +482,7 @@ for index, row in germany.iterrows():
     int(population[population['Bundesländer'] == row['GEN']]['Stand'].values[0])
     germany.loc[index, 'ProcentageOfDeathPop'] = \
     "{:.2f}".format((death_de[death_de['Bundesländer'] == row['GEN']]['Todesfälle'].values[0] /
-    population[population['Bundesländer'] == row['GEN']]['Population'].values[0]) * 100000)
+    population[population['Bundesländer'] == row['GEN']]['Population'].values[0]) * 1000)
 
 geo_source_germany = GeoJSONDataSource(geojson=germany.to_json())
 
@@ -507,7 +507,7 @@ hover_germany = bokeh_germany.select(dict(type=HoverTool))
 hover_germany.tooltips = [
     ("Bundesland", "@GEN"), ("Todesfälle", "@Deaths"),
     ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"),
-    ("Prozentualer Anteil der Todesfälle pro Bevölkerung", '@ProcentageOfDeathPop')
+    ("Sterberate", '@ProcentageOfDeathPop')
                           ]
 hover_germany.mode = 'mouse'
 
@@ -541,7 +541,7 @@ for index, row in austria.iterrows():
     austria.loc[index, 'YearOfPopulation'] = \
     int(population[population['Bundesländer'] == row['BL']]['Stand'].values[0])
     austria.loc[index, 'ProcentageOfDeathPop'] = \
-    "{:.2f}".format((death_at[death_at['Bundesländer'] == row['BL']]['Anzahl Tode'].values[0] / population[population['Bundesländer'] == row['BL']]['Population'].values[0]) * 100000)
+    "{:.2f}".format((death_at[death_at['Bundesländer'] == row['BL']]['Anzahl Tode'].values[0] / population[population['Bundesländer'] == row['BL']]['Population'].values[0]) * 1000)
 
 
  # TODO add comment
@@ -568,7 +568,7 @@ hover_austria = bokeh_austria.select(dict(type=HoverTool))
 hover_austria.tooltips = [
     ("Bundesland", "@BL"), ("Todesfälle", "@Deaths"), \
     ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"), \
-    ("Prozentualer Anteil der Todesfälle pro Bevölkerung", '@ProcentageOfDeathPop')
+    ("Sterberate", '@ProcentageOfDeathPop')
 ]
 
 hover_austria.mode = 'mouse'
