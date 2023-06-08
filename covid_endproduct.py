@@ -578,28 +578,36 @@ st.bokeh_chart(bokeh_austria)
 
 st.header('Impfungen')
 
+#Schweiz
 st.subheader('Schweiz')
 
 # Daten einlesen
-vacc_ch = pd.read_csv('data//COVID19Cases_vaccpersons_AKL10_w.csv')
+vacc_type = pd.read_csv('data//COVID19VaccPersons_vaccine.csv')
 
-# Datum in DateTime-Format umwandeln
-vacc_ch['date'] = pd.to_datetime(vacc_ch['date'])
+# Datenverarbeitung
+vacc_type['date'] = pd.to_datetime(vacc_type['date'])  # Konvertiere die 'date'-Spalte in Datumsobjekte
+vacc_type = vacc_type.sort_values('date')
+vacc_ch = vacc_type[vacc_type['type'] == 'COVID19FullyVaccPersons']
 
-# Liniendiagramm erstellen
-fig, ax_vacc_swiss = plt.subplots()
-ax_vacc_swiss.ticklabel_format(style='plain')
-ax_vacc_swiss.plot(vacc_ch['date'], vacc_ch['entries'])
-plt.xlabel('Impfdatum')
-plt.ylabel('Anzahl der Impfungen')
-plt.title('Gesamtzahl der Impfungen in der Schweiz')
+# Kumulative Summe der Einträge berechnen
+vacc_type['Kumulative Summe'] = vacc_type['entries'].cumsum() / 10
 
-# X-Achse anpassen, um quartalsweise Beschriftungen anzuzeigen
-quarter_labels = vacc_ch['date'].dt.to_period('Q').astype(str)
-plt.xticks(vacc_ch['date'], quarter_labels, rotation=45)
+# Streamlit-Anwendung
+st.title('Kumulative Summe der Einträge nach Datum')
+
+# Grafik erstellen und anzeigen
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.plot(vacc_type['date'], vacc_type['Kumulative Summe'])
+ax.ticklabel_format(style='plain', axis='y')
+
+# Achsenbeschriftungen
+plt.xlabel('Datum')
+plt.ylabel('Kumulative Summe')
 plt.grid(True)
-plt.tight_layout()
+
+# Diagramm in Streamlit anzeigen
 st.pyplot(fig)
+
 
 st.subheader('Deutschland')
 
