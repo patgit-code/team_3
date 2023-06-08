@@ -704,6 +704,9 @@ ax_vacc_type_swiss.set_xticks(vaccine_swiss_grouped['vaccine'], labels, rotation
 # Achsen oben und rechts entfernen
 ax_vacc_type_swiss.spines[['right', 'top']].set_visible(False)
 
+# Ticks oben und rechts entfernen
+plt.tick_params(right = False, top = False)
+
 # Labels und Titel setzen
 plt.xlabel('Impfstoff')
 plt.ylabel('Anzahl Impfungen')
@@ -734,10 +737,15 @@ bar_austria = ax_vacc_type_austria.bar(vaccine_austria_grouped['vaccine'], vacci
 # Achsen oben und rechts entfernen
 ax_vacc_type_austria.spines[['right', 'top']].set_visible(False)
 
+# Werte überhalb des Graph setzen
 ax_vacc_type_austria.bar_label(bar_austria, labels=[e for e in vaccine_austria_grouped['vaccinations_administered_cumulative']], padding=3, color='Black', fontsize=8)
 
+# Neue Labels setzen
 labels = ['Astra Zeneca', 'Pfizer Biontech', 'Janssen', 'Moderna', 'Novavax', 'Sanofi Pasteur', 'Valneva']
 ax_vacc_type_austria.set_xticks(vaccine_austria_grouped['vaccine'], labels, rotation=45)
+
+# Ticks oben und rechts entfernen
+plt.tick_params(right = False, top = False)
 
 plt.xlabel('Impfstoff')
 plt.ylabel('Anzahl Impfungen')
