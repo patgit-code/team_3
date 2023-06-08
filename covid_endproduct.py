@@ -38,12 +38,12 @@ st.subheader('COVID-19 Fälle in der Schweiz, Deutschland und Österreuch')
 #st.subheader('')
 
 #Erläuterung zur Grafik
-st.text("Die Schweiz implementierte im Vergleich zu Österreich und Deutschland als letzte \n"
+st.markdown("Die Schweiz implementierte im Vergleich zu Österreich und Deutschland als letzte \n"
         "erste Coronamassnahmen. Auch im Verlauf der Pandemie waren die Massnahmen \n"
          "verglichen mit unseren Nachbarsländern stets weniger streng. In Betracht auf  \n"
         "die Fallzahlen, war die Schweiz auf Platz zwei mit durchschnittlich 50'573 Fällen \n"
         "auf 100'000 Einwohner.")
-st.text("Anfang des Jahres 2022 gab es in allen drei Ländern eine drastische Steigung der \n"
+st.markdown("Anfang des Jahres 2022 gab es in allen drei Ländern eine drastische Steigung der \n"
         "Fallzahlen. Dies vor allem deswegen, weil die Massnahmen gelockert wurden und \n" 
         "die Bevölkerung fahrlässiger handelte. Da zu diesem Zeitpunkt die Impfungen schon \n" 
         "recht fortgeschritten waren, nahm man die ganze Situation etwas lockerer.")
@@ -161,7 +161,7 @@ st.bokeh_chart(p)
 
 st.header('Die tödliche Wirkung von COVID-19')
 st.subheader('Ein Blick auf Quartal und Altersgruppe in der Schweiz, Deutschland und Österreich')
-st.text('')
+st.markdown('')
 
 # Funktionen zur Erstellung der Heatmaps
 
@@ -330,7 +330,7 @@ on_country_dropdown_change(country_dropdown)
 
 # Schweiz
 st.subheader('Grafische Analyse')
-st.text('In der Heatmap werden die Todesfälle nach Quartal und Altersgruppe in Deutschland,\n'
+st.markdown('In der Heatmap werden die Todesfälle nach Quartal und Altersgruppe in Deutschland,\n'
         'der Schweiz und Österreich dargestellt. Mithilfe des Dropdown-Menüs können Leser\n'
         'das Land auswählen und die Todesfallzahlen für den Zeitraum von 2021 bis 2023\n'
         'anzeigen. Dunklere Felder zeigen eine höhere Anzahl von COVID-19-bedingten\n'
@@ -343,8 +343,9 @@ st.text('In der Heatmap werden die Todesfälle nach Quartal und Altersgruppe in 
 st.header('Geografische Verteilung')
 st.subheader('Wo sind die unterschieder der Todesfälle. \
 Können wir einen Unterschied sehen zwischen den Kantonen bzw. Bundesländern? \
-Gibt es einen Unterschied zwischen dem Land und der Stadt')
+Gibt es einen Unterschied zwischen dem Land und der Stadt?')
 
+st.markdown('')
 # Schweiz
 # static map
 
@@ -455,8 +456,6 @@ st.bokeh_chart(bokeh_swiss)
 # Deutschland
 st.subheader('Deutschland')
 
-# TODO ungefähre Anzahl pro Bundesland bzw. Land / Menschen Ratio herraussuchen
-# TODO explain this csv where did we get the data here
 death_de = pd.read_csv("data//statistic_id1100750_fallzahl-des-coronavirus--covid-19--nach-bundeslaendern-2023.csv",
                  delimiter = ';')
 
@@ -469,8 +468,8 @@ germany['Deaths'] = ''
 germany['Population'] = ''
 germany['ProcentageOfDeathPop'] = ''
 germany['YearOfPopulation'] = ''
-# Infos zu den Bevölkerunganzahl von Statista (https://de.statista.com/statistik/daten/studie/75536/umfrage/schweiz-bevoelkerung-nach-kanton-zeitreihe/)
 
+# Infos zu den Bevölkerunganzahl von Statista (https://de.statista.com/statistik/daten/studie/75536/umfrage/schweiz-bevoelkerung-nach-kanton-zeitreihe/)
 # Setzen der Todesfälle auf den korrekten Kanton.
 # Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
 for index, row in germany.iterrows():
@@ -577,6 +576,8 @@ hover_austria.mode = 'mouse'
 st.bokeh_chart(bokeh_austria)
 
 st.header('Impfungen')
+
+st.markdown('')
 
 #Schweiz
 st.subheader('Schweiz')
