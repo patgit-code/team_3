@@ -598,17 +598,18 @@ vacc_ch = vacc_type[vacc_type['type'] == 'COVID19FullyVaccPersons']
 # Kumulative Summe der Einträge berechnen
 vacc_type['Kumulative Summe'] = vacc_type['entries'].cumsum() / 10
 
-# Streamlit-Anwendung
-plt.title('Kumulative Summe der Einträge nach Datum')
-
 # Grafik erstellen und anzeigen
-fig, ax = plt.subplots(figsize=(10, 6))
-ax.plot(vacc_type['date'], vacc_type['Kumulative Summe'])
-ax.ticklabel_format(style='plain', axis='y')
+fig, ax_vacc_swiss = plt.subplots(figsize=(10, 6))
+ax_vacc_swiss.plot(vacc_type['date'], vacc_type['Kumulative Summe'])
+ax_vacc_swiss.ticklabel_format(style='plain', axis='y')
+
+# Titel
+plt.title('COVID-19 Impfungen in der Schweiz')
 
 # Achsenbeschriftungen
-plt.xlabel('Datum')
-plt.ylabel('Kumulative Summe')
+plt.xticks(rotation=45)
+plt.xlabel('Impfdatum')
+plt.ylabel('Kumulative Impfungen')
 plt.grid(True)
 
 # Diagramm in Streamlit anzeigen
@@ -641,12 +642,12 @@ daily_cases = de_vacc_grouped.groupby('Impfdatum')['kumulierte Impfungen'].sum()
 
 
 # Liniendiagramm erstellen
-fig, ax_vacc_germany = plt.subplots()
+fig, ax_vacc_germany = plt.subplots(figsize=(10, 6))
 ax_vacc_germany.ticklabel_format(style='plain')
 ax_vacc_germany.plot(de_vacc_grouped['Impfdatum'], de_vacc_grouped['kumulierte Impfungen'])
 
-plt.xlabel('Datum')
-plt.ylabel('Anzahl der kumulierten Impfungen')
+plt.xlabel('Impfdatum')
+plt.ylabel('Kumulative Impfungen')
 plt.title('COVID-19 Impfungen in Deutschland')
 
 plt.xticks(rotation=45)
@@ -667,12 +668,12 @@ vacc_ak['Time'] = pd.to_datetime(vacc_ak['Time'], format='%d.%m.%Y %H:%M:%S')
 total_vaccinations = vacc_ak.groupby('Time')['Anzahl'].sum()
 
 # Liniendiagramm erstellen
-fig, ax_vacc_austria = plt.subplots()
+fig, ax_vacc_austria = plt.subplots(figsize=(10, 6))
 ax_vacc_austria.ticklabel_format(style='plain')
 ax_vacc_austria.plot(total_vaccinations.index, total_vaccinations.values)
 plt.xlabel('Impfdatum')
-plt.ylabel('Gesamtimpfungen')
-plt.title('Gesamtzahl der Impfungen in Österreich')
+plt.ylabel('Kumulative Impfungen')
+plt.title('COVID-19 Impfungen in Österreich')
 plt.xticks(rotation=45)
 plt.grid(True)
 plt.tight_layout()
