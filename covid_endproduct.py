@@ -437,7 +437,7 @@ bokeh_swiss.background_fill_color = None
 bokeh_swiss.sizing_mode = 'scale_width'
 
 # Erstellen der Karte und befüllen mit Farbe
-bokeh_swiss.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_switzerland, fill_color="tomato")
+bokeh_swiss.patches('xs', 'ys', fill_alpha=0.8, line_width=0.6, line_color='white', source=geo_source_switzerland, fill_color="tomato")
 
 # Hover Tool für die Todesfälle erstellen.
 # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
@@ -499,7 +499,7 @@ bokeh_germany.background_fill_color = None
 bokeh_germany.sizing_mode = 'scale_width'
 
 # Erstellen der Karte und befüllen mit Farbe
-bokeh_germany.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_germany, fill_color="maroon")
+bokeh_germany.patches('xs', 'ys', fill_alpha=0.8, line_width=0.6, line_color='white', source=geo_source_germany, fill_color="maroon")
 
 # Hover Tool für die Todesfälle erstellen.
 # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
@@ -560,7 +560,7 @@ bokeh_austria.background_fill_color = None
 bokeh_austria.sizing_mode = 'scale_width'
 
 # Erstellen der Karte und befüllen mit Farbe
-bokeh_austria.patches('xs', 'ys', fill_alpha=1.0, line_width=0.0, source=geo_source_austria, fill_color="orange")
+bokeh_austria.patches('xs', 'ys', fill_alpha=0.8, line_width=0.6, line_color='white', source=geo_source_austria, fill_color="orange")
 
 # Hover Tool für die Todesfälle erstellen.
 # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
@@ -710,13 +710,14 @@ plt.tick_params(right = False, top = False)
 # Labels und Titel setzen
 plt.xlabel('Impfstoff')
 plt.ylabel('Anzahl Impfungen')
-plt.title('Anzahl der Impfungen nach Impfstoff in der Schweiz')
+plt.title('Anzahl der Impfungen pro Impfstoff in der Schweiz')
 plt.tight_layout()
 st.pyplot(fig)
 
 # Deutschland
 st.subheader('Deutschland')
 
+# TODO FIND DATA VACCINE TYPE FOR GERMANY
 
 # Österreich
 st.subheader('Österreich')
@@ -749,7 +750,7 @@ plt.tick_params(right = False, top = False)
 
 plt.xlabel('Impfstoff')
 plt.ylabel('Anzahl Impfungen')
-plt.title('Anzahl der Impfungen und Impfstoff in Österreich')
+plt.title('Anzahl der Impfungen pro Impfstoff in Österreich')
 plt.tight_layout()
 st.pyplot(fig)
 
