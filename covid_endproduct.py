@@ -40,7 +40,7 @@ st.subheader('COVID-19 Fälle in der Schweiz, Deutschland und Österreuch')
 #Erläuterung zur Grafik
 st.markdown("Die Schweiz implementierte im Vergleich zu Österreich und Deutschland als letzte "
         "erste Coronamassnahmen. Auch im Verlauf der Pandemie waren die Massnahmen "
-         "verglichen mit unseren Nachbarsländern stets weniger streng. In Betracht auf "
+        "verglichen mit unseren Nachbarsländern stets weniger streng. In Betracht auf "
         "die Fallzahlen, war die Schweiz auf Platz zwei mit durchschnittlich 50'573 Fällen "
         "auf 100'000 Einwohner.")
 st.markdown("Anfang des Jahres 2022 gab es in allen drei Ländern eine drastische Steigung der "
@@ -51,7 +51,6 @@ st.markdown("Anfang des Jahres 2022 gab es in allen drei Ländern eine drastisch
 
 # TODO Start all Visualisations at the same date
 # TODO Get Info how many tests were made at start and end of pandemic
-# TODO check if WHO-COVID-19-global-data has all austria and germany than we make all the graphs with the same data
 
 # Schweiz
 #st.subheader('Schweiz')
@@ -76,16 +75,6 @@ switzerland_quarterly = switzerland.groupby(pd.Grouper(key='Date_reported', freq
 for index, row in switzerland_quarterly.iterrows():
     switzerland_quarterly.loc[index, 'Cumulative_cases'] = (row['Cumulative_cases'] / swiss_population) * 100000
 
-
-# Deutschland
-#st.subheader('Deutschland')
-
-# Daten einlesen
-#df = pd.read_csv('data//Aktuell Deutschland COVID Infektionen.csv', delimiter=';')
-
-# Meldedatum in DateTime-Format umwandeln
-#df['Meldedatum'] = pd.to_datetime(df['Meldedatum'])
-
 # Daten für Deutschland filtern
 germany_process_data = covid_ww[covid_ww['Country_code'] == 'DE']
 germany_population = 83200000 #Stand 2021
@@ -109,10 +98,9 @@ austria_population = 8956000 #Stand 2021
 # Daten nach Quartal gruppieren und kumulative Fälle berechnen
 austria_quarterly = austria_process_data.groupby(pd.Grouper(key='Date_reported', freq='Q')).agg({'Cumulative_cases': 'max'})
 
-#Zahlen prozentual auf Bevölkerung reduzieren und auf 100'000 Einwohner rechnen
+# Zahlen prozentual auf Bevölkerung reduzieren und auf 100'000 Einwohner rechnen
 for index, row in austria_quarterly.iterrows():
     austria_quarterly.loc[index, 'Cumulative_cases'] = (row['Cumulative_cases'] / austria_population) * 100000
-    
 
 # Linien-Diagramm erstellen für alle
 
@@ -142,8 +130,10 @@ germany_line = p.line(x='date', y='Cumulative_cases', source=germany_source, col
 austria_line = p.line(x='date', y='Cumulative_cases', source=austria_source, color='orange', line_width=2.5,
                       legend_label='Österreich')
 
-# Interactivity - Click to hide lines
+# Legenden mit Klick verstecken
 p.legend.click_policy = 'hide'
+
+# Legenden zu den drei Linien anzeigen.
 p.legend.location = "top_left"
 
 # Hover-Tool
@@ -151,13 +141,11 @@ hover = HoverTool(tooltips=[('Datum', '@date{%F}'), ('Anzahl der Fälle', '@Cumu
                   formatters={'@date': 'datetime'})
 p.add_tools(hover)
 
-# Convert the Bokeh plot to HTML components
+# Konvertieren des Bokeh plot in HTML Komponenten
 script, div = components(p)
 
-# Display the HTML components using Streamlit
+# HTML Komponenten anzeigen
 st.bokeh_chart(p)
-
-
 
 st.header('Die tödliche Wirkung von COVID-19')
 st.subheader('Ein Blick auf Quartal und Altersgruppe in der Schweiz, Deutschland und Österreich')
@@ -165,7 +153,7 @@ st.markdown('')
 
 # Funktionen zur Erstellung der Heatmaps
 
-def create_heatmap_schweiz():
+def create_heatmap_switzerland():
     # Daten laden
     data_alt = pd.read_csv('data//COVID19Death_geoRegion_AKL10_w.csv')
 
@@ -209,7 +197,7 @@ def create_heatmap_schweiz():
     plt.tight_layout()
     st.pyplot(fig)
 
-def create_heatmap_österreich():
+def create_heatmap_austria():
     # Daten laden
     dat = pd.read_csv("data//CovidFaelle_Altersgruppe.csv", delimiter=';')
 
@@ -256,7 +244,7 @@ def create_heatmap_österreich():
     plt.tight_layout()
     st.pyplot(fig)
 
-def create_heatmap_deutschland():
+def create_heatmap_germany():
     # Daten laden
     df_alt = pd.read_csv('data//Aktuell Deutschland COVID Infektionen.csv', delimiter=';')
 
@@ -319,21 +307,21 @@ country_dropdown = st.selectbox(
 # Funktion zur Handhabung der Dropdown-Änderungen erstellen
 def on_country_dropdown_change(country):
     if country == 'Schweiz':
-        create_heatmap_schweiz()
+        create_heatmap_switzerland()
     elif country == 'Österreich':
-        create_heatmap_österreich()
+        create_heatmap_austria()
     elif country == 'Deutschland':
-        create_heatmap_deutschland()
+        create_heatmap_germany()
 
 # Dropdown-Widget anzeigen und Änderungen überwachen
 on_country_dropdown_change(country_dropdown)
 
 # Schweiz
 st.subheader('Grafische Analyse')
-st.markdown('In der Heatmap werden die Todesfälle nach Quartal und Altersgruppe in Deutschland,'
-        'der Schweiz und Österreich dargestellt. Mithilfe des Dropdown-Menüs können Leser'
-        'das Land auswählen und die Todesfallzahlen für den Zeitraum von 2021 bis 2023'
-        'anzeigen. Dunklere Felder zeigen eine höhere Anzahl von COVID-19-bedingten'
+st.markdown('In der Heatmap werden die Todesfälle nach Quartal und Altersgruppe in Deutschland, '
+        'der Schweiz und Österreich dargestellt. Mithilfe des Dropdown-Menüs können Leser '
+        'das Land auswählen und die Todesfallzahlen für den Zeitraum von 2021 bis 2023 '
+        'anzeigen. Dunklere Felder zeigen eine höhere Anzahl von COVID-19-bedingten '
         'Todesfällen. Als Beispiel verdeutlichen die Daten für die Schweiz, dass vor '
         'allem ältere Menschen, insbesondere ab 70 Jahren,während des ersten '
         'Pandemiejahres 2021 verstorben sind. Ende 2021/Anfang 2022 stiegen die Zahlen '
@@ -683,7 +671,7 @@ st.pyplot(fig)
 st.header('Wirksamkeit der Unterschiedlichen Impfungen')
 
 st.markdown('Impfstoffen waren nicht gleich in allen Ländern. So war ... in der ... gar nicht gestattet. '
-            'Am meisten wurde der Impfstoff ... geimpft'
+            'Am meisten wurde der Impfstoff ... geimpft.'
             )
 
 # Schweiz
