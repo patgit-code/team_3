@@ -599,25 +599,8 @@ vacc_type['date'] = pd.to_datetime(vacc_type['date'])
 vacc_type = vacc_type.sort_values('date')
 vacc_type['Kumulative Summe'] = (vacc_type['entries'].cumsum() / swiss_population) * 100000
 
-# Grafik erstellen und anzeigen
-fig, ax_vacc_swiss = plt.subplots(figsize=(10, 6))
-ax_vacc_swiss.plot(vacc_type['date'], vacc_type['Kumulative Summe'])
-ax_vacc_swiss.ticklabel_format(style='plain', axis='y')
 
-# Titel
-plt.title('COVID-19 Impfungen in der Schweiz')
-
-# Achsenbeschriftungen
-plt.xticks(rotation=45)
-plt.xlabel('Impfdatum')
-plt.ylabel('Kumulative Impfungen')
-plt.grid(True)
-
-# Diagramm in Streamlit anzeigen
-st.pyplot(fig)
-
-st.subheader('Deutschland')
-
+#Deutschland
 de_vacc = pd.read_csv('data//Aktuell_Deutschland_Bundeslaender_COVID-19-Impfungen.csv', delimiter=',')
 # Daten nur von Impfserie 1 nehmen
 de_vacc = de_vacc[de_vacc['Impfserie'] == 1]
@@ -647,34 +630,32 @@ source_swiss = ColumnDataSource(data=dict(date=vacc_type['date'], cum_sum=vacc_t
 source_germany = ColumnDataSource(data=dict(date=daily_cases['Impfdatum'], impfungen_pro_100k=daily_cases['Impfungen pro 100k']))
 source_austria = ColumnDataSource(data=dict(date=total_vaccinations.index, impfungen=total_vaccinations_per_100k.values))
 
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.grid(True)
-st.pyplot(fig)
+# Werkzeug für Tooltips erstellen
+tooltips = [
+    ('Datum', '@date{%F}'),
+    ('Impfungen pro 100.000 Einwohner (Schweiz)', '@cum_sum{0.00}'),
+    ('Impfungen pro 100.000 Einwohner (Deutschland)', '@impfungen_pro_100k{0.00}'),
+    ('Impfungen pro 100.000 Einwohner (Österreich)', '@impfungen{0.00}')
+]
+formatters = {'@date': 'datetime'}
+hover_tool = HoverTool(tooltips=tooltips, formatters=formatters)
 
 # Figure-Objekt erstellen
 p = figure(x_axis_type='datetime', y_axis_type='auto', plot_width=800, plot_height=400, title='COVID-19 Impfungen pro 100.000 Einwohner')
 p.add_tools(hover_tool)
 
-
 # Linien für die einzelnen Länder zeichnen
-switzerland_line = p.line(x='date', y='cum_sum', source=source_swiss, line_color='tomato', line_width=2.5, legend_label='Schweiz')
-germany_line = p.line(x='date', y='impfungen_pro_100k', source=source_germany, line_color='maroon', line_width=2.5, legend_label='Deutschland')
-austria_line = p.line(x='date', y='impfungen', source=source_austria, line_color='orange', line_width=2.5, legend_label='Österreich')
-
+switzerland_line = p.line(x='date', y='cum_sum', source=source_swiss, line_color='tomato', line_width=2, legend_label='Schweiz')
+germany_line = p.line(x='date', y='impfungen_pro_100k', source=source_germany, line_color='maroon', line_width=2, legend_label='Deutschland')
+austria_line = p.line(x='date', y='impfungen', source=source_austria, line_color='orange', line_width=2, legend_label='Österreich')
 
 # Achsenbeschriftungen festlegen
 p.xaxis.axis_label = 'Datum'
 p.yaxis.axis_label = 'Anzahl der Impfungen pro 100.000 Einwohner'
 
+# Streamlit-App erstellen
+st.bokeh_chart(p)
 
-plt.xlabel('Impfdatum')
-plt.ylabel('Kumulative Impfungen')
-plt.title('COVID-19 Impfungen in Österreich')
-plt.xticks(rotation=45)
-plt.grid(True)
-plt.tight_layout()
-st.pyplot(fig)
 
 # TODO add graphs with the used vac for each country to add statement about effectiveness of vacc.
 st.header('Wirksamkeit der Unterschiedlichen Impfungen')
