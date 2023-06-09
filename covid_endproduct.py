@@ -693,83 +693,126 @@ st.markdown('Impfstoffen waren nicht gleich in allen Ländern. So war ... in der
             )
 
 # Schweiz
-st.subheader('Schweiz')
+#st.subheader('Schweiz')
+def create_vaccinetype_bar_switzerland():
+    vaccine_swiss = pd.read_csv('data//COVID19VaccPersons_AKL10_vaccine_w.csv')
 
-vaccine_swiss = pd.read_csv('data//COVID19VaccPersons_AKL10_vaccine_w.csv')
+    # Entferne unknown und all Einträge
+    vaccine_swiss.drop(vaccine_swiss[vaccine_swiss['vaccine'] == 'unknown'].index, inplace = True)
+    vaccine_swiss.drop(vaccine_swiss[vaccine_swiss['vaccine'] == 'all'].index, inplace = True)
 
-# Entferne unknown und all Einträge
-vaccine_swiss.drop(vaccine_swiss[vaccine_swiss['vaccine'] == 'unknown'].index, inplace = True)
-vaccine_swiss.drop(vaccine_swiss[vaccine_swiss['vaccine'] == 'all'].index, inplace = True)
+    # Gruppiere nach den Impfstofftypen
+    vaccine_swiss_grouped = vaccine_swiss.groupby('vaccine')['entries'].sum().reset_index()
 
-# Gruppiere nach den Impfstofftypen
-vaccine_swiss_grouped = vaccine_swiss.groupby('vaccine')['entries'].sum().reset_index()
+    # Sortieren nach der Anzahl
+    vaccine_swiss_grouped = vaccine_swiss_grouped.sort_values(by='entries', ascending=False)
+    # Bardiagramm erstellen
+    fig, ax_vacc_type_swiss = plt.subplots(figsize=(10, 8))
+    ax_vacc_type_swiss.ticklabel_format(style='plain')
+    bar_swiss = ax_vacc_type_swiss.bar(vaccine_swiss_grouped['vaccine'], vaccine_swiss_grouped['entries'], width=0.6, color='tomato', edgecolor='None')
 
-# Sortieren nach der Anzahl
-vaccine_swiss_grouped = vaccine_swiss_grouped.sort_values(by='entries', ascending=False)
-# Bardiagramm erstellen
-fig, ax_vacc_type_swiss = plt.subplots(figsize=(10, 8))
-ax_vacc_type_swiss.ticklabel_format(style='plain')
-bar_swiss = ax_vacc_type_swiss.bar(vaccine_swiss_grouped['vaccine'], vaccine_swiss_grouped['entries'], width=0.6, color='tomato', edgecolor='None')
+    # Werte überhalb des Graph setzen
+    ax_vacc_type_swiss.bar_label(bar_swiss, labels=[e for e in vaccine_swiss_grouped['entries']], padding=3, color='Black', fontsize=8)
 
-# Werte überhalb des Graph setzen
-ax_vacc_type_swiss.bar_label(bar_swiss, labels=[e for e in vaccine_swiss_grouped['entries']], padding=3, color='Black', fontsize=8)
+    # Neue Labels setzen
+    labels = ['Johnson Johnson', 'Moderna', 'Moderna Bivalent', 'Novavax', 'Pfizer Biontech', 'Pfizer Biontech Bivalent']
+    ax_vacc_type_swiss.set_xticks(vaccine_swiss_grouped['vaccine'], labels, rotation=90)
 
-# Neue Labels setzen
-labels = ['Johnson Johnson', 'Moderna', 'Moderna Bivalent', 'Novavax', 'Pfizer Biontech', 'Pfizer Biontech Bivalent']
-ax_vacc_type_swiss.set_xticks(vaccine_swiss_grouped['vaccine'], labels, rotation=0)
+    # Achsen oben und rechts entfernen
+    ax_vacc_type_swiss.spines[['right', 'top']].set_visible(False)
 
-# Achsen oben und rechts entfernen
-ax_vacc_type_swiss.spines[['right', 'top']].set_visible(False)
+    # Ticks oben und rechts entfernen
+    plt.tick_params(right = False, top = False)
 
-# Ticks oben und rechts entfernen
-plt.tick_params(right = False, top = False)
-
-# Labels und Titel setzen
-plt.xlabel('Impfstoff')
-plt.ylabel('Anzahl Impfungen')
-plt.title('Anzahl der Impfungen pro Impfstoff in der Schweiz')
-plt.tight_layout()
-st.pyplot(fig)
+    # Labels und Titel setzen
+    plt.xlabel('Impfstoff')
+    plt.ylabel('Anzahl Impfungen')
+    plt.title('Anzahl der Impfungen pro Impfstoff in der Schweiz')
+    plt.tight_layout()
+    st.pyplot(fig)
 
 # Deutschland
-st.subheader('Deutschland')
+#st.subheader('Deutschland')
+def create_vaccinetype_bar_germany():
+    # Stand: 27. Mai 2022 statista (https://de.statista.com/statistik/daten/studie/1197550/umfrage/impfungen-gegen-das-coronavirus-nach-hersteller/)
+    vaccine_germany = pd.read_csv('data//statistic_id1197550_impfungen-gegen-das-coronavirus-nach-hersteller-2022.csv', delimiter=';')
 
-# TODO FIND DATA VACCINE TYPE FOR GERMANY
+    # Bardiagramm erstellen
+    fig, ax_vacc_type_germany = plt.subplots(figsize=(10, 8))
+    ax_vacc_type_germany.ticklabel_format(style='plain')
+    bar_austria = ax_vacc_type_germany.bar(vaccine_germany['vaccine'], vaccine_germany['entries'], width=0.6, color='maroon', edgecolor='None')
+
+    # Achsen oben und rechts entfernen
+    ax_vacc_type_germany.spines[['right', 'top']].set_visible(False)
+
+    # Werte überhalb des Graph setzen
+    ax_vacc_type_germany.bar_label(bar_austria, labels=[e for e in vaccine_germany['entries']], padding=3, color='Black', fontsize=8)
+
+    # Neue Labels setzen
+    #labels = ['Astra Zeneca', 'Pfizer Biontech', 'Janssen', 'Moderna', 'Novavax', 'Sanofi Pasteur', 'Valneva']
+    #ax_vacc_type_germany.set_xticks(vaccine_germany['vaccine'], labels, rotation=0)
+
+    # Ticks oben und rechts entfernen
+    plt.tick_params(right = False, top = False)
+    plt.tick_params(axis='x', rotation=90)
+
+    plt.xlabel('Impfstoff')
+    plt.ylabel('Anzahl Impfungen')
+    plt.title('Anzahl der Impfungen pro Impfstoff in Deutschland')
+    plt.tight_layout()
+    st.pyplot(fig)
+
 
 # Österreich
-st.subheader('Österreich')
+#st.subheader('Österreich')
+def create_vaccinetype_bar_austria():
+    vaccine_austria = pd.read_csv('data//COVID19_vaccination_agegroups_v202210.csv', delimiter=';')
 
-vaccine_austria = pd.read_csv('data//COVID19_vaccination_agegroups_v202210.csv', delimiter=';')
+    # Gruppiere nach den Impfstofftypen
+    vaccine_austria_grouped = vaccine_austria.groupby('vaccine').sum().reset_index()
 
-# Gruppiere nach den Impfstofftypen
-vaccine_austria_grouped = vaccine_austria.groupby('vaccine').sum().reset_index()
+    # Sortieren nach der Anzahl
+    vaccine_austria_grouped = vaccine_austria_grouped.sort_values(by='vaccinations_administered_cumulative', ascending=False)
 
-# Sortieren nach der Anzahl
-vaccine_austria_grouped = vaccine_austria_grouped.sort_values(by='vaccinations_administered_cumulative', ascending=False)
+    # Bardiagramm erstellen
+    fig, ax_vacc_type_austria = plt.subplots(figsize=(10, 8))
+    ax_vacc_type_austria.ticklabel_format(style='plain')
+    bar_austria = ax_vacc_type_austria.bar(vaccine_austria_grouped['vaccine'], vaccine_austria_grouped['vaccinations_administered_cumulative'], width=0.6, color='orange', edgecolor='None')
 
-# Bardiagramm erstellen
-fig, ax_vacc_type_austria = plt.subplots(figsize=(10, 8))
-ax_vacc_type_austria.ticklabel_format(style='plain')
-bar_austria = ax_vacc_type_austria.bar(vaccine_austria_grouped['vaccine'], vaccine_austria_grouped['vaccinations_administered_cumulative'], width=0.6, color='orange', edgecolor='None')
+    # Achsen oben und rechts entfernen
+    ax_vacc_type_austria.spines[['right', 'top']].set_visible(False)
 
-# Achsen oben und rechts entfernen
-ax_vacc_type_austria.spines[['right', 'top']].set_visible(False)
+    # Werte überhalb des Graph setzen
+    ax_vacc_type_austria.bar_label(bar_austria, labels=[e for e in vaccine_austria_grouped['vaccinations_administered_cumulative']], padding=3, color='Black', fontsize=8)
 
-# Werte überhalb des Graph setzen
-ax_vacc_type_austria.bar_label(bar_austria, labels=[e for e in vaccine_austria_grouped['vaccinations_administered_cumulative']], padding=3, color='Black', fontsize=8)
+    # Neue Labels setzen
+    labels = ['Astra Zeneca', 'Pfizer Biontech', 'Janssen', 'Moderna', 'Novavax', 'Sanofi Pasteur', 'Valneva']
+    ax_vacc_type_austria.set_xticks(vaccine_austria_grouped['vaccine'], labels, rotation=90)
 
-# Neue Labels setzen
-labels = ['Astra Zeneca', 'Pfizer Biontech', 'Janssen', 'Moderna', 'Novavax', 'Sanofi Pasteur', 'Valneva']
-ax_vacc_type_austria.set_xticks(vaccine_austria_grouped['vaccine'], labels, rotation=0)
+    # Ticks oben und rechts entfernen
+    plt.tick_params(right = False, top = False)
 
-# Ticks oben und rechts entfernen
-plt.tick_params(right = False, top = False)
+    plt.xlabel('Impfstoff')
+    plt.ylabel('Anzahl Impfungen')
+    plt.title('Anzahl der Impfungen pro Impfstoff in Österreich')
+    plt.tight_layout()
+    st.pyplot(fig)
 
-plt.xlabel('Impfstoff')
-plt.ylabel('Anzahl Impfungen')
-plt.title('Anzahl der Impfungen pro Impfstoff in Österreich')
-plt.tight_layout()
-st.pyplot(fig)
+country_dropdown_vacctypebar = st.selectbox(
+    'Wählen Sie ein Land aus: :',
+    ['Schweiz', 'Österreich', 'Deutschland'],
+    key = 'bar'
+)
+
+def on_country_dropdown_vacctypebar_change(country):
+    if country == 'Schweiz':
+        create_vaccinetype_bar_switzerland()
+    elif country == 'Österreich':
+        create_vaccinetype_bar_austria()
+    elif country == 'Deutschland':
+        create_vaccinetype_bar_germany()
+
+on_country_dropdown_vacctypebar_change(country_dropdown_vacctypebar)
 
 #Ausblick
 st.header('Ausblick der Fallzahlen')
