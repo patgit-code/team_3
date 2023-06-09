@@ -589,101 +589,82 @@ on_country_dropdown_map_change(country_dropdown_map)
 
 st.header('Impfungen')
 
-st.markdown('Die Impfungen stiegen für alle drei Länder stark an...'
-            'Booster Impfungen stiegen nicht so ...'
-            )
+st.markdown('In allen drei Ländern stiegen die Anzahl Impfungen stark an. Die folgende Grafik bezieht sich ausschliesselich auf die ersten Impfungen, ohne Booster etc.')
+
 
 #Schweiz
-st.subheader('Schweiz')
-
-# Daten einlesen
 vacc_type = pd.read_csv('data//COVID19VaccPersons_vaccine.csv')
-
-# Datenverarbeitung
-vacc_type['date'] = pd.to_datetime(vacc_type['date'])  # Konvertiere die 'date'-Spalte in Datumsobjekte
-vacc_type = vacc_type.sort_values('date')
 vacc_ch = vacc_type[vacc_type['type'] == 'COVID19FullyVaccPersons']
-
-# Kumulative Summe der Einträge berechnen
+vacc_type['date'] = pd.to_datetime(vacc_type['date'])
+vacc_type = vacc_type.sort_values('date')
 vacc_type['Kumulative Summe'] = (vacc_type['entries'].cumsum() / swiss_population) * 100000
 
-# Grafik erstellen und anzeigen
-fig, ax_vacc_swiss = plt.subplots(figsize=(10, 6))
-ax_vacc_swiss.plot(vacc_type['date'], vacc_type['Kumulative Summe'])
-ax_vacc_swiss.ticklabel_format(style='plain', axis='y')
-
-# Titel
-plt.title('COVID-19 Impfungen in der Schweiz')
-
-# Achsenbeschriftungen
-plt.xticks(rotation=45)
-plt.xlabel('Impfdatum')
-plt.ylabel('Kumulative Impfungen')
-plt.grid(True)
-
-# Diagramm in Streamlit anzeigen
-st.pyplot(fig)
-
-st.subheader('Deutschland')
-
+# Deutschland
 de_vacc = pd.read_csv('data//Aktuell_Deutschland_Bundeslaender_COVID-19-Impfungen.csv', delimiter=',')
-
 # Daten nur von Impfserie 1 nehmen
 de_vacc = de_vacc[de_vacc['Impfserie'] == 1]
-
 # Sortieren Sie den DataFrame nach dem Impfdatum
 de_vacc_sorted = de_vacc.sort_values('Impfdatum')
-
 # Gruppieren Sie den DataFrame nach dem Impfdatum und summiere die Anzahl
 de_vacc_grouped = de_vacc_sorted.groupby('Impfdatum')['Anzahl'].sum().reset_index()
-
 # Berechne die kumulierten Impfungen pro Tag
 de_vacc_grouped['kumulierte Impfungen'] = de_vacc_grouped['Anzahl'].cumsum()
-
 # Meldedatum in DateTime-Format umwandeln
 de_vacc_grouped['Impfdatum'] = pd.to_datetime(de_vacc_grouped['Impfdatum'])
 
 # Gruppieren nach Meldedatum und Summieren der Anzahl der Fälle
 daily_cases = de_vacc_grouped.groupby('Impfdatum')['kumulierte Impfungen'].sum().reset_index()
+daily_cases = de_vacc_grouped.groupby('Impfdatum')['kumulierte Impfungen'].sum().reset_index()
+daily_cases['Impfungen pro 100k'] = (daily_cases['kumulierte Impfungen'] / germany_population) * 100000
 
-# Liniendiagramm erstellen
-fig, ax_vacc_germany = plt.subplots(figsize=(10, 6))
-ax_vacc_germany.ticklabel_format(style='plain')
-ax_vacc_germany.plot(de_vacc_grouped['Impfdatum'], de_vacc_grouped['kumulierte Impfungen'])
-
-plt.xlabel('Impfdatum')
-plt.ylabel('Kumulative Impfungen')
-plt.title('COVID-19 Impfungen in Deutschland')
-
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.grid(True)
-st.pyplot(fig)
-
-
-st.subheader('Österreich')
-
-# Daten einlesen
+# Österreich
 vacc_ak = pd.read_csv("data//CovidFaelle_Altersgruppe.csv", delimiter=';')
-
-# Datumsformat konvertieren
 vacc_ak['Time'] = pd.to_datetime(vacc_ak['Time'], format='%d.%m.%Y %H:%M:%S')
-
-# Summe der Impfungen für jeden Zeitpunkt berechnen
+vacc_ak = vacc_ak[vacc_ak['Time'] >= '2021-01-01']  # Datumsfilter hinzufügen
 total_vaccinations = vacc_ak.groupby('Time')['Anzahl'].sum()
+total_vaccinations_per_100k = (total_vaccinations / austria_population) * 100000
 
-# Liniendiagramm erstellen
-fig, ax_vacc_austria = plt.subplots(figsize=(10, 6))
-ax_vacc_austria.ticklabel_format(style='plain')
-ax_vacc_austria.plot(total_vaccinations.index, total_vaccinations.values)
+# Daten für die Grafik erstellen
+source_swiss = ColumnDataSource(data=dict(date=vacc_type['date'], cum_sum=vacc_type['Kumulative Summe']))
+source_germany = ColumnDataSource(data=dict(date=daily_cases['Impfdatum'], impfungen_pro_100k=daily_cases['Impfungen pro 100k']))
+source_austria = ColumnDataSource(data=dict(date=total_vaccinations.index, impfungen=total_vaccinations_per_100k.values))
 
-plt.xlabel('Impfdatum')
-plt.ylabel('Kumulative Impfungen')
-plt.title('COVID-19 Impfungen in Österreich')
-plt.xticks(rotation=45)
-plt.grid(True)
-plt.tight_layout()
-st.pyplot(fig)
+# Werkzeug für Tooltips erstellen
+tooltips = [
+    ('Datum', '@date{%F}'),
+    ('Impfungen pro 100.000 Einwohner (Schweiz)', '@cum_sum{0.00}'),
+    ('Impfungen pro 100.000 Einwohner (Deutschland)', '@impfungen_pro_100k{0.00}'),
+    ('Impfungen pro 100.000 Einwohner (Österreich)', '@impfungen{0.00}')
+]
+formatters = {'@date': 'datetime'}
+hover_tool = HoverTool(tooltips=tooltips, formatters=formatters)
+
+# Figure-Objekt erstellen
+p = figure(x_axis_type='datetime', y_axis_type='auto', plot_width=800, plot_height=400, title='COVID-19 Impfungen pro 100.000 Einwohner')
+p.add_tools(hover_tool)
+
+
+# Linien für die einzelnen Länder zeichnen
+switzerland_line = p.line(x='date', y='cum_sum', source=source_swiss, line_color='tomato', line_width=2.5, legend_label='Schweiz')
+germany_line = p.line(x='date', y='impfungen_pro_100k', source=source_germany, line_color='maroon', line_width=2.5, legend_label='Deutschland')
+austria_line = p.line(x='date', y='impfungen', source=source_austria, line_color='orange', line_width=2.5, legend_label='Österreich')
+
+
+# Achsenbeschriftungen festlegen
+p.xaxis.axis_label = 'Datum'
+p.yaxis.axis_label = 'Anzahl der Impfungen pro 100.000 Einwohner'
+
+
+# Legenden mit Klick verstecken
+p.legend.click_policy = 'hide'
+# Legenden zu den drei Linien anzeigen.
+p.legend.location = "top_left"
+
+# Streamlit-App erstellen
+st.bokeh_chart(p)
+
+
+
 
 # TODO add graphs with the used vac for each country to add statement about effectiveness of vacc.
 st.header('Wirksamkeit der Unterschiedlichen Impfungen')
