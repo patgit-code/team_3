@@ -18,6 +18,7 @@ from IPython.display import display
 from IPython.display import clear_output
 from datetime import datetime
 from bokeh.embed import components
+from sklearn.linear_model import LinearRegression
 matplotlib.style.use('classic')
 
 # Bild als Header für den Benutzer als Einstieg in den Artikel
@@ -604,7 +605,7 @@ vacc_type = vacc_type.sort_values('date')
 vacc_ch = vacc_type[vacc_type['type'] == 'COVID19FullyVaccPersons']
 
 # Kumulative Summe der Einträge berechnen
-vacc_type['Kumulative Summe'] = vacc_type['entries'].cumsum() / 10
+vacc_type['Kumulative Summe'] = (vacc_type['entries'].cumsum() / swiss_population) * 100000
 
 # Grafik erstellen und anzeigen
 fig, ax_vacc_swiss = plt.subplots(figsize=(10, 6))
@@ -769,6 +770,133 @@ plt.ylabel('Anzahl Impfungen')
 plt.title('Anzahl der Impfungen pro Impfstoff in Österreich')
 plt.tight_layout()
 st.pyplot(fig)
+
+#Ausblick
+st.header('Ausblick der Fallzahlen')
+st.subheader(' ')
+st.write("Bitte beachten Sie, dass diese Trendanalysen nur anhand der bisher gesammelten Daten erstellt wurde und somit nur eine Annahme ist."
+         "Die tatsächlichen Fallzahlen können sich anders entwickeln.")
+st.write("Die Vorhersage wurde auf Basis der Bevölkerungsanzahl des jeweiligen Landes gemessen. Ein direkter Vergleich ist somit nicht möglich.")
+
+#Schweiz
+st.subheader('Schweiz')
+
+switzerland['Date_reported'] = switzerland['Date_reported'].astype(str)
+switzerland['year'] = switzerland['Date_reported'].str[0:4]
+year_ch = switzerland.groupby('year')['New_cases'].sum()
+
+# Daten von years
+years_ch = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1) #von year_ch
+cases_ch = np.array([451142, 883690, 3045631, 20909])
+
+# Lineare Regression
+regressor = LinearRegression()
+regressor.fit(years_ch, cases_ch)
+
+# Trendanalyse
+slope = regressor.coef_[0]
+intercept = regressor.intercept_
+trend = f"y = {slope:.2f}x + {intercept:.2f}"
+
+# Prognose erstellen
+future_year = 2024
+future_cases = regressor.predict([[future_year]])
+
+# Graph erstellen
+plt.figure(figsize=(10, 6))
+plt.scatter(years_ch, cases_ch, color='orange', s=50, label='Bisherige Zahlen')
+plt.plot(years_ch, regressor.predict(years_ch), color='tomato',linewidth=2.5, label='Lineare Regression')
+plt.scatter(future_year, future_cases, color='maroon', s=100, label='Prognose für 2024')
+plt.xlabel('Jahr')
+plt.ylabel('Fälle')
+plt.title('COVID-19 Fallzahlen in der Schweiz')
+plt.legend(scatterpoints=1)
+plt.ticklabel_format(style='plain')
+plt.xticks(years_ch.flatten(), [str(int(year)) for year in years_ch.flatten()])
+plt.ylim(0)  # Y-Achse bei 0 starten lassen
+
+
+# Ergebnis anzeigen
+st.pyplot(plt)
+st.write("Trendanalyse:", trend)
+
+#Deutschland
+st.subheader('Deutschland')
+# Daten
+years_de = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1)
+cases_de = np.array([1734444, 5430604, 30220321, 1011090])
+
+# Lineare Regression
+regressor = LinearRegression()
+regressor.fit(years_de, cases_de)
+
+# Trendanalyse
+slope = regressor.coef_[0]
+intercept = regressor.intercept_
+trend = f"y = {slope:.2f}x + {intercept:.2f}"
+
+# Prognose erstellen
+future_years = 2024
+future_cases = regressor.predict([[future_year]])
+
+# Visualisierung
+plt.figure(figsize=(10,6))
+plt.scatter(years_de, cases_de, color='orange', s=50,  label='Bisherige Zahlen')
+plt.plot(years_de, regressor.predict(years_de), color='tomato', linewidth=2.5, label='Lineare Regression')
+plt.scatter(future_years, future_cases, color='maroon', s=100, label='Prognose')
+plt.xlabel('Jahr')
+plt.ylabel('Fallzahlen')
+plt.title('COVID-19 Fallzahlen in Deutschland')
+plt.legend(scatterpoints=1)
+plt.ticklabel_format(style='plain')
+plt.xticks(years_de.flatten(), [str(int(year)) for year in years_de.flatten()])
+plt.ylim(0)  # Y-Achse bei 0 starten lassen
+
+
+st.pyplot(plt)
+st.write("Trendanalyse:", trend)
+
+#Österreich
+st.subheader('Österreich')
+
+austria_process_data['Date_reported'] = austria_process_data['Date_reported'].astype(str)
+austria_process_data['year'] = austria_process_data['Date_reported'].str[0:4]
+year_at = austria_process_data.groupby('year')['New_cases'].sum()
+
+# Daten
+years_at = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1) #von year_at
+cases_at = np.array([352657, 911871, 4436351, 359753])
+
+# Lineare Regression
+regressor = LinearRegression()
+regressor.fit(years_at, cases_at)
+
+# Trendanalyse
+slope = regressor.coef_[0]
+intercept = regressor.intercept_
+trend = f"y = {slope:.2f}x + {intercept:.2f}"
+
+# Prognose erstellen
+future_years = 2024
+future_cases = regressor.predict([[future_years]])
+
+# Graph erstellen
+plt.figure(figsize=(10, 6))
+plt.scatter(years_at, cases_at, color='orange', s=50,  label='Bisherige Zahlen')
+plt.plot(years_at, regressor.predict(years_at), color='tomato', linewidth=2.5, label='Lineare Regression')
+plt.scatter(future_years, future_cases, color='maroon', s=100, label='Prognose für 2024')
+plt.xlabel('Jahr')
+plt.ylabel('Fallzahlen')
+plt.title('COVID-19 Fallzahlen in Österreich')
+plt.legend(scatterpoints=1)
+plt.ticklabel_format(style='plain')
+plt.xticks(years_at.flatten(), [str(int(year)) for year in years_at.flatten()])
+
+
+st.pyplot(plt)
+st.write("Trendanalyse:", trend)
+
+
 
 
 # Fazit
