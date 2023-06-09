@@ -774,7 +774,7 @@ st.pyplot(fig)
 #Ausblick
 st.header('Ausblick der Fallzahlen')
 st.subheader(' ')
-st.write("Bitte beachten Sie, dass diese Trendanalysen nur anhand der bisher gesammelten Daten erstellt wurde und somit nur eine Annahme ist."
+st.write("Bitte beachten Sie, dass diese Trendanalysen nur anhand der bisher gesammelten Daten erstellt wurde und somit nur eine Annahme ist. "
          "Die tatsächlichen Fallzahlen können sich anders entwickeln.")
 st.write("Die Vorhersage wurde auf Basis der Bevölkerungsanzahl des jeweiligen Landes gemessen. Ein direkter Vergleich ist somit nicht möglich.")
 
@@ -786,7 +786,7 @@ switzerland['year'] = switzerland['Date_reported'].str[0:4]
 year_ch = switzerland.groupby('year')['New_cases'].sum()
 
 # Daten von years
-years_ch = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1) #von year_ch
+years_ch = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1) # von year_ch
 cases_ch = np.array([451142, 883690, 3045631, 20909])
 
 # Lineare Regression
@@ -892,11 +892,8 @@ plt.legend(scatterpoints=1)
 plt.ticklabel_format(style='plain')
 plt.xticks(years_at.flatten(), [str(int(year)) for year in years_at.flatten()])
 
-
 st.pyplot(plt)
 st.write("Trendanalyse:", trend)
-
-
 
 
 # Fazit
