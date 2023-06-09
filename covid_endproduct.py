@@ -236,7 +236,7 @@ def create_heatmap_austria():
     ax.set_ylabel('Altersgruppe')
     ax.set_title('Anzahl der Todesfälle nach Quartal und Altersgruppe in Österreich')
     ax.set_xticks(np.arange(len(quarter_labels))+0.5)
-    ax.set_xticklabels(quarter_labels, rotation=45, ha='right')
+    ax.set_xticklabels(quarter_labels, rotation=0, ha='right')
 
     # Umkehrung der y-Achse
     ax.set_yticks(np.arange(len(pivot_table.index))[::-1]+0.5)
@@ -288,7 +288,7 @@ def create_heatmap_germany():
     ax.set_ylabel('Altersgruppe')
     ax.set_title('Anzahl der Todesfälle nach Quartal und Altersgruppe in Deutschland')
     ax.set_xticks(np.arange(len(quarter_labels))+0.5)
-    ax.set_xticklabels(quarter_labels, rotation=45, ha='right')
+    ax.set_xticklabels(quarter_labels, rotation=0, ha='right')
     ax.set_yticklabels(pivot_table.index[::-1], rotation=0)
 
     # Anpassung der Farbskala basierend auf den Werten
@@ -616,7 +616,7 @@ ax_vacc_swiss.ticklabel_format(style='plain', axis='y')
 plt.title('COVID-19 Impfungen in der Schweiz')
 
 # Achsenbeschriftungen
-plt.xticks(rotation=45)
+plt.xticks(rotation=0)
 plt.xlabel('Impfdatum')
 plt.ylabel('Kumulative Impfungen')
 plt.grid(True)
@@ -655,7 +655,7 @@ plt.xlabel('Impfdatum')
 plt.ylabel('Kumulative Impfungen')
 plt.title('COVID-19 Impfungen in Deutschland')
 
-plt.xticks(rotation=45)
+plt.xticks(rotation=0)
 plt.tight_layout()
 plt.grid(True)
 st.pyplot(fig)
@@ -680,7 +680,7 @@ ax_vacc_austria.plot(total_vaccinations.index, total_vaccinations.values)
 plt.xlabel('Impfdatum')
 plt.ylabel('Kumulative Impfungen')
 plt.title('COVID-19 Impfungen in Österreich')
-plt.xticks(rotation=45)
+plt.xticks(rotation=0)
 plt.grid(True)
 plt.tight_layout()
 st.pyplot(fig)
@@ -716,7 +716,7 @@ ax_vacc_type_swiss.bar_label(bar_swiss, labels=[e for e in vaccine_swiss_grouped
 
 # Neue Labels setzen
 labels = ['Johnson Johnson', 'Moderna', 'Moderna Bivalent', 'Novavax', 'Pfizer Biontech', 'Pfizer Biontech Bivalent']
-ax_vacc_type_swiss.set_xticks(vaccine_swiss_grouped['vaccine'], labels, rotation=45)
+ax_vacc_type_swiss.set_xticks(vaccine_swiss_grouped['vaccine'], labels, rotation=0)
 
 # Achsen oben und rechts entfernen
 ax_vacc_type_swiss.spines[['right', 'top']].set_visible(False)
@@ -760,7 +760,7 @@ ax_vacc_type_austria.bar_label(bar_austria, labels=[e for e in vaccine_austria_g
 
 # Neue Labels setzen
 labels = ['Astra Zeneca', 'Pfizer Biontech', 'Janssen', 'Moderna', 'Novavax', 'Sanofi Pasteur', 'Valneva']
-ax_vacc_type_austria.set_xticks(vaccine_austria_grouped['vaccine'], labels, rotation=45)
+ax_vacc_type_austria.set_xticks(vaccine_austria_grouped['vaccine'], labels, rotation=0)
 
 # Ticks oben und rechts entfernen
 plt.tick_params(right = False, top = False)
