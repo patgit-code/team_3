@@ -299,9 +299,10 @@ def create_heatmap_germany():
 
 
 # Dropdown-Widget für Länderauswahl erstellen
-country_dropdown = st.selectbox(
+country_dropdown_heatmap = st.selectbox(
     'Wählen Sie ein Land aus: :',
-    ['Schweiz', 'Österreich', 'Deutschland']
+    ['Schweiz', 'Österreich', 'Deutschland'],
+    key = 'heatmap'
 )
 
 # Funktion zur Handhabung der Dropdown-Änderungen erstellen
@@ -314,7 +315,7 @@ def on_country_dropdown_change(country):
         create_heatmap_germany()
 
 # Dropdown-Widget anzeigen und Änderungen überwachen
-on_country_dropdown_change(country_dropdown)
+on_country_dropdown_change(country_dropdown_heatmap)
 
 # Schweiz
 st.subheader('Grafische Analyse')
@@ -337,234 +338,253 @@ st.markdown('In den Karten werden die Todesfälle, die Bevölkerungsanzahl, und 
             ''
             )
 
-# Schweiz
-
-st.subheader('Schweiz')
 
 population = pd.read_csv("data//population.csv", delimiter=';')
 
-# TODO REMOVE THIS CODE AND SAVE TO CORRECTED CSV in a seperate folder in teams \
-#  so we load the already corrected data into the streamlit
-# any other changes to the data should be done in a def function above \
-# so this is better readable aka def the graph above and here we can see the structure of the article
-# TODO add comments to this and remove any not needed code
-# TODO make all dates consistent -> Turn all to german and same type
+# Schweiz
+def create_map_switzerland():
+    #st.subheader('Schweiz')
 
-# Shapefile der Schweiz von admin.ch laden. (https://www.swisstopo.admin.ch/de/geodata/landscape/boundaries3d.html)
-# Wir wählen die Kantonsgebiet Variante, für die Visualisierung.
-cantons = gpd.read_file("data//shapefiles//swissboundaries//swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp")
 
-# Lesen der Datei mit den Informationen zu den Anzahl Todesfälle pro Kanton
-death = pd.read_csv("data//COVID19Death_geoRegion.csv")
+    # TODO REMOVE THIS CODE AND SAVE TO CORRECTED CSV in a seperate folder in teams \
+    #  so we load the already corrected data into the streamlit
+    # any other changes to the data should be done in a def function above \
+    # so this is better readable aka def the graph above and here we can see the structure of the article
+    # TODO add comments to this and remove any not needed code
+    # TODO make all dates consistent -> Turn all to german and same type
 
-# Bereinigen der Daten. Georegion CH ist zu allgemein und kann nicht auf der Karte angezeigt werden.
-# CHFL (Liechtenstein) ist nicht auf der Karte ersichtlich und kann ebenfalls entfernt werden.
-# NA (Not Available) kann auch nicht auf der Karte dargestellt werden und kann auch entfernt werden.
-death.drop(death[death['geoRegion'] == 'CH'].index, inplace=True)
-death.drop(death[death['geoRegion'] == 'CHFL'].index, inplace=True)
-death.drop(death[death['entries'] == 'NA'].index, inplace=True)
-death_count_canton = death.groupby('geoRegion')['entries'].sum().reset_index()
+    # Shapefile der Schweiz von admin.ch laden. (https://www.swisstopo.admin.ch/de/geodata/landscape/boundaries3d.html)
+    # Wir wählen die Kantonsgebiet Variante, für die Visualisierung.
+    cantons = gpd.read_file("data//shapefiles//swissboundaries//swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp")
 
-# Erstellen von einem Dictionary damit die unterschiedlichen Notationen, in das Geo Dataframe gemapped werden kann.
-dict_canton = {
-    "Graubünden": "GR",
-    "Bern": "BE",
-    "Valais": "VS",
-    "Vaud": "VD",
-    "Ticino": "TI",
-    "St. Gallen": "SG",
-    "Zürich": "ZH",
-    "Fribourg": "FR",
-    "Luzern": "LU",
-    "Aargau": "AG",
-    "Uri": "UR",
-    "Thurgau": "TG",
-    "Schwyz": "SZ",
-    "Jura": "JU",
-    "Neuchâtel": "NE",
-    "Solothurn": "SO",
-    "Glarus": "GL",
-    "Basel-Landschaft": "BL",
-    "Obwalden": "OW",
-    "Nidwalden": "NW",
-    "Genève": "GE",
-    "Schaffhausen": "SH",
-    "Appenzell Ausserrhoden": "AR",
-    "Zug": "ZG",
-    "Appenzell Innerrhoden": "AI",
-    "Basel-Stadt": "BS"
-}
+    # Lesen der Datei mit den Informationen zu den Anzahl Todesfälle pro Kanton
+    death = pd.read_csv("data//COVID19Death_geoRegion.csv")
 
-# Erstellen der Spalte für die Todesfälle
-cantons['deaths'] = ''
-cantons['Population'] = ''
-cantons['ProcentageOfDeathPop'] = ''
-cantons['YearOfPopulation'] = ''
+    # Bereinigen der Daten. Georegion CH ist zu allgemein und kann nicht auf der Karte angezeigt werden.
+    # CHFL (Liechtenstein) ist nicht auf der Karte ersichtlich und kann ebenfalls entfernt werden.
+    # NA (Not Available) kann auch nicht auf der Karte dargestellt werden und kann auch entfernt werden.
+    death.drop(death[death['geoRegion'] == 'CH'].index, inplace=True)
+    death.drop(death[death['geoRegion'] == 'CHFL'].index, inplace=True)
+    death.drop(death[death['entries'] == 'NA'].index, inplace=True)
+    death_count_canton = death.groupby('geoRegion')['entries'].sum().reset_index()
 
-# Setzen der Todesfälle auf den korrekten Kanton.
-# Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
-for index, row in cantons.iterrows():
-    cantons.loc[index, 'deaths'] = \
-    int(death_count_canton[death_count_canton['geoRegion'] == dict_canton[row['NAME']]]['entries'].values[0])
-    cantons.loc[index, 'Population'] = \
-    int(population[population['Bundesländer'] == row['NAME']]['Population'].values[0])
-    cantons.loc[index, 'YearOfPopulation'] = \
-    int(population[population['Bundesländer'] == row['NAME']]['Stand'].values[0])
-    cantons.loc[index, 'ProcentageOfDeathPop'] = \
-    "{:.2f}".format((death_count_canton[death_count_canton['geoRegion'] == dict_canton[row['NAME']]]['entries'].values[0] /
-    population[population['Bundesländer'] == row['NAME']]['Population'].values[0]) * 1000)
+    # Erstellen von einem Dictionary damit die unterschiedlichen Notationen, in das Geo Dataframe gemapped werden kann.
+    dict_canton = {
+        "Graubünden": "GR",
+        "Bern": "BE",
+        "Valais": "VS",
+        "Vaud": "VD",
+        "Ticino": "TI",
+        "St. Gallen": "SG",
+        "Zürich": "ZH",
+        "Fribourg": "FR",
+        "Luzern": "LU",
+        "Aargau": "AG",
+        "Uri": "UR",
+        "Thurgau": "TG",
+        "Schwyz": "SZ",
+        "Jura": "JU",
+        "Neuchâtel": "NE",
+        "Solothurn": "SO",
+        "Glarus": "GL",
+        "Basel-Landschaft": "BL",
+        "Obwalden": "OW",
+        "Nidwalden": "NW",
+        "Genève": "GE",
+        "Schaffhausen": "SH",
+        "Appenzell Ausserrhoden": "AR",
+        "Zug": "ZG",
+        "Appenzell Innerrhoden": "AI",
+        "Basel-Stadt": "BS"
+    }
 
-geo_source_switzerland = GeoJSONDataSource(geojson=cantons.to_json())
+    # Erstellen der Spalte für die Todesfälle
+    cantons['deaths'] = ''
+    cantons['Population'] = ''
+    cantons['ProcentageOfDeathPop'] = ''
+    cantons['YearOfPopulation'] = ''
 
-bokeh_swiss = figure(tools='wheel_zoom, hover')
+    # Setzen der Todesfälle auf den korrekten Kanton.
+    # Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
+    for index, row in cantons.iterrows():
+        cantons.loc[index, 'deaths'] = \
+        int(death_count_canton[death_count_canton['geoRegion'] == dict_canton[row['NAME']]]['entries'].values[0])
+        cantons.loc[index, 'Population'] = \
+        int(population[population['Bundesländer'] == row['NAME']]['Population'].values[0])
+        cantons.loc[index, 'YearOfPopulation'] = \
+        int(population[population['Bundesländer'] == row['NAME']]['Stand'].values[0])
+        cantons.loc[index, 'ProcentageOfDeathPop'] = \
+        "{:.2f}".format((death_count_canton[death_count_canton['geoRegion'] == dict_canton[row['NAME']]]['entries'].values[0] /
+        population[population['Bundesländer'] == row['NAME']]['Population'].values[0]) * 1000)
 
-# Entfernen der Raster und Achsen
-bokeh_swiss.axis.visible = False
-bokeh_swiss.xgrid.visible = False
-bokeh_swiss.ygrid.visible = False
-bokeh_swiss.outline_line_color = None
-bokeh_swiss.background_fill_color = None
+    geo_source_switzerland = GeoJSONDataSource(geojson=cantons.to_json())
 
-# Grösse des Graphen auf die Breite skalieren
-bokeh_swiss.sizing_mode = 'scale_width'
+    bokeh_swiss = figure(tools='wheel_zoom, hover')
 
-# Erstellen der Karte und befüllen mit Farbe
-bokeh_swiss.patches('xs', 'ys', fill_alpha=0.8, line_width=0.6, line_color='white', source=geo_source_switzerland, fill_color="tomato")
+    # Entfernen der Raster und Achsen
+    bokeh_swiss.axis.visible = False
+    bokeh_swiss.xgrid.visible = False
+    bokeh_swiss.ygrid.visible = False
+    bokeh_swiss.outline_line_color = None
+    bokeh_swiss.background_fill_color = None
 
-# Hover Tool für die Todesfälle erstellen.
-# Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
-hover_switzerland = bokeh_swiss.select(dict(type=HoverTool))
-hover_switzerland.tooltips = [
-    ("Kanton", "@NAME"), ("Todesfälle", "@deaths"),
-    ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"),
-    ("Sterberate", '@ProcentageOfDeathPop')
-                              ]
-hover_switzerland.mode = 'mouse'
+    # Grösse des Graphen auf die Breite skalieren
+    bokeh_swiss.sizing_mode = 'scale_width'
 
-# Anzeigen der Karte
-st.bokeh_chart(bokeh_swiss)
+    # Erstellen der Karte und befüllen mit Farbe
+    bokeh_swiss.patches('xs', 'ys', fill_alpha=0.8, line_width=0.6, line_color='white', source=geo_source_switzerland, fill_color="tomato")
+
+    # Hover Tool für die Todesfälle erstellen.
+    # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
+    hover_switzerland = bokeh_swiss.select(dict(type=HoverTool))
+    hover_switzerland.tooltips = [
+        ("Kanton", "@NAME"), ("Todesfälle", "@deaths"),
+        ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"),
+        ("Sterberate", '@ProcentageOfDeathPop')
+                                  ]
+    hover_switzerland.mode = 'mouse'
+
+    # Anzeigen der Karte
+    st.bokeh_chart(bokeh_swiss)
 
 # Deutschland
-st.subheader('Deutschland')
+#st.subheader('Deutschland')
 
-death_de = pd.read_csv("data//statistic_id1100750_fallzahl-des-coronavirus--covid-19--nach-bundeslaendern-2023.csv",
-                 delimiter = ';')
+def create_map_germany():
 
-# Shapefile Deutschland von bund.de laden. (https://gdz.bkg.bund.de/index.php/default/digitale-geodaten/verwaltungsgebiete.html)
-# Wir wählen die Bundesland Variante, für die Visualisierung.
-germany = gpd.read_file("data//shapefiles//deutschland//vg2500_bld.shp")
+    death_de = pd.read_csv("data//statistic_id1100750_fallzahl-des-coronavirus--covid-19--nach-bundeslaendern-2023.csv",
+                     delimiter = ';')
 
-# Erstellen der Spalte für die Todesfälle
-germany['Deaths'] = ''
-germany['Population'] = ''
-germany['ProcentageOfDeathPop'] = ''
-germany['YearOfPopulation'] = ''
+    # Shapefile Deutschland von bund.de laden. (https://gdz.bkg.bund.de/index.php/default/digitale-geodaten/verwaltungsgebiete.html)
+    # Wir wählen die Karte, in dem die Bundesländer eingezeichnet sind, für die Visualisierung.
+    germany = gpd.read_file("data//shapefiles//deutschland//vg2500_bld.shp")
 
-# Infos zu den Bevölkerunganzahl von Statista (https://de.statista.com/statistik/daten/studie/75536/umfrage/schweiz-bevoelkerung-nach-kanton-zeitreihe/)
-# Setzen der Todesfälle auf den korrekten Kanton.
-# Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
-for index, row in germany.iterrows():
-    germany.loc[index, 'Deaths'] = \
-    int(death_de[death_de['Bundesländer'] == row['GEN']]['Todesfälle'].values[0])
-    germany.loc[index, 'Population'] = \
-    int(population[population['Bundesländer'] == row['GEN']]['Population'].values[0])
-    germany.loc[index, 'YearOfPopulation'] = \
-    int(population[population['Bundesländer'] == row['GEN']]['Stand'].values[0])
-    germany.loc[index, 'ProcentageOfDeathPop'] = \
-    "{:.2f}".format((death_de[death_de['Bundesländer'] == row['GEN']]['Todesfälle'].values[0] /
-    population[population['Bundesländer'] == row['GEN']]['Population'].values[0]) * 1000)
+    # Erstellen der Spalte für die Todesfälle
+    germany['Deaths'] = ''
+    germany['Population'] = ''
+    germany['ProcentageOfDeathPop'] = ''
+    germany['YearOfPopulation'] = ''
 
-geo_source_germany = GeoJSONDataSource(geojson=germany.to_json())
+    # Infos zu den Bevölkerunganzahl von Statista (https://de.statista.com/statistik/daten/studie/75536/umfrage/schweiz-bevoelkerung-nach-kanton-zeitreihe/)
+    # Setzen der Todesfälle auf den korrekten Kanton.
+    # Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
+    for index, row in germany.iterrows():
+        germany.loc[index, 'Deaths'] = \
+        int(death_de[death_de['Bundesländer'] == row['GEN']]['Todesfälle'].values[0])
+        germany.loc[index, 'Population'] = \
+        int(population[population['Bundesländer'] == row['GEN']]['Population'].values[0])
+        germany.loc[index, 'YearOfPopulation'] = \
+        int(population[population['Bundesländer'] == row['GEN']]['Stand'].values[0])
+        germany.loc[index, 'ProcentageOfDeathPop'] = \
+        "{:.2f}".format((death_de[death_de['Bundesländer'] == row['GEN']]['Todesfälle'].values[0] /
+        population[population['Bundesländer'] == row['GEN']]['Population'].values[0]) * 1000)
 
-bokeh_germany = figure(tools='wheel_zoom, hover')
+    geo_source_germany = GeoJSONDataSource(geojson=germany.to_json())
 
-# Entfernen der Raster und Achsen
-bokeh_germany.axis.visible = False
-bokeh_germany.xgrid.visible = False
-bokeh_germany.ygrid.visible = False
-bokeh_germany.outline_line_color = None
-bokeh_germany.background_fill_color = None
+    bokeh_germany = figure(tools='wheel_zoom, hover')
 
-# Grösse des Graphen auf die Breite skalieren
-bokeh_germany.sizing_mode = 'scale_width'
+    # Entfernen der Raster und Achsen
+    bokeh_germany.axis.visible = False
+    bokeh_germany.xgrid.visible = False
+    bokeh_germany.ygrid.visible = False
+    bokeh_germany.outline_line_color = None
+    bokeh_germany.background_fill_color = None
 
-# Erstellen der Karte und befüllen mit Farbe
-bokeh_germany.patches('xs', 'ys', fill_alpha=0.8, line_width=0.6, line_color='white', source=geo_source_germany, fill_color="maroon")
+    # Grösse des Graphen auf die Breite skalieren
+    bokeh_germany.sizing_mode = 'scale_width'
 
-# Hover Tool für die Todesfälle erstellen.
-# Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
-hover_germany = bokeh_germany.select(dict(type=HoverTool))
-hover_germany.tooltips = [
-    ("Bundesland", "@GEN"), ("Todesfälle", "@Deaths"),
-    ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"),
-    ("Sterberate", '@ProcentageOfDeathPop')
-                          ]
-hover_germany.mode = 'mouse'
+    # Erstellen der Karte und befüllen mit Farbe
+    bokeh_germany.patches('xs', 'ys', fill_alpha=0.8, line_width=0.6, line_color='white', source=geo_source_germany, fill_color="maroon")
 
-# Anzeigen der Karte
-st.bokeh_chart(bokeh_germany)
+    # Hover Tool für die Todesfälle erstellen.
+    # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
+    hover_germany = bokeh_germany.select(dict(type=HoverTool))
+    hover_germany.tooltips = [
+        ("Bundesland", "@GEN"), ("Todesfälle", "@Deaths"),
+        ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"),
+        ("Sterberate", '@ProcentageOfDeathPop')
+                              ]
+    hover_germany.mode = 'mouse'
+
+    # Anzeigen der Karte
+    st.bokeh_chart(bokeh_germany)
 
 # Österreich
-st.subheader('Österreich')
+#st.subheader('Österreich')
+def create_map_austria():
 
-# Shapefile Österreich von arcgis.com laden.(https://data-synergis.opendata.arcgis.com/maps/a16c7b8ef72f4ec2b36f7c7ebbcdf2e5)
-# Wir wählen die Bundesland Variante, für die Visualisierung.
-austria = gpd.read_file("data//shapefiles//oesterreich//Bundeslaender_50.shp")
+    # Shapefile Österreich von arcgis.com laden.(https://data-synergis.opendata.arcgis.com/maps/a16c7b8ef72f4ec2b36f7c7ebbcdf2e5)
+    # Wir wählen die Bundesland Variante, für die Visualisierung.
+    austria = gpd.read_file("data//shapefiles//oesterreich//Bundeslaender_50.shp")
 
-# TODO explain this csv where did we get the data here
-# Statista csv
-death_at = pd.read_csv("data//statistic_id1104271_todesfaelle-mit-dem-coronavirus--covid-19--in-oesterreich-nach-bundesland-2023.csv",
-                 delimiter = ';')
+    # Statista csv
+    death_at = pd.read_csv("data//statistic_id1104271_todesfaelle-mit-dem-coronavirus--covid-19--in-oesterreich-nach-bundesland-2023.csv",
+                     delimiter = ';')
 
-# Erstellen der Spalte für die Todesfälle
-austria['Deaths'] = ''
-austria['Population'] = ''
-austria['ProcentageOfDeathPop'] = ''
-austria['YearOfPopulation'] = ''
-# Setzen der Todesfälle auf den korrekten Kanton.
-# Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
-for index, row in austria.iterrows():
-    austria.loc[index, 'Deaths'] = \
-    int(death_at[death_at['Bundesländer'] == row['BL']]['Anzahl Tode'].values[0])
-    austria.loc[index, 'Population'] = \
-    int(population[population['Bundesländer'] == row['BL']]['Population'].values[0])
-    austria.loc[index, 'YearOfPopulation'] = \
-    int(population[population['Bundesländer'] == row['BL']]['Stand'].values[0])
-    austria.loc[index, 'ProcentageOfDeathPop'] = \
-    "{:.2f}".format((death_at[death_at['Bundesländer'] == row['BL']]['Anzahl Tode'].values[0] / population[population['Bundesländer'] == row['BL']]['Population'].values[0]) * 1000)
+    # Erstellen der Spalte für die Todesfälle
+    austria['Deaths'] = ''
+    austria['Population'] = ''
+    austria['ProcentageOfDeathPop'] = ''
+    austria['YearOfPopulation'] = ''
+    # Setzen der Todesfälle auf den korrekten Kanton.
+    # Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
+    for index, row in austria.iterrows():
+        austria.loc[index, 'Deaths'] = \
+        int(death_at[death_at['Bundesländer'] == row['BL']]['Anzahl Tode'].values[0])
+        austria.loc[index, 'Population'] = \
+        int(population[population['Bundesländer'] == row['BL']]['Population'].values[0])
+        austria.loc[index, 'YearOfPopulation'] = \
+        int(population[population['Bundesländer'] == row['BL']]['Stand'].values[0])
+        austria.loc[index, 'ProcentageOfDeathPop'] = \
+        "{:.2f}".format((death_at[death_at['Bundesländer'] == row['BL']]['Anzahl Tode'].values[0] / population[population['Bundesländer'] == row['BL']]['Population'].values[0]) * 1000)
 
+    geo_source_austria = GeoJSONDataSource(geojson=austria.to_json())
 
- # TODO add comment
-geo_source_austria = GeoJSONDataSource(geojson=austria.to_json())
+    bokeh_austria = figure(tools='wheel_zoom, hover')
 
-bokeh_austria = figure(tools='wheel_zoom, hover')
+    # Entfernen der Raster und Achsen
+    bokeh_austria.axis.visible = False
+    bokeh_austria.xgrid.visible = False
+    bokeh_austria.ygrid.visible = False
+    bokeh_austria.outline_line_color = None
+    bokeh_austria.background_fill_color = None
 
-# Entfernen der Raster und Achsen
-bokeh_austria.axis.visible = False
-bokeh_austria.xgrid.visible = False
-bokeh_austria.ygrid.visible = False
-bokeh_austria.outline_line_color = None
-bokeh_austria.background_fill_color = None
+    # Grösse des Graphen auf die Breite skalieren
+    bokeh_austria.sizing_mode = 'scale_width'
 
-# Grösse des Graphen auf die Breite skalieren
-bokeh_austria.sizing_mode = 'scale_width'
+    # Erstellen der Karte und befüllen mit Farbe
+    bokeh_austria.patches('xs', 'ys', fill_alpha=0.8, line_width=0.6, line_color='white', source=geo_source_austria, fill_color="orange")
 
-# Erstellen der Karte und befüllen mit Farbe
-bokeh_austria.patches('xs', 'ys', fill_alpha=0.8, line_width=0.6, line_color='white', source=geo_source_austria, fill_color="orange")
+    # Hover Tool für die Todesfälle erstellen.
+    # Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
+    hover_austria = bokeh_austria.select(dict(type=HoverTool))
+    hover_austria.tooltips = [
+        ("Bundesland", "@BL"), ("Todesfälle", "@Deaths"), \
+        ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"), \
+        ("Sterberate", '@ProcentageOfDeathPop')
+    ]
 
-# Hover Tool für die Todesfälle erstellen.
-# Falls nun über das Gebiet mit der Maus gefahren wird, wird der Name des Gebiets und die Todesfälle angezeigt.
-hover_austria = bokeh_austria.select(dict(type=HoverTool))
-hover_austria.tooltips = [
-    ("Bundesland", "@BL"), ("Todesfälle", "@Deaths"), \
-    ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"), \
-    ("Sterberate", '@ProcentageOfDeathPop')
-]
+    hover_austria.mode = 'mouse'
 
-hover_austria.mode = 'mouse'
+    # Anzeigen der Karte
+    st.bokeh_chart(bokeh_austria)
 
-# Anzeigen der Karte
-st.bokeh_chart(bokeh_austria)
+# Dropdown-Widget für Länderauswahl erstellen
+country_dropdown_map = st.selectbox(
+    'Wählen Sie ein Land aus: :',
+    ['Schweiz', 'Österreich', 'Deutschland'],
+    key = 'map'
+)
+
+def on_country_dropdown_map_change(country):
+    if country == 'Schweiz':
+        create_map_switzerland()
+    elif country == 'Österreich':
+        create_map_austria()
+    elif country == 'Deutschland':
+        create_map_germany()
+
+on_country_dropdown_map_change(country_dropdown_map)
 
 st.header('Impfungen')
 
@@ -603,12 +623,11 @@ plt.grid(True)
 # Diagramm in Streamlit anzeigen
 st.pyplot(fig)
 
-
 st.subheader('Deutschland')
 
 de_vacc = pd.read_csv('data//Aktuell_Deutschland_Bundeslaender_COVID-19-Impfungen.csv', delimiter=',')
 
-#Daten nur von Impfserie 1 nehmen
+# Daten nur von Impfserie 1 nehmen
 de_vacc = de_vacc[de_vacc['Impfserie'] == 1]
 
 # Sortieren Sie den DataFrame nach dem Impfdatum
@@ -620,14 +639,11 @@ de_vacc_grouped = de_vacc_sorted.groupby('Impfdatum')['Anzahl'].sum().reset_inde
 # Berechne die kumulierten Impfungen pro Tag
 de_vacc_grouped['kumulierte Impfungen'] = de_vacc_grouped['Anzahl'].cumsum()
 
-
-# Liniendiagramm erstellen
 # Meldedatum in DateTime-Format umwandeln
 de_vacc_grouped['Impfdatum'] = pd.to_datetime(de_vacc_grouped['Impfdatum'])
 
 # Gruppieren nach Meldedatum und Summieren der Anzahl der Fälle
 daily_cases = de_vacc_grouped.groupby('Impfdatum')['kumulierte Impfungen'].sum().reset_index()
-
 
 # Liniendiagramm erstellen
 fig, ax_vacc_germany = plt.subplots(figsize=(10, 6))
@@ -659,6 +675,7 @@ total_vaccinations = vacc_ak.groupby('Time')['Anzahl'].sum()
 fig, ax_vacc_austria = plt.subplots(figsize=(10, 6))
 ax_vacc_austria.ticklabel_format(style='plain')
 ax_vacc_austria.plot(total_vaccinations.index, total_vaccinations.values)
+
 plt.xlabel('Impfdatum')
 plt.ylabel('Kumulative Impfungen')
 plt.title('COVID-19 Impfungen in Österreich')
