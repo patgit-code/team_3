@@ -644,6 +644,9 @@ hover_tool = HoverTool(tooltips=tooltips, formatters=formatters)
 p = figure(x_axis_type='datetime', y_axis_type='auto', plot_width=800, plot_height=400, title='COVID-19 Impfungen pro 100.000 Einwohner')
 p.add_tools(hover_tool)
 
+# Entfernen der Scientific (e+...) Formatierung auf der Y-Achse
+p.left[0].formatter.use_scientific = False
+
 # Linien für die einzelnen Länder zeichnen
 switzerland_line = p.line(x='date', y='cum_sum', source=source_swiss, line_color='tomato', line_width=2, legend_label='Schweiz')
 germany_line = p.line(x='date', y='impfungen_pro_100k', source=source_germany, line_color='maroon', line_width=2, legend_label='Deutschland')
@@ -663,7 +666,8 @@ st.header('Wirksamkeit der Unterschiedlichen Impfungen')
 st.markdown('Die Impfstoffe die verwendet wurden unterscheiden sich zwischen den drei Ländern. ' 
             'Ein Grund weshalb, bestimmte Impfstoffe mehr geimpft wurde, war das Zulassungsdatum. '
             'So war Novavax in der EU ab dem 4. August 2021 und in der Schweiz erst ab dem 13. April 2022 zugelassen. '
-            'Am meisten wurde der Pfizer Biontech Impfstoff geimpft. Pfizer Biontech war der erste Impfstoff der in der EU und der Schweiz zugelassen wurde.'
+            "Am meisten wurde der Pfizer Biontech Impfstoff, mit 137'755'538 Impfdosen geimpft. "
+            "Pfizer Biontech war der erste Impfstoff der in der EU und der Schweiz zugelassen wurde."
             )
 
 # Schweiz
