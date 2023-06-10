@@ -440,7 +440,7 @@ def create_map_switzerland():
     hover_switzerland = bokeh_swiss.select(dict(type=HoverTool))
     hover_switzerland.tooltips = [
         ("Kanton", "@NAME"), ("Todesfälle", "@deaths"),
-        ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"),
+        ("Bevölkerung", "@Population"), ("Stand (Bevölkerung)","@YearOfPopulation"),
         ("Sterberate", '@ProcentageOfDeathPop')
                                   ]
     hover_switzerland.mode = 'mouse'
@@ -502,7 +502,7 @@ def create_map_germany():
     hover_germany = bokeh_germany.select(dict(type=HoverTool))
     hover_germany.tooltips = [
         ("Bundesland", "@GEN"), ("Todesfälle", "@Deaths"),
-        ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"),
+        ("Bevölkerung", "@Population"), ("Stand (Bevölkerung)","@YearOfPopulation"),
         ("Sterberate", '@ProcentageOfDeathPop')
                               ]
     hover_germany.mode = 'mouse'
@@ -561,7 +561,7 @@ def create_map_austria():
     hover_austria = bokeh_austria.select(dict(type=HoverTool))
     hover_austria.tooltips = [
         ("Bundesland", "@BL"), ("Todesfälle", "@Deaths"), \
-        ("Bevölkerung", "@Population"), ("Stand","@YearOfPopulation"), \
+        ("Bevölkerung", "@Population"), ("Stand (Bevölkerung)","@YearOfPopulation"), \
         ("Sterberate", '@ProcentageOfDeathPop')
     ]
 
