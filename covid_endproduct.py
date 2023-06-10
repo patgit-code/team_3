@@ -660,24 +660,26 @@ st.bokeh_chart(p)
 # TODO add graphs with the used vac for each country to add statement about effectiveness of vacc.
 st.header('Wirksamkeit der Unterschiedlichen Impfungen')
 
-st.markdown('Impfstoffen waren nicht gleich in allen Ländern. So war ... in der ... gar nicht gestattet. '
-            'Am meisten wurde der Impfstoff ... geimpft.'
+st.markdown('Die Impfstoffe die verwendet wurden unterscheiden sich zwischen den drei Ländern. ' 
+            'Ein Grund weshalb, bestimmte Impfstoffe mehr geimpft wurde, war das Zulassungsdatum. '
+            'So war Novavax in der EU ab dem 4. August 2021 und in der Schweiz erst ab dem 13. April 2022 zugelassen. '
+            'Am meisten wurde der Pfizer Biontech Impfstoff geimpft. Pfizer Biontech war der erste Impfstoff der in der EU und der Schweiz zugelassen wurde.'
             )
 
 # Schweiz
-#st.subheader('Schweiz')
+vaccine_swiss = pd.read_csv('data//COVID19VaccPersons_AKL10_vaccine_w.csv')
+
+# Entferne unknown und all Einträge
+vaccine_swiss.drop(vaccine_swiss[vaccine_swiss['vaccine'] == 'unknown'].index, inplace = True)
+vaccine_swiss.drop(vaccine_swiss[vaccine_swiss['vaccine'] == 'all'].index, inplace = True)
+
+# Gruppiere nach den Impfstofftypen
+vaccine_swiss_grouped = vaccine_swiss.groupby('vaccine')['entries'].sum().reset_index()
+
+# Sortieren nach der Anzahl
+vaccine_swiss_grouped = vaccine_swiss_grouped.sort_values(by='entries', ascending=False)
+
 def create_vaccinetype_bar_switzerland():
-    vaccine_swiss = pd.read_csv('data//COVID19VaccPersons_AKL10_vaccine_w.csv')
-
-    # Entferne unknown und all Einträge
-    vaccine_swiss.drop(vaccine_swiss[vaccine_swiss['vaccine'] == 'unknown'].index, inplace = True)
-    vaccine_swiss.drop(vaccine_swiss[vaccine_swiss['vaccine'] == 'all'].index, inplace = True)
-
-    # Gruppiere nach den Impfstofftypen
-    vaccine_swiss_grouped = vaccine_swiss.groupby('vaccine')['entries'].sum().reset_index()
-
-    # Sortieren nach der Anzahl
-    vaccine_swiss_grouped = vaccine_swiss_grouped.sort_values(by='entries', ascending=False)
     # Bardiagramm erstellen
     fig, ax_vacc_type_swiss = plt.subplots(figsize=(10, 8))
     ax_vacc_type_swiss.ticklabel_format(style='plain')
@@ -705,9 +707,10 @@ def create_vaccinetype_bar_switzerland():
 
 # Deutschland
 #st.subheader('Deutschland')
+# Stand: 27. Mai 2022 statista (https://de.statista.com/statistik/daten/studie/1197550/umfrage/impfungen-gegen-das-coronavirus-nach-hersteller/)
+vaccine_germany = pd.read_csv('data//statistic_id1197550_impfungen-gegen-das-coronavirus-nach-hersteller-2022.csv', delimiter=';')
+
 def create_vaccinetype_bar_germany():
-    # Stand: 27. Mai 2022 statista (https://de.statista.com/statistik/daten/studie/1197550/umfrage/impfungen-gegen-das-coronavirus-nach-hersteller/)
-    vaccine_germany = pd.read_csv('data//statistic_id1197550_impfungen-gegen-das-coronavirus-nach-hersteller-2022.csv', delimiter=';')
 
     # Bardiagramm erstellen
     fig, ax_vacc_type_germany = plt.subplots(figsize=(10, 8))
@@ -721,8 +724,8 @@ def create_vaccinetype_bar_germany():
     ax_vacc_type_germany.bar_label(bar_austria, labels=[e for e in vaccine_germany['entries']], padding=3, color='Black', fontsize=8)
 
     # Neue Labels setzen
-    #labels = ['Astra Zeneca', 'Pfizer Biontech', 'Janssen', 'Moderna', 'Novavax', 'Sanofi Pasteur', 'Valneva']
-    #ax_vacc_type_germany.set_xticks(vaccine_germany['vaccine'], labels, rotation=0)
+    labels = ['Pfizer Biontech', 'Moderna', 'Astra Zeneca', 'Johnson Johnson', 'Novavax']
+    ax_vacc_type_germany.set_xticks(vaccine_germany['vaccine'], labels, rotation=90)
 
     # Ticks oben und rechts entfernen
     plt.tick_params(right = False, top = False)
@@ -737,14 +740,14 @@ def create_vaccinetype_bar_germany():
 
 # Österreich
 #st.subheader('Österreich')
+vaccine_austria = pd.read_csv('data//COVID19_vaccination_agegroups_v202210.csv', delimiter=';')
+
+# Gruppiere nach den Impfstofftypen
+vaccine_austria_grouped = vaccine_austria.groupby('vaccine').sum().reset_index()
+
+# Sortieren nach der Anzahl
+vaccine_austria_grouped = vaccine_austria_grouped.sort_values(by='vaccinations_administered_cumulative', ascending=False)
 def create_vaccinetype_bar_austria():
-    vaccine_austria = pd.read_csv('data//COVID19_vaccination_agegroups_v202210.csv', delimiter=';')
-
-    # Gruppiere nach den Impfstofftypen
-    vaccine_austria_grouped = vaccine_austria.groupby('vaccine').sum().reset_index()
-
-    # Sortieren nach der Anzahl
-    vaccine_austria_grouped = vaccine_austria_grouped.sort_values(by='vaccinations_administered_cumulative', ascending=False)
 
     # Bardiagramm erstellen
     fig, ax_vacc_type_austria = plt.subplots(figsize=(10, 8))
@@ -758,7 +761,7 @@ def create_vaccinetype_bar_austria():
     ax_vacc_type_austria.bar_label(bar_austria, labels=[e for e in vaccine_austria_grouped['vaccinations_administered_cumulative']], padding=3, color='Black', fontsize=8)
 
     # Neue Labels setzen
-    labels = ['Astra Zeneca', 'Pfizer Biontech', 'Janssen', 'Moderna', 'Novavax', 'Sanofi Pasteur', 'Valneva']
+    labels = ['Astra Zeneca', 'Pfizer Biontech', 'Johnson Johnson', 'Moderna', 'Novavax', 'Sanofi Pasteur', 'Valneva']
     ax_vacc_type_austria.set_xticks(vaccine_austria_grouped['vaccine'], labels, rotation=90)
 
     # Ticks oben und rechts entfernen
