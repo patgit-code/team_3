@@ -35,7 +35,7 @@ st.subheader(
     'Doch was können wir aus der vergangenen Pandemie lernen?')
 
 # Umstände
-st.subheader('COVID-19 Fälle in der Schweiz, Deutschland und Österreuch')
+st.subheader('COVID-19 Fälle in der Schweiz, Deutschland und Österreich')
 #st.subheader('')
 
 #Erläuterung zur Grafik
