@@ -660,14 +660,13 @@ p.yaxis.axis_label = 'Anzahl der Impfungen pro 100.000 Einwohner'
 st.bokeh_chart(p)
 
 
-# TODO add graphs with the used vac for each country to add statement about effectiveness of vacc.
-st.header('Wirksamkeit der Unterschiedlichen Impfungen')
+st.header('Impfstoffe im Vergleich')
 
-st.markdown('Die Impfstoffe die verwendet wurden unterscheiden sich zwischen den drei Ländern. ' 
+st.markdown('Die Impfstoffe, die verwendet wurden unterscheiden sich zwischen den drei Ländern. ' 
             'Ein Grund weshalb, bestimmte Impfstoffe mehr geimpft wurde, war das Zulassungsdatum. '
             'So war Novavax in der EU ab dem 4. August 2021 und in der Schweiz erst ab dem 13. April 2022 zugelassen. '
             "Am meisten wurde der Pfizer Biontech Impfstoff, mit 137'755'538 Impfdosen geimpft. "
-            "Pfizer Biontech war der erste Impfstoff der in der EU und der Schweiz zugelassen wurde."
+            "Pfizer Biontech war der erste Impfstoff, der in der EU und der Schweiz zugelassen wurde."
             )
 
 # Schweiz
@@ -830,7 +829,7 @@ plt.scatter(years_ch, cases_ch, color='orange', s=50, label='Bisherige Zahlen')
 plt.plot(years_ch, regressor.predict(years_ch), color='tomato',linewidth=2.5, label='Lineare Regression')
 plt.scatter(future_year, future_cases, color='maroon', s=100, label='Prognose für 2024')
 plt.xlabel('Jahr')
-plt.ylabel('Fälle')
+plt.ylabel('Fallzahlen')
 plt.title('COVID-19 Fallzahlen in der Schweiz')
 plt.legend(scatterpoints=1)
 plt.ticklabel_format(style='plain')
