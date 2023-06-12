@@ -314,6 +314,12 @@ def create_heatmap_germany():
     norm = plt.Normalize(pivot_table.min().min(), pivot_table.max().max())
     heatmap = sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='d', cbar=False, norm=norm, ax=ax)
 
+    # Horizontale Ausrichtung der xticklabels
+    plt.xticks(rotation=0)
+
+    # Horizontale Ausrichtung der yticklabels
+    plt.yticks(rotation=0)
+
     plt.tight_layout()
     st.pyplot(fig)
 
