@@ -314,9 +314,6 @@ def create_heatmap_germany():
     norm = plt.Normalize(pivot_table.min().min(), pivot_table.max().max())
     heatmap = sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='d', cbar=False, norm=norm, ax=ax)
 
-    # Anpassung der Strichmuster in der Mitte
-    ax.hlines([x + 0.5 for x in range(len(pivot_table.index))], *ax.get_xlim(), colors='white', linewidths=1.5)
-
     plt.tight_layout()
     st.pyplot(fig)
 
