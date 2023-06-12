@@ -951,7 +951,6 @@ def perform_linear_regression(years, cases, future_year):
     return trend, future_cases
 
 # Schweiz
-st.subheader('Schweiz')
 
 switzerland = pd.DataFrame({
     'Date_reported': ['2020-01-01', '2021-01-01', '2022-01-01', '2023-01-01'],
@@ -962,13 +961,11 @@ years_ch = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1)
 cases_ch = np.array([451142, 883690, 3045631, 20909])
 
 # Deutschland
-st.subheader('Deutschland')
 
 years_de = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1)
 cases_de = np.array([1734444, 5430604, 30220321, 1011090])
 
 # Österreich
-st.subheader('Österreich')
 
 austria_process_data = pd.DataFrame({
     'Date_reported': ['2020-01-01', '2021-01-01', '2022-01-01', '2023-01-01'],
