@@ -236,7 +236,7 @@ def create_heatmap_austria():
     ax.set_ylabel('Altersgruppe')
     ax.set_title('Anzahl der Todesfälle nach Quartal und Altersgruppe in Österreich')
     ax.set_xticks(np.arange(len(quarter_labels))+0.5)
-    ax.set_xticklabels(quarter_labels, rotation=0, ha='right')
+    ax.set_xticklabels(quarter_labels, rotation=0, ha='center')
 
     # Umkehrung der y-Achse
     ax.set_yticks(np.arange(len(pivot_table.index))[::-1]+0.5)
@@ -288,7 +288,7 @@ def create_heatmap_germany():
     ax.set_ylabel('Altersgruppe')
     ax.set_title('Anzahl der Todesfälle nach Quartal und Altersgruppe in Deutschland')
     ax.set_xticks(np.arange(len(quarter_labels))+0.5)
-    ax.set_xticklabels(quarter_labels, rotation=0, ha='right')
+    ax.set_xticklabels(quarter_labels, rotation=0, ha='center')
     ax.set_yticklabels(pivot_table.index[::-1], rotation=0)
 
     # Anpassung der Farbskala basierend auf den Werten
