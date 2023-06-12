@@ -992,6 +992,9 @@ if selected_country == 'Schweiz':
     ax.set_ylabel('Fallzahlen')
     ax.set_title('COVID-19 Fallzahlen in der Schweiz')
     ax.legend(scatterpoints=1)
+    ax.ticklabel_format(style='plain')
+    ax.set_xticks(years_ch.flatten())
+    ax.set_xticklabels([str(int(year)) for year in years_ch.flatten()])
     st.pyplot(fig)
 
 elif selected_country == 'Deutschland':
@@ -1004,6 +1007,9 @@ elif selected_country == 'Deutschland':
     ax.set_ylabel('Fallzahlen')
     ax.set_title('COVID-19 Fallzahlen in Deutschland')
     ax.legend(scatterpoints=1)
+    ax.ticklabel_format(style='plain')
+    ax.set_xticks(years_de.flatten())
+    ax.set_xticklabels([str(int(year)) for year in years_de.flatten()])
     st.pyplot(fig)
 
 elif selected_country == 'Österreich':
@@ -1016,6 +1022,9 @@ elif selected_country == 'Österreich':
     ax.set_ylabel('Fallzahlen')
     ax.set_title('COVID-19 Fallzahlen in Österreich')
     ax.legend(scatterpoints=1)
+    ax.ticklabel_format(style='plain')
+    ax.set_xticks(years_at.flatten())
+    ax.set_xticklabels([str(int(year)) for year in years_at.flatten()])
     st.pyplot(fig)
 
 st.write("Trendanalyse:", trend)
