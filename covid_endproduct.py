@@ -937,6 +937,110 @@ st.write("Trendanalyse:", trend)
 
 #TODO DROPDOWN EINFÜGEN FÜR AUSBLICK
 
+# Funktion zur Handhabung der Dropdown-Änderungen erstellen
+def on_country_dropdown_change(change):
+    if change['new'] == 'Schweiz':
+        create_graph_switzerland()
+    elif change['new'] == 'Österreich':
+        create_graph_austria()
+    elif change['new'] == 'Deutschland':
+        create_graph_germany()
+
+# Daten für Schweiz
+switzerland['Date_reported'] = switzerland['Date_reported'].astype(str)
+switzerland['year'] = switzerland['Date_reported'].str[0:4]
+year_ch = switzerland.groupby('year')['New_cases'].sum()
+years_ch = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1) 
+cases_ch = np.array([451142, 883690, 3045631, 20909])
+regressor_ch = LinearRegression()
+regressor_ch.fit(years_ch, cases_ch)
+slope_ch = regressor_ch.coef_[0]
+intercept_ch = regressor_ch.intercept_
+trend_ch = f"y = {slope_ch:.2f}x + {intercept_ch:.2f}"
+
+# Daten für Deutschland
+years_de = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1)
+cases_de = np.array([1734444, 5430604, 30220321, 1011090])
+regressor_de = LinearRegression()
+regressor_de.fit(years_de, cases_de)
+slope_de = regressor_de.coef_[0]
+intercept_de = regressor_de.intercept_
+trend_de = f"y = {slope_de:.2f}x + {intercept_de:.2f}"
+
+# Daten für Österreich
+austria_process_data['Date_reported'] = austria_process_data['Date_reported'].astype(str)
+austria_process_data['year'] = austria_process_data['Date_reported'].str[0:4]
+year_at = austria_process_data.groupby('year')['New_cases'].sum()
+years_at = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1) 
+cases_at = np.array([352657, 911871, 4436351, 359753])
+regressor_at = LinearRegression()
+regressor_at.fit(years_at, cases_at)
+slope_at = regressor_at.coef_[0]
+intercept_at = regressor_at.intercept_
+trend_at = f"y = {slope_at:.2f}x + {intercept_at:.2f}"
+
+# Dropdown-Menü
+country_dropdown = st.selectbox('Land auswählen', ['Schweiz', 'Österreich', 'Deutschland'])
+heatmap_output = st.empty()
+
+# Funktion zur Erstellung des Graphen und der Trendanalyse für die Schweiz
+def create_graph_switzerland():
+    future_year = 2024
+    future_cases = regressor_ch.predict([[future_year]])
+    plt.figure(figsize=(10, 6))
+    plt.scatter(years_ch, cases_ch, color='orange', s=50, label='Bisherige Zahlen')
+    plt.plot(years_ch, regressor_ch.predict(years_ch), color='tomato', linewidth=2.5, label='Lineare Regression')
+    plt.scatter(future_year, future_cases, color='maroon', s=100, label='Prognose für 2024')
+    plt.xlabel('Jahr')
+    plt.ylabel('Fallzahlen')
+    plt.title('COVID-19 Fallzahlen in der Schweiz')
+    plt.legend(scatterpoints=1)
+    plt.ticklabel_format(style='plain')
+    plt.xticks(years_ch.flatten(), [str(int(year)) for year in years_ch.flatten()])
+    plt.ylim(0)
+    st.pyplot(plt)
+    st.write("Trendanalyse:", trend_ch)
+
+# Funktion zur Erstellung des Graphen und der Trendanalyse für Deutschland
+def create_graph_germany():
+    future_years = 2024
+    future_cases = regressor_de.predict([[future_years]])
+    plt.figure(figsize=(10, 6))
+    plt.scatter(years_de, cases_de, color='orange', s=50, label='Bisherige Zahlen')
+    plt.plot(years_de, regressor_de.predict(years_de), color='tomato', linewidth=2.5, label='Lineare Regression')
+    plt.scatter(future_years, future_cases, color='maroon', s=100, label='Prognose für 2024')
+    plt.xlabel('Jahr')
+    plt.ylabel('Fallzahlen')
+    plt.title('COVID-19 Fallzahlen in Deutschland')
+    plt.legend(scatterpoints=1)
+    plt.ticklabel_format(style='plain')
+    plt.xticks(years_de.flatten(), [str(int(year)) for year in years_de.flatten()])
+    plt.ylim(0)
+    st.pyplot(plt)
+    st.write("Trendanalyse:", trend_de)
+
+# Funktion zur Erstellung des Graphen und der Trendanalyse für Österreich
+def create_graph_austria():
+    future_years = 2024
+    future_cases = regressor_at.predict([[future_years]])
+    plt.figure(figsize=(10, 6))
+    plt.scatter(years_at, cases_at, color='orange', s=50, label='Bisherige Zahlen')
+    plt.plot(years_at, regressor_at.predict(years_at), color='tomato', linewidth=2.5, label='Lineare Regression')
+    plt.scatter(future_years, future_cases, color='maroon', s=100, label='Prognose für 2024')
+    plt.xlabel('Jahr')
+    plt.ylabel('Fallzahlen')
+    plt.title('COVID-19 Fallzahlen in Österreich')
+    plt.legend(scatterpoints=1)
+    plt.ticklabel_format(style='plain')
+    plt.xticks(years_at.flatten(), [str(int(year)) for year in years_at.flatten()])
+    st.pyplot(plt)
+    st.write("Trendanalyse:", trend_at)
+
+# Dropdown-Änderungen überwachen
+country_dropdown.observe(on_country_dropdown_change, names='value')
+
+# Initiale Anzeige
+create_graph_switzerland()
 
 # Fazit
 st.header('Fazit')
