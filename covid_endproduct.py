@@ -995,6 +995,7 @@ if selected_country == 'Schweiz':
     ax.ticklabel_format(style='plain')
     ax.set_xticks(years_ch.flatten())
     ax.set_xticklabels([str(int(year)) for year in years_ch.flatten()])
+    ax.set_ylim(bottom=0)
     st.pyplot(fig)
 
 elif selected_country == 'Deutschland':
@@ -1010,6 +1011,7 @@ elif selected_country == 'Deutschland':
     ax.ticklabel_format(style='plain')
     ax.set_xticks(years_de.flatten())
     ax.set_xticklabels([str(int(year)) for year in years_de.flatten()])
+    ax.set_ylim(bottom=0)
     st.pyplot(fig)
 
 elif selected_country == 'Österreich':
@@ -1025,6 +1027,7 @@ elif selected_country == 'Österreich':
     ax.ticklabel_format(style='plain')
     ax.set_xticks(years_at.flatten())
     ax.set_xticklabels([str(int(year)) for year in years_at.flatten()])
+    ax.set_ylim(bottom=0)
     st.pyplot(fig)
 
 st.write("Trendanalyse:", trend)
