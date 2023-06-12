@@ -818,9 +818,30 @@ st.markdown("Die folgenden Grafiken zeigen den Ausblick der Fallzahlen im Jahr 2
             "Die tatsächlichen Fallzahlen können sich anders entwickeln.")
 st.write("Die Vorhersage wurde auf Basis der Bevölkerungsanzahl des jeweiligen Landes gemessen. Ein direkter Vergleich ist somit nicht möglich.")
 
+#Schweiz
+
 switzerland['Date_reported'] = switzerland['Date_reported'].astype(str)
 switzerland['year'] = switzerland['Date_reported'].str[0:4]
 year_ch = switzerland.groupby('year')['New_cases'].sum()
+
+# Daten von years
+years_ch = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1) # von year_ch
+cases_ch = np.array([451142, 883690, 3045631, 20909])
+
+# Lineare Regression
+regressor = LinearRegression()
+regressor.fit(years_ch, cases_ch)
+
+#Deutschland
+
+# Daten
+years_de = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1)
+cases_de = np.array([1734444, 5430604, 30220321, 1011090])
+
+# Lineare Regression
+regressor = LinearRegression()
+regressor.fit(years_de, cases_de)
+
 
 #Österreich
 
