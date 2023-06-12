@@ -947,10 +947,7 @@ def on_country_dropdown_change(change):
         create_graph_germany()
 
 # Daten für Schweiz
-switzerland['Date_reported'] = switzerland['Date_reported'].astype(str)
-switzerland['year'] = switzerland['Date_reported'].str[0:4]
-year_ch = switzerland.groupby('year')['New_cases'].sum()
-years_ch = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1) 
+years_ch = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1)
 cases_ch = np.array([451142, 883690, 3045631, 20909])
 regressor_ch = LinearRegression()
 regressor_ch.fit(years_ch, cases_ch)
@@ -968,10 +965,7 @@ intercept_de = regressor_de.intercept_
 trend_de = f"y = {slope_de:.2f}x + {intercept_de:.2f}"
 
 # Daten für Österreich
-austria_process_data['Date_reported'] = austria_process_data['Date_reported'].astype(str)
-austria_process_data['year'] = austria_process_data['Date_reported'].str[0:4]
-year_at = austria_process_data.groupby('year')['New_cases'].sum()
-years_at = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1) 
+years_at = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1)
 cases_at = np.array([352657, 911871, 4436351, 359753])
 regressor_at = LinearRegression()
 regressor_at.fit(years_at, cases_at)
