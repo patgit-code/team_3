@@ -27,30 +27,29 @@ st.image(image)
 st.caption('Bild von Pexels')
 
 # Titel des Artikel mit Unterschrift
-st.title(body='COVID-19 - Ein Rückblick auf die Pandemie im deutschsprachigen Raum. '
+st.title(body='COVID-19: Ein Rückblick auf die Pandemie im deutschsprachigen Raum. '
          'Was können wir davon mitnehmen?')
 st.subheader(
-    'Es ist bereits ein Jahr her, seit die Massnahmen gegen Covid-19 in Deutschland, Österreich und der Schweiz '
+    'Es ist bereits ein Jahr her, seit die Massnahmen gegen Covid-19 in der Schweiz, Deutschland und Österreich '
     'aufgehoben wurden. Das Leben hat sich wieder normalisiert und der Virus verschwindet langsam aus unseren Köpfen. '
     'Doch was können wir aus der vergangenen Pandemie lernen?')
 
 # Umstände
-st.subheader('COVID-19 Fälle in der Schweiz, Deutschland und Österreich')
+st.title('COVID-19 Fälle in der Schweiz, Deutschland und Österreich')
 #st.subheader('')
 
 #Erläuterung zur Grafik
 st.markdown("Die Schweiz implementierte im Vergleich zu Österreich und Deutschland als letzte "
-        "erste Coronamassnahmen. Auch im Verlauf der Pandemie waren die Massnahmen "
-        "verglichen mit unseren Nachbarsländern stets weniger streng. In Betracht auf "
+        "erste Coronamassnahmen. Auch im Verlaufe der Pandemie waren die Massnahmen "
+        "verglichen mit den Nachbarsländern stets weniger streng. In Betracht auf "
         "die Fallzahlen, war die Schweiz auf Platz zwei mit durchschnittlich 50'573 Fällen "
         "auf 100'000 Einwohner.")
 st.markdown("Anfang des Jahres 2022 gab es in allen drei Ländern eine drastische Steigung der "
         "Fallzahlen. Dies vor allem deswegen, weil die Massnahmen gelockert wurden und " 
         "die Bevölkerung fahrlässiger handelte. Da zu diesem Zeitpunkt die Impfungen schon " 
-        "recht fortgeschritten waren, nahm man die ganze Situation etwas lockerer.")
+        "recht fortgeschritten waren, nahm man die Situation etwas lockerer.")
 
 
-# TODO Start all Visualisations at the same date
 # TODO Get Info how many tests were made at start and end of pandemic
 
 # Schweiz
@@ -150,10 +149,21 @@ st.bokeh_chart(p)
 
 st.header('Die tödliche Wirkung von COVID-19')
 st.subheader('Ein Blick auf Quartal und Altersgruppe in der Schweiz, Deutschland und Österreich')
-st.markdown('')
+
+st.markdown('In den Heatmaps werden die Todesfälle nach Quartal und Altersgruppe in der Schweiz, '
+        'Deutschland und Österreich dargestellt. Mittels Dropdown-Menü können Sie '
+        'das gewünschte Land anwählen und es werden die Todesfälle pro Altersgruppe ab 2021 bis '
+        'heute dargestellt. Dunklere Felder bedeuten eine höhere Anzahl von COVID-19-bedingten '
+        'Todesfällen. '
+        'In der Schweiz, starben hauptäschlich ältere Menschen an COVID-19. '
+        'Dank der implementierten Massnahmen und den Impfungen konnten die Todeszahlen'
+        ' reduziert werden. '
+        'Deutschland weist einen ähnlichen Verlauf auf wie die Schweiz. In Österreich hingegen'
+        ' steigen die Todesfälle im Laufe der Jahre. Aber auch hier sind hauptsächlich ältere'
+        ' Menschen betroffen.'
+        )
 
 # Funktionen zur Erstellung der Heatmaps
-
 def create_heatmap_switzerland():
     # Daten laden
     data_alt = pd.read_csv('data//COVID19Death_geoRegion_AKL10_w.csv')
@@ -192,7 +202,7 @@ def create_heatmap_switzerland():
     fig, ax = plt.subplots(figsize=(12, 8))
     sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='.0f', cbar=True, ax=ax)
     ax.set_xlabel('Quartal')
-    ax.set_ylabel('Altersklasse')
+    ax.set_ylabel('Altersgruppe')
     ax.set_title('Anzahl der Todesfälle nach Quartal und Altersgruppe in der Schweiz')
 
     plt.tight_layout()
@@ -301,7 +311,7 @@ def create_heatmap_germany():
 
 # Dropdown-Widget für Länderauswahl erstellen
 country_dropdown_heatmap = st.selectbox(
-    'Wählen Sie ein Land aus: :',
+    'Wählen Sie ein Land aus:',
     ['Schweiz', 'Österreich', 'Deutschland'],
     key = 'heatmap'
 )
@@ -318,24 +328,15 @@ def on_country_dropdown_change(country):
 # Dropdown-Widget anzeigen und Änderungen überwachen
 on_country_dropdown_change(country_dropdown_heatmap)
 
-# Schweiz
-st.subheader('Grafische Analyse')
-st.markdown('In der Heatmap werden die Todesfälle nach Quartal und Altersgruppe in Deutschland, '
-        'der Schweiz und Österreich dargestellt. Mithilfe des Dropdown-Menüs können Leser '
-        'das Land auswählen und die Todesfallzahlen für den Zeitraum von 2021 bis 2023 '
-        'anzeigen. Dunklere Felder zeigen eine höhere Anzahl von COVID-19-bedingten '
-        'Todesfällen. Als Beispiel verdeutlichen die Daten für die Schweiz, dass vor '
-        'allem ältere Menschen, insbesondere ab 70 Jahren,während des ersten '
-        'Pandemiejahres 2021 verstorben sind. Ende 2021/Anfang 2022 stiegen die Zahlen '
-        'erneut an, was auf eine erhöhte Todesrate hinweist.')
 
 
 st.header('Geografische Verteilung')
-st.subheader('Wo sind die unterschieder der Todesfälle. \
-Können wir einen Unterschied sehen zwischen den Kantonen bzw. Bundesländern? \
+st.subheader('In den folgenden Grafiken sind die Todeszahlen pro Kanton, resp. Bundesland ersichtlich. \
+Können Sie einen Unterschied zwischen den Kantonen bzw. Bundesländern sehen? \
 Gibt es einen Unterschied zwischen dem Land und der Stadt?')
 
-st.markdown('In den Karten werden die Todesfälle, die Bevölkerungsanzahl, und die Sterberate der einzelnen Kanton bzw. Bundesländer angezeigt.'
+st.markdown('In den Karten sind die Todesfälle, die Bevölkerungsanzahl, und die Sterberate der einzelnen Kanton bzw. Bundesländer in den Tooltips ersichtlich. '
+            'Wenn Sie mit der Maus über die Karte fahren, werden die Tooltips automatisch angezeigt.'
             ''
             )
 
@@ -572,7 +573,7 @@ def create_map_austria():
 
 # Dropdown-Widget für Länderauswahl erstellen
 country_dropdown_map = st.selectbox(
-    'Wählen Sie ein Land aus: :',
+    'Wählen Sie ein Land aus: ',
     ['Schweiz', 'Österreich', 'Deutschland'],
     key = 'map'
 )
@@ -589,7 +590,7 @@ on_country_dropdown_map_change(country_dropdown_map)
 
 st.header('Impfungen')
 
-st.markdown('In allen drei Ländern stiegen die Anzahl Impfungen stark an. Die folgende Grafik bezieht sich ausschliesselich auf die ersten Impfungen, ohne Booster etc.')
+st.markdown('In allen drei Ländern stieg die Anzahl der Impfungen stark an. Die folgende Grafik bezieht sich ausschliesselich auf die ersten Impfungen (ohne Booster etc.).')
 
 
 #Schweiz
@@ -633,15 +634,15 @@ source_austria = ColumnDataSource(data=dict(date=total_vaccinations.index, impfu
 # Werkzeug für Tooltips erstellen
 tooltips = [
     ('Datum', '@date{%F}'),
-    ('Impfungen pro 100.000 Einwohner (Schweiz)', '@cum_sum{0.00}'),
-    ('Impfungen pro 100.000 Einwohner (Deutschland)', '@impfungen_pro_100k{0.00}'),
-    ('Impfungen pro 100.000 Einwohner (Österreich)', '@impfungen{0.00}')
+    ("Impfungen pro 100'000 Einwohner (Schweiz)", '@cum_sum{0.00}'),
+    ("Impfungen pro 100'000 Einwohner (Deutschland)", '@impfungen_pro_100k{0.00}'),
+    ("Impfungen pro 100'000 Einwohner (Österreich)", '@impfungen{0.00}')
 ]
 formatters = {'@date': 'datetime'}
 hover_tool = HoverTool(tooltips=tooltips, formatters=formatters)
 
 # Figure-Objekt erstellen
-p = figure(x_axis_type='datetime', y_axis_type='auto', plot_width=800, plot_height=400, title='COVID-19 Impfungen pro 100.000 Einwohner')
+p = figure(x_axis_type='datetime', y_axis_type='auto', plot_width=800, plot_height=400, title="COVID-19 Impfungen pro 100'000 Einwohner")
 p.add_tools(hover_tool)
 
 # Entfernen der Scientific (e+...) Formatierung auf der Y-Achse
@@ -654,7 +655,7 @@ austria_line = p.line(x='date', y='impfungen', source=source_austria, line_color
 
 # Achsenbeschriftungen festlegen
 p.xaxis.axis_label = 'Datum'
-p.yaxis.axis_label = 'Anzahl der Impfungen pro 100.000 Einwohner'
+p.yaxis.axis_label = "Anzahl der Impfungen pro 100'000 Einwohner"
 
 # Streamlit-App erstellen
 st.bokeh_chart(p)
@@ -662,12 +663,14 @@ st.bokeh_chart(p)
 
 st.header('Impfstoffe im Vergleich')
 
-st.markdown('Die Impfstoffe, die verwendet wurden unterscheiden sich zwischen den drei Ländern. ' 
-            'Ein Grund weshalb, bestimmte Impfstoffe mehr geimpft wurde, war das Zulassungsdatum. '
-            'So war Novavax in der EU ab dem 4. August 2021 und in der Schweiz erst ab dem 13. April 2022 zugelassen. '
-            "Am meisten wurde der Pfizer Biontech Impfstoff, mit 137'755'538 Impfdosen geimpft. "
+st.markdown('Obwohl alle drei Länder täglich Impfungen durchführte, setzte jedes Land auf andere Impfstoffe. ' 
+            'Ein Grund, weshalb bestimmte Impfstoffe mehr geimpft wurden, war das Zulassungsdatum. '
+            'So war Novavax beispielsweise in der EU ab dem 4. August 2021 und in der Schweiz erst ab dem 13. April 2022 zugelassen. '
+            "Am meisten wurde der Pfizer Biontech Impfstoff, mit 137'755'538 Impfdosen über alle drei Länder geimpft. "
             "Pfizer Biontech war der erste Impfstoff, der in der EU und der Schweiz zugelassen wurde."
             )
+st.markdown('Bitte beachten Sie, dass die Anzahl der Impfdosen an der gesamten Bevölkerungszahl gemessen wird und die Zahlen der drei Grafiken '
+            'somit nicht direkt miteinander vergleichbar sind.')
 
 # Schweiz
 vaccine_swiss = pd.read_csv('data//COVID19VaccPersons_AKL10_vaccine_w.csv')
@@ -777,7 +780,7 @@ def create_vaccinetype_bar_austria():
     st.pyplot(fig)
 
 country_dropdown_vacctypebar = st.selectbox(
-    'Wählen Sie ein Land aus: :',
+    'Wählen Sie ein Land aus: ',
     ['Schweiz', 'Österreich', 'Deutschland'],
     key = 'bar'
 )
@@ -795,8 +798,9 @@ on_country_dropdown_vacctypebar_change(country_dropdown_vacctypebar)
 #Ausblick
 st.header('Ausblick der Fallzahlen')
 st.subheader(' ')
-st.write("Bitte beachten Sie, dass diese Trendanalysen nur anhand der bisher gesammelten Daten erstellt wurde und somit nur eine Annahme ist. "
-         "Die tatsächlichen Fallzahlen können sich anders entwickeln.")
+st.markdown("Die folgenden Grafiken zeigen den Ausblick der Fallzahlen im Jahr 2024."
+            "Die Trendanalysen wurden anhand der bisher gesammelten Daten erstellt und sind somit nur eine Annahme der Fallzahlen. "
+            "Die tatsächlichen Fallzahlen können sich anders entwickeln.")
 st.write("Die Vorhersage wurde auf Basis der Bevölkerungsanzahl des jeweiligen Landes gemessen. Ein direkter Vergleich ist somit nicht möglich.")
 
 #Schweiz
@@ -916,11 +920,17 @@ plt.xticks(years_at.flatten(), [str(int(year)) for year in years_at.flatten()])
 st.pyplot(plt)
 st.write("Trendanalyse:", trend)
 
+#TODO DROPDOWN EINFÜGEN FÜR AUSBLICK
+
 
 # Fazit
 st.header('Fazit')
-st.subheader(
-    'Durch die Erkenntnisse können wir die Menschen beruhigen. Mit dem analytischen Rückblick auf die vergangenen '
-    'Jahre können bei zukünftigen Pandemien verbesserte Massnahmen bestimmt werden.')
+st.markdown(
+    'Durch die gewonnenen Erkenntnisse kann die Bevölkerung beruhigt werden. Auch wenn die Fallzahlen im nächsten Jahr nochmals steigen sollten, '
+    'ist jedes Land mit Impfdosen und den passenden Massnahmen vorbereitet. '
+    'Mit dem analytischen Rückblick auf die vergangenen Jahre können bei zukünftigen Pandemien die besten Massnahmen ergriffen werden, welche '
+    'die Gesundheit der Bevölkerung sicherstellt und die wirtschaftlichen Leistungen beibehält.')
 
-st.caption('Céline Felix, Katharina Azevedo, Kirishana Kiritharan, Patrick Häusermann')
+#TODO - Vorschläge für effizientere Massnahmen
+
+st.caption('Autoren: Céline Felix, Katharina Azevedo, Kirishana Kiritharan, Patrick Häusermann')
