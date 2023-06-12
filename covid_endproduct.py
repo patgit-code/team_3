@@ -194,6 +194,8 @@ def create_heatmap_switzerland():
     ax.set_xlabel('Quartal')
     ax.set_ylabel('Altersklasse')
     ax.set_title('Anzahl der Todesfälle nach Quartal und Altersgruppe in der Schweiz')
+    ax.set_xticks(np.arange(len(data))+0.5)
+    ax.set_xticklabels(data, rotation=0, ha='center')
 
     plt.tight_layout()
     st.pyplot(fig)
@@ -289,7 +291,7 @@ def create_heatmap_germany():
     ax.set_title('Anzahl der Todesfälle nach Quartal und Altersgruppe in Deutschland')
     ax.set_xticks(np.arange(len(quarter_labels))+0.5)
     ax.set_xticklabels(quarter_labels, rotation=0, ha='center')
-    ax.set_yticklabels(pivot_table.index[::-1], rotation=0)
+    ax.set_yticklabels(pivot_table.index[::-1], rotation=0, ha='center')
 
     # Anpassung der Farbskala basierend auf den Werten
     norm = plt.Normalize(pivot_table.min().min(), pivot_table.max().max())
@@ -301,7 +303,7 @@ def create_heatmap_germany():
 
 # Dropdown-Widget für Länderauswahl erstellen
 country_dropdown_heatmap = st.selectbox(
-    'Wählen Sie ein Land aus: :',
+    'Wählen Sie ein Land aus:',
     ['Schweiz', 'Österreich', 'Deutschland'],
     key = 'heatmap'
 )
