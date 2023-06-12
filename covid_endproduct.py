@@ -307,9 +307,15 @@ def create_heatmap_germany():
     ax.set_xticklabels(quarter_labels, rotation=0, ha='center')
     ax.set_yticklabels(pivot_table.index[::-1], rotation=0, ha='center')
 
+    # Horizontale Ausrichtung der Y-Achse
+    ax.set_yticklabels(pivot_table.index[::-1], rotation=0, ha='right')
+
     # Anpassung der Farbskala basierend auf den Werten
     norm = plt.Normalize(pivot_table.min().min(), pivot_table.max().max())
     heatmap = sns.heatmap(pivot_table, cmap=cmap, annot=True, fmt='d', cbar=False, norm=norm, ax=ax)
+
+    # Anpassung der Strichmuster in der Mitte
+    ax.hlines([x + 0.5 for x in range(len(pivot_table.index))], *ax.get_xlim(), colors='white', linewidths=1.5)
 
     plt.tight_layout()
     st.pyplot(fig)
