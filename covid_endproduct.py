@@ -194,8 +194,7 @@ def create_heatmap_switzerland():
     ax.set_xlabel('Quartal')
     ax.set_ylabel('Altersklasse')
     ax.set_title('Anzahl der Todesfälle nach Quartal und Altersgruppe in der Schweiz')
-    ax.set_xticks(np.arange(len(data))+0.5)
-    ax.set_xticklabels(data, rotation=0, ha='center')
+   
 
     plt.tight_layout()
     st.pyplot(fig)
