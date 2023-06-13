@@ -637,19 +637,8 @@ source_swiss = ColumnDataSource(data=dict(date=vacc_type['date'], cum_sum=vacc_t
 source_germany = ColumnDataSource(data=dict(date=daily_cases['Impfdatum'], impfungen_pro_100k=daily_cases['Impfungen pro 100k']))
 source_austria = ColumnDataSource(data=dict(date=total_vaccinations.index, impfungen=total_vaccinations_per_100k.values))
 
-# Werkzeug für Tooltips erstellen
-tooltips = [
-    ('Datum', '@date{%F}'),
-    ("Impfungen pro 100'000 Einwohner (Schweiz)", '@cum_sum{0.00}'),
-    ("Impfungen pro 100'000 Einwohner (Deutschland)", '@impfungen_pro_100k{0.00}'),
-    ("Impfungen pro 100'000 Einwohner (Österreich)", '@impfungen{0.00}')
-]
-formatters = {'@date': 'datetime'}
-hover_tool = HoverTool(tooltips=tooltips, formatters=formatters)
-
 # Figure-Objekt erstellen
-p = figure(x_axis_type='datetime', y_axis_type='auto', plot_width=800, plot_height=400, title="COVID-19 Impfungen pro 100'000 Einwohner")
-p.add_tools(hover_tool)
+p = figure(x_axis_type='datetime', y_axis_type='auto', plot_width=600, plot_height=600, title="COVID-19 Impfungen pro 100'000 Einwohner")
 
 # Entfernen der Scientific (e+...) Formatierung auf der Y-Achse
 p.left[0].formatter.use_scientific = False
@@ -658,6 +647,10 @@ p.left[0].formatter.use_scientific = False
 switzerland_line = p.line(x='date', y='cum_sum', source=source_swiss, line_color='tomato', line_width=2, legend_label='Schweiz')
 germany_line = p.line(x='date', y='impfungen_pro_100k', source=source_germany, line_color='maroon', line_width=2, legend_label='Deutschland')
 austria_line = p.line(x='date', y='impfungen', source=source_austria, line_color='orange', line_width=2, legend_label='Österreich')
+
+# Legenden mit Klick verstecken
+p.legend.click_policy = 'hide'
+p.legend.location = "top_left"
 
 # Achsenbeschriftungen festlegen
 p.xaxis.axis_label = 'Datum'
