@@ -471,7 +471,7 @@ def create_map_switzerland():
 
     # Quellenangabe
     st.caption('Todesfälle Datenquelle: Bundesamt für Gesundheit (BAG), Stand: 01.01.2023')
-    st.caption('Bevölkerung Datenquelle: Statista, Stand: 31.12.2021')
+    st.caption('Bevölkerung Datenquelle: Statista Bundesamt für Statistik (Schweiz), Stand: 31.12.2021')
 
 # Deutschland
 #st.subheader('Deutschland')
