@@ -270,7 +270,7 @@ def create_heatmap_germany():
                                                             'A15-A34': '15-34',
                                                             'A35-A59': '35-59',
                                                             'A60-A79': '60-79',
-                                                            'A80+ ': '80+'})
+                                                            'A80+': '80+'})
 
     # 'Unbekannt' aus der Altersklasse rauslöschen
     df = df_alt[df_alt['Altersgruppe'] != 'unbekannt']
@@ -360,15 +360,6 @@ population = pd.read_csv("data//population.csv", delimiter=';')
 
 # Schweiz
 def create_map_switzerland():
-    #st.subheader('Schweiz')
-
-
-    # TODO REMOVE THIS CODE AND SAVE TO CORRECTED CSV in a seperate folder in teams \
-    #  so we load the already corrected data into the streamlit
-    # any other changes to the data should be done in a def function above \
-    # so this is better readable aka def the graph above and here we can see the structure of the article
-    # TODO add comments to this and remove any not needed code
-    # TODO make all dates consistent -> Turn all to german and same type
 
     # Shapefile der Schweiz von admin.ch laden. (https://www.swisstopo.admin.ch/de/geodata/landscape/boundaries3d.html)
     # Wir wählen die Kantonsgebiet Variante, für die Visualisierung.
