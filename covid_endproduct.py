@@ -693,9 +693,9 @@ p.yaxis.axis_label = "Anzahl der Impfungen pro 100'000 Einwohner"
 p.toolbar.active_drag = None
 st.bokeh_chart(p, use_container_width=True)
 
-st.caption('Schweiz Datenquelle: Bundesamt für Gesundheit (BAG) Stand: 24.04.2023')
-st.caption('Deutschland Datenquelle: Stand: ')
-st.caption('Österreich Datenquelle: Stand: ')
+st.caption('Schweiz Datenquelle: Bundesamt für Gesundheit (BAG), Stand: 24.04.2023')
+st.caption('Deutschland Datenquelle: Robert Koch-Institut (RKI), Stand: 07.04.2023')
+st.caption('Österreich Datenquelle: Epidemiologischen Meldesystem (EMS), Stand: 15.05.2023')
 
 st.header('Impfstoffe im Vergleich')
 
