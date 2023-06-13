@@ -36,9 +36,8 @@ st.subheader(
 
 # Umstände
 st.title('COVID-19 Fälle in der Schweiz, Deutschland und Österreich')
-#st.subheader('')
 
-#Erläuterung zur Grafik
+# Erläuterung zur Grafik
 st.markdown("Die Schweiz implementierte im Vergleich zu Österreich und Deutschland als letzte "
         "erste Coronamassnahmen. Auch im Verlaufe der Pandemie waren die Massnahmen "
         "verglichen mit den Nachbarsländern stets weniger streng. In Betracht auf "
@@ -53,7 +52,6 @@ st.markdown("Anfang des Jahres 2022 gab es in allen drei Ländern eine drastisch
 # TODO Get Info how many tests were made at start and end of pandemic
 
 # Schweiz
-#st.subheader('Schweiz')
 
 # Lesen des WHO Datensatz für den die drei Visualisierungen erstellt werden.
 covid_ww = pd.read_csv(os.path.join('data', 'WHO-COVID-19-global-data.csv'))
@@ -88,8 +86,6 @@ for index, row in germany_quarterly.iterrows():
     
 
 #Österreich
-# Summe der Covid-Fälle für alle Daten berechnen
-#total_cases = dat.groupby('Time')['Anzahl'].sum()
 
 # Daten für Österreich filtern
 austria_process_data = covid_ww[covid_ww['Country_code'] == 'AT']
@@ -151,6 +147,8 @@ script, div = components(p)
 p.toolbar.active_drag = None
 st.bokeh_chart(p, use_container_width=True)
 
+# Quellenangabe
+st.caption('Datenquelle: World Health Organization (WHO), Stand: 26.04.2023')
 
 
 st.header('Die tödliche Wirkung von COVID-19')
@@ -220,6 +218,9 @@ def create_heatmap_switzerland():
     plt.tight_layout()
     st.pyplot(fig)
 
+    # Quellenangabe
+    st.caption('Datenquelle: , Stand:')
+
 def create_heatmap_austria():
     # Daten laden
     dat = pd.read_csv("data//CovidFaelle_Altersgruppe.csv", delimiter=';')
@@ -266,6 +267,9 @@ def create_heatmap_austria():
 
     plt.tight_layout()
     st.pyplot(fig)
+
+    # Quellenangabe
+    st.caption('Datenquelle: , Stand:')
 
 def create_heatmap_germany():
     # Daten laden
@@ -328,6 +332,9 @@ def create_heatmap_germany():
 
     plt.tight_layout()
     st.pyplot(fig)
+
+    # Quellenangabe
+    st.caption('Datenquelle: , Stand:')
 
 
 # Dropdown-Widget für Länderauswahl erstellen
@@ -461,6 +468,9 @@ def create_map_switzerland():
     # Anzeigen der Karte
     st.bokeh_chart(bokeh_swiss)
 
+    # Quellenangabe
+    st.caption('Datenquelle: , Stand:')
+
 # Deutschland
 #st.subheader('Deutschland')
 
@@ -523,6 +533,9 @@ def create_map_germany():
     # Anzeigen der Karte
     st.bokeh_chart(bokeh_germany)
 
+    # Quellenangabe
+    st.caption('Datenquelle: , Stand:')
+
 # Österreich
 #st.subheader('Österreich')
 def create_map_austria():
@@ -582,6 +595,9 @@ def create_map_austria():
 
     # Anzeigen der Karte
     st.bokeh_chart(bokeh_austria)
+
+    # Quellenangabe
+    st.caption('Datenquelle: , Stand:')
 
 # Dropdown-Widget für Länderauswahl erstellen
 country_dropdown_map = st.selectbox(
@@ -643,6 +659,16 @@ source_swiss = ColumnDataSource(data=dict(date=vacc_type['date'], cum_sum=vacc_t
 source_germany = ColumnDataSource(data=dict(date=daily_cases['Impfdatum'], impfungen_pro_100k=daily_cases['Impfungen pro 100k']))
 source_austria = ColumnDataSource(data=dict(date=total_vaccinations.index, impfungen=total_vaccinations_per_100k.values))
 
+# Werkzeug für Tooltips erstellen
+tooltips = [
+    ('Datum', '@date{%F}'),
+    ("Impfungen pro 100'000 Einwohner (Schweiz)", '@cum_sum{0.00}'),
+    ("Impfungen pro 100'000 Einwohner (Deutschland)", '@impfungen_pro_100k{0.00}'),
+    ("Impfungen pro 100'000 Einwohner (Österreich)", '@impfungen{0.00}')
+]
+formatters = {'@date': 'datetime'}
+hover_tool = HoverTool(tooltips=tooltips, formatters=formatters)
+
 # Figure-Objekt erstellen
 p = figure(x_axis_type='datetime', y_axis_type='auto', plot_width=600, plot_height=600, title="COVID-19 Impfungen pro 100'000 Einwohner")
 p.xaxis.axis_label_text_font_style = 'normal'
@@ -656,10 +682,6 @@ switzerland_line = p.line(x='date', y='cum_sum', source=source_swiss, line_color
 germany_line = p.line(x='date', y='impfungen_pro_100k', source=source_germany, line_color='maroon', line_width=2, legend_label='Deutschland')
 austria_line = p.line(x='date', y='impfungen', source=source_austria, line_color='orange', line_width=2, legend_label='Österreich')
 
-# Legenden mit Klick verstecken
-p.legend.click_policy = 'hide'
-p.legend.location = "top_left"
-
 # Achsenbeschriftungen festlegen
 p.xaxis.axis_label = 'Datum'
 p.yaxis.axis_label = "Anzahl der Impfungen pro 100'000 Einwohner"
@@ -668,6 +690,9 @@ p.yaxis.axis_label = "Anzahl der Impfungen pro 100'000 Einwohner"
 p.toolbar.active_drag = None
 st.bokeh_chart(p, use_container_width=True)
 
+st.caption('Schweiz Datenquelle: (BAG) Stand: 24.04.2023')
+st.caption('Deutschland Datenquelle: Stand: ')
+st.caption('Österreich Datenquelle: Stand: ')
 
 st.header('Impfstoffe im Vergleich')
 
@@ -719,8 +744,11 @@ def create_vaccinetype_bar_switzerland():
     plt.tight_layout()
     st.pyplot(fig)
 
+    # Quellenangabe
+    st.caption('Datenquelle: , Stand:')
+
 # Deutschland
-#st.subheader('Deutschland')
+
 # Stand: 27. Mai 2022 statista (https://de.statista.com/statistik/daten/studie/1197550/umfrage/impfungen-gegen-das-coronavirus-nach-hersteller/)
 vaccine_germany = pd.read_csv('data//statistic_id1197550_impfungen-gegen-das-coronavirus-nach-hersteller-2022.csv', delimiter=';')
 
@@ -751,6 +779,8 @@ def create_vaccinetype_bar_germany():
     plt.tight_layout()
     st.pyplot(fig)
 
+    # Quellenangabe
+    st.caption('Datenquelle: , Stand:')
 
 # Österreich
 #st.subheader('Österreich')
@@ -787,6 +817,9 @@ def create_vaccinetype_bar_austria():
     plt.tight_layout()
     st.pyplot(fig)
 
+    # Quellenangabe
+    st.caption('Datenquelle: , Stand:')
+
 country_dropdown_vacctypebar = st.selectbox(
     'Wählen Sie ein Land aus: ',
     ['Schweiz', 'Österreich', 'Deutschland'],
@@ -805,7 +838,6 @@ on_country_dropdown_vacctypebar_change(country_dropdown_vacctypebar)
 
 #Ausblick
 st.header('Ausblick der Fallzahlen')
-st.subheader(' ')
 st.markdown("Die folgenden Grafiken zeigen den Ausblick der Fallzahlen im Jahr 2024."
             "Die Trendanalysen wurden anhand der bisher gesammelten Daten erstellt und sind somit nur eine Annahme der Fallzahlen. "
             "Die tatsächlichen Fallzahlen können sich anders entwickeln.")
@@ -821,6 +853,10 @@ year_ch = switzerland.groupby('year')['New_cases'].sum()
 years_ch = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1) # von year_ch
 cases_ch = np.array([451142, 883690, 3045631, 20909])
 
+# Lineare Regression
+regressor = LinearRegression()
+regressor.fit(years_ch, cases_ch)
+
 #Deutschland
 
 # Daten DE
@@ -834,6 +870,19 @@ austria_process_data['Date_reported'] = austria_process_data['Date_reported'].as
 austria_process_data['year'] = austria_process_data['Date_reported'].str[0:4]
 year_at = austria_process_data.groupby('year')['New_cases'].sum()
 
+
+# Funktion zur Durchführung der linearen Regression und Prognose
+def perform_linear_regression(years, cases, future_year):
+    regressor = LinearRegression()
+    regressor.fit(years, cases)
+    
+    slope = regressor.coef_[0]
+    intercept = regressor.intercept_
+    trend = f"y = {slope:.2f}x + {intercept:.2f}"
+    
+    future_cases = regressor.predict([[future_year]])
+    
+    return trend, future_cases
 
 # Schweiz
 
@@ -893,6 +942,9 @@ if selected_country == 'Schweiz':
     ax.set_ylim(bottom=0)
     st.pyplot(fig)
 
+    # Quellenangabe
+    st.caption('Datenquelle: , Stand:')
+
 elif selected_country == 'Deutschland':
 
     # Lineare Regression
@@ -923,6 +975,9 @@ elif selected_country == 'Deutschland':
     ax.set_ylim(bottom=0)
     st.pyplot(fig)
 
+    # Quellenangabe
+    st.caption('Datenquelle: , Stand:')
+
 elif selected_country == 'Österreich':
     # Lineare Regression
     regressor = LinearRegression()
@@ -950,6 +1005,9 @@ elif selected_country == 'Österreich':
     ax.set_xticklabels([str(int(year)) for year in years_at.flatten()])
     ax.set_ylim(bottom=0)
     st.pyplot(fig)
+
+    # Quellenangabe
+    st.caption('Datenquelle: , Stand:')
 
 st.write("Trendanalyse:", trend)
 
