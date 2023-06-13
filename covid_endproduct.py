@@ -31,7 +31,7 @@ st.title(body='COVID-19: Ein Rückblick auf die Pandemie im deutschsprachigen Ra
          'Was können wir davon mitnehmen?')
 st.subheader(
     'Es ist bereits ein Jahr her, seit die Massnahmen gegen COVID-19 in der Schweiz, Deutschland und Österreich '
-    'aufgehoben wurden. Das Leben hat sich wieder normalisiert und der Virus verschwindet langsam aus unseren Köpfen. '
+    'aufgehoben wurden. Das Leben hat sich wieder normalisiert und der Virus verschwindet langsam aus den Köpfen. '
     'Doch was können wir aus der vergangenen Pandemie lernen?')
 
 # Umstände
@@ -106,7 +106,7 @@ germany_source = ColumnDataSource(data=germany_quarterly)
 austria_source = ColumnDataSource(data=austria_quarterly)
 
 # Create a figure object
-p = figure(x_axis_type='datetime', title='COVID-19 Fälle in der Schweiz, Deutschland und Österreich',
+p = figure(x_axis_type='datetime', title='Kumulative COVID-19 Fälle in der Schweiz, Deutschland und Österreich',
            x_axis_label='Datum', y_axis_label="Anzahl der COVID-Fälle pro 100'000 Einwohner")
 
 p.xaxis.axis_label_text_font_style = 'normal'
@@ -145,9 +145,9 @@ st.bokeh_chart(p, use_container_width=True)
 st.header('Massnahmen')
 st.markdown('Im Verlaufe der Pandemie mussten die Massnahmen immer wieder angepasst werden, '
             'um die effizientesten zu finden. Ein Lockdown beispielsweise ist wirtschaftlich gesehen sehr '
-            'schelcht und Social Distancing sowie Home-Office schlagen der Gesellschaft auf die Psyche. Die '
+            'schlecht und Social Distancing sowie Home-Office schlagen der Gesellschaft auf die Psyche. Die '
             'Regierungen setzten daher stark auf die Impfungen, um die anderen Massnahmen schrittweise lockern '
-            'zu können.')
+            'zu können. Was rückblickend die effizientesten Massnahmen waren, wird am Ende des Artikels erläutert.')
 
 st.header('Die tödliche Wirkung von COVID-19')
 #st.subheader('Ein Blick auf Quartal und Altersgruppe in der Schweiz, Deutschland und Österreich')
@@ -358,12 +358,11 @@ on_country_dropdown_change(country_dropdown_heatmap)
 
 st.header('Geografische Verteilung der Todesfälle')
 st.markdown('In den folgenden Grafiken sind die Todeszahlen pro Kanton, resp. pro Bundesland ersichtlich. \
-Können Sie einen Unterschied zwischen den Kantonen bzw. Bundesländern sehen? \
+Können Sie einen Unterschied zwischen den Kantonen bzw. Bundesländern ausmachen? \
 Gibt es einen Unterschied zwischen dem Land und der Stadt?')
 
-st.markdown('In den Karten sind die Todesfälle, die Bevölkerungsanzahl, und die Sterberate der einzelnen Kanton bzw. Bundesländer in den Tooltips ersichtlich. '
-            'Wenn Sie mit der Maus über die Karte fahren, werden die Tooltips automatisch angezeigt.'
-            ''
+st.markdown('In den Karten sind die Todesfälle, die Bevölkerungsanzahl, und die Sterberate der einzelnen Kantonen bzw. Bundesländern in den Tooltips ersichtlich. '
+            'Durch einen Klick auf die Karte, werden die Tooltips automatisch angezeigt.'
             )
 
 
@@ -619,14 +618,14 @@ on_country_dropdown_map_change(country_dropdown_map)
 st.header('Impfungen im Vergleich')
 
 st.markdown('Anfangs 2021, ungefähr ein Jahr nach Ausbruch des Virus, wurden die ersten Impfungen durchgeführt. '
-            'Wie man den folgenden Grafik entnehmen kann, verhielten sich die Kurven zu beginn etwas verhaltener. Dies '
+            'Wie man den folgenden Grafiken entnehmen kann, verhielten sich die Kurven zu Beginn etwas verhaltener. Dies '
             'hauptsächlich daher, da zuerst die älteren und gefärdeteren Generationen geimpft wurden. '
-            'In allen drei Ländern stieg die Anzahl der Impfungen anschliessend stark an. Im Sommer 2021 wurde in '
-            'der Schweiz die meisten Impfungen aufgezeichnet. In Österreich hingegen im ersten Quaral '
+            'In allen drei Ländern stieg die Anzahl der Impfungen anschliessend stark an. Im Sommer 2021 wurden in '
+            'der Schweiz die meisten Impfungen aufgezeichnet. In Österreich hingegen im ersten Quartal '
             '2022, als die Fallzahlen erneut stark anstiegen (Vergleich Grafik 1). In Deutschland stagnieren '
             'die Impfzahlen seit Beginn des Jahres 2022.')
             
-st.markdown('Die folgende Grafik bezieht sich ausschliesselich auf die ersten Impfungen (ohne Booster etc.).')
+st.markdown('Die folgende Grafik bezieht sich ausschliesslich auf die ersten Impfungen (ohne Booster etc.).')
 
 
 #Schweiz
@@ -679,7 +678,7 @@ formatters = {'@date': 'datetime'}
 hover_tool = HoverTool(tooltips=tooltips, formatters=formatters)
 
 # Figure-Objekt erstellen
-p = figure(x_axis_type='datetime', y_axis_type='auto', plot_width=600, plot_height=600, title="COVID-19 Impfungen pro 100'000 Einwohner")
+p = figure(x_axis_type='datetime', y_axis_type='auto', plot_width=600, plot_height=600, title="COVID-19: Kumulative Impfungen in der Schweiz, Deutschland und Österreich")
 p.xaxis.axis_label_text_font_style = 'normal'
 p.yaxis.axis_label_text_font_style = 'normal'
 
@@ -1033,21 +1032,19 @@ st.markdown(
     'Gemäss einer Studie des Eidgenössischen Departements für Wirtschaft, Bildung und Forschung (WBF) '
     'sind die effektivsten Massnahmen Lockdowns und Schulschliessungen. Da sich dies allerdings negativ auf die '
     'Wirtschaft ausübt, wird das wenn möglich vermieden. Eine weitere effiziente Massnahme ist das '
-    'Tragen von Masken, da das Infektionsgeschehen dadurch effektiv beeinflusst wurden konnte. '
+    'Tragen von Masken, da das Infektionsgeschehen dadurch effektiv beeinflusst werden konnte. '
     'Weitere sinnvolle Massnahmen sind Social Distancing und Homeoffice.')
 st.markdown( 'Gemäss den oberen Auswertungen werden die Fallzahlen voraussichtlich in den Wintermonaten '
-    'erneut steigen, da die Gesellschaft in der kalten Saison anfälliger auf Krankheiten ist und uns sich öfters in geschlossenen Innenräumen '
+    'erneut steigen, da die Gesellschaft in der kalten Saison anfälliger auf Krankheiten ist und sich öfters in geschlossenen Innenräumen '
     'aufhält. Durch Home-Office Pläne, Einhaltung des Abstands (ein bis zwei Metern) sowie der Hygienemassnahmen sollten die Fallzahlen gebändigt '
-    'werden können. Auch das freiwille Tragen einer Maske wird von Ärzten empfohlen. ')
+    'werden können. Auch das freiwillige Tragen einer Maske wird von Ärzten empfohlen. ')
 
+# Quellenangabe
+st.caption("Datenquelle: Eidgenössisches Departement für Wirtschaft, Bildung und Forschung (WBF), 'Wirksamkeit und Kosten von Corona-Massnahmen und optimale Interventionsebene'")
 
-st.caption("Für weitere länderspezifische Informationen können folgende Webseiten aufgesucht werden: \
+st.markdown("Für weitere länderspezifische Informationen können folgende Webseiten aufgesucht werden: \
             Schweiz: Bundesamt für Gesundheit (BAG),  Deutschland:  Robert Koch-Institut (RKI), Österreich:  Bundesministerium für Soziales, Gesundheit, Pflege und Konsumentenschutz (BMSGPK)")
 
 st.caption('Autoren: Céline Felix, Katharina Azevedo, Kirishana Kiritharan, Patrick Häusermann')
 st.caption('Veröffentlichung Artikel: Juni 2023')
 
-st.caption("Für weitere länderspezifische Informationen besuchen Sie: \
-            Schweiz: Bundesamt für Gesundheit (BAG) \
-            Deutschland:  Robert Koch-Institut (RKI) \
-            Österreich:  Bundesministerium für Soziales, Gesundheit, Pflege und Konsumentenschutz (BMSGPK)")
