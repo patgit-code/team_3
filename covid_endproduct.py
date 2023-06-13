@@ -219,7 +219,7 @@ def create_heatmap_switzerland():
     st.pyplot(fig)
 
     # Quellenangabe
-    st.caption('Datenquelle: , Stand:')
+    st.caption('Datenquelle: Bundesamt für Gesundheit (BAG), Stand: 01.01.2023')
 
 def create_heatmap_austria():
     # Daten laden
@@ -269,7 +269,7 @@ def create_heatmap_austria():
     st.pyplot(fig)
 
     # Quellenangabe
-    st.caption('Datenquelle: , Stand:')
+    st.caption('Datenquelle: Epidemiologischen Meldesystem (EMS), Stand: 15.05.2023')
 
 def create_heatmap_germany():
     # Daten laden
@@ -334,7 +334,7 @@ def create_heatmap_germany():
     st.pyplot(fig)
 
     # Quellenangabe
-    st.caption('Datenquelle: , Stand:')
+    st.caption('Datenquelle: Robert Koch-Institut (RKI), Stand: 01.01.2023')
 
 
 # Dropdown-Widget für Länderauswahl erstellen
