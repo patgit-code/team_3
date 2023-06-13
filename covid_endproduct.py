@@ -147,8 +147,9 @@ p.add_tools(hover)
 # Konvertieren des Bokeh plot in HTML Komponenten
 script, div = components(p)
 
-# HTML Komponenten anzeigen
-st.bokeh_chart(p)
+# korrekte Darstellung auf Smartphone sicherstellen
+st.bokeh_chart(p, use_container_width=True)
+
 
 st.header('Die tödliche Wirkung von COVID-19')
 st.subheader('Ein Blick auf Quartal und Altersgruppe in der Schweiz, Deutschland und Österreich')
