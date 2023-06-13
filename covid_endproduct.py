@@ -374,6 +374,7 @@ population = pd.read_csv("data//population.csv", delimiter=';')
 # Schweiz
 def create_map_switzerland():
 
+    # Infos zu den Bevölkerunganzahl von Statista (https://de.statista.com/statistik/daten/studie/75536/umfrage/schweiz-bevoelkerung-nach-kanton-zeitreihe/)
     # Shapefile der Schweiz von admin.ch laden. (https://www.swisstopo.admin.ch/de/geodata/landscape/boundaries3d.html)
     # Wir wählen die Kantonsgebiet Variante, für die Visualisierung.
     cantons = gpd.read_file("data//shapefiles//swissboundaries//swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp")
@@ -469,7 +470,8 @@ def create_map_switzerland():
     st.bokeh_chart(bokeh_swiss)
 
     # Quellenangabe
-    st.caption('Datenquelle: , Stand:')
+    st.caption('Todesfälle Datenquelle: Bundesamt für Gesundheit (BAG), Stand: 01.01.2023')
+    st.caption('Bevölkerung Datenquelle: Statista, Stand: 31.12.2021')
 
 # Deutschland
 #st.subheader('Deutschland')
@@ -489,7 +491,6 @@ def create_map_germany():
     germany['ProcentageOfDeathPop'] = ''
     germany['YearOfPopulation'] = ''
 
-    # Infos zu den Bevölkerunganzahl von Statista (https://de.statista.com/statistik/daten/studie/75536/umfrage/schweiz-bevoelkerung-nach-kanton-zeitreihe/)
     # Setzen der Todesfälle auf den korrekten Kanton.
     # Die Todesfälle müssen auf int gecastet werden, ansonsten wirft GeoJSONDataSource einen Fehler
     for index, row in germany.iterrows():
@@ -534,10 +535,11 @@ def create_map_germany():
     st.bokeh_chart(bokeh_germany)
 
     # Quellenangabe
-    st.caption('Datenquelle: , Stand:')
+    st.caption('Todesfälle Datenquelle: Statista, Stand: 25.01.2023')
+    st.caption('Bevölkerung Datenquelle: Destatis, Stand: 31.12.2021')
 
 # Österreich
-#st.subheader('Österreich')
+
 def create_map_austria():
 
     # Shapefile Österreich von arcgis.com laden.(https://data-synergis.opendata.arcgis.com/maps/a16c7b8ef72f4ec2b36f7c7ebbcdf2e5)
@@ -597,7 +599,8 @@ def create_map_austria():
     st.bokeh_chart(bokeh_austria)
 
     # Quellenangabe
-    st.caption('Datenquelle: , Stand:')
+    st.caption('Todesfälle Datenquelle: Statista, Stand: 31.05.2023')
+    st.caption('Bevölkerung Datenquelle: Google, Stand: 2022/2023')
 
 # Dropdown-Widget für Länderauswahl erstellen
 country_dropdown_map = st.selectbox(
@@ -690,7 +693,7 @@ p.yaxis.axis_label = "Anzahl der Impfungen pro 100'000 Einwohner"
 p.toolbar.active_drag = None
 st.bokeh_chart(p, use_container_width=True)
 
-st.caption('Schweiz Datenquelle: (BAG) Stand: 24.04.2023')
+st.caption('Schweiz Datenquelle: Bundesamt für Gesundheit (BAG) Stand: 24.04.2023')
 st.caption('Deutschland Datenquelle: Stand: ')
 st.caption('Österreich Datenquelle: Stand: ')
 
