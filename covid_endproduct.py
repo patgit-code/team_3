@@ -30,7 +30,7 @@ st.caption('Bild von Pexels')
 st.title(body='COVID-19: Ein Rückblick auf die Pandemie im deutschsprachigen Raum. '
          'Was können wir davon mitnehmen?')
 st.subheader(
-    'Es ist bereits ein Jahr her, seit die Massnahmen gegen Covid-19 in der Schweiz, Deutschland und Österreich '
+    'Es ist bereits ein Jahr her, seit die Massnahmen gegen COVID-19 in der Schweiz, Deutschland und Österreich '
     'aufgehoben wurden. Das Leben hat sich wieder normalisiert und der Virus verschwindet langsam aus unseren Köpfen. '
     'Doch was können wir aus der vergangenen Pandemie lernen?')
 
@@ -116,7 +116,7 @@ austria_source = ColumnDataSource(data=austria_quarterly)
 
 # Create a figure object
 p = figure(x_axis_type='datetime', title='COVID-19 Fälle in der Schweiz, Deutschland und Österreich',
-           x_axis_label='Datum', y_axis_label="Anzahl der Covid-Fälle pro 100'000 Einwohner")
+           x_axis_label='Datum', y_axis_label="Anzahl der COVID-Fälle pro 100'000 Einwohner")
 
 # Lines for Switzerland
 switzerland_line = p.line(x='date', y='Cumulative_cases', source=switzerland_source, color='tomato', line_width=2.5,
