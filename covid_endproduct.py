@@ -607,10 +607,11 @@ st.markdown('In allen drei Ländern stieg die Anzahl der Impfungen stark an. Die
 
 #Schweiz
 vacc_type = pd.read_csv('data//COVID19VaccPersons_vaccine.csv')
-vacc_ch = vacc_type[vacc_type['type'] == 'COVID19FullyVaccPersons']
 vacc_type['date'] = pd.to_datetime(vacc_type['date'])
 vacc_type = vacc_type.sort_values('date')
-vacc_type['Kumulative Summe'] = (vacc_type['entries'].cumsum() / swiss_population) * 100000
+vacc_type = vacc_type[vacc_type['type'] == 'COVID19FullyVaccPersons']
+vacc_type['Kumulative Summe'] = vacc_type['entries'].cumsum()
+vacc_type['Kumulative Summe'] = (vacc_type['Kumulative Summe'] / swiss_population) * 100000
 
 
 #Deutschland
@@ -886,11 +887,20 @@ if selected_country == 'Schweiz':
     ax.set_xlabel('Jahr')
     ax.set_ylabel('Fallzahlen')
     ax.set_title('COVID-19 Fallzahlen in der Schweiz')
+    # Legende
     ax.legend(scatterpoints=1)
     ax.ticklabel_format(style='plain')
+
     ax.set_xticks(years_ch.flatten())
     ax.set_xticklabels([str(int(year)) for year in years_ch.flatten()])
     ax.set_ylim(bottom=0)
+    ax.grid(True)
+    p.grid.grid_line_color = 'gray'
+    p.grid.grid_line_alpha = 0.5
+    p.legend.border_line_color = 'black'  # Farbe der Umrandung
+    p.legend.border_line_width = 1  # Dicke der Umrandung
+    p.legend.border_line_alpha = 0.8  # Transparenz der Umrandung
+
     st.pyplot(fig)
 
 elif selected_country == 'Deutschland':
@@ -966,3 +976,8 @@ st.markdown(
 st.caption('Autoren: Céline Felix, Katharina Azevedo, Kirishana Kiritharan, Patrick Häusermann')
 st.caption('Veröffentlichung Artikel: Juni 2023')
 st.caption('Daten bis April 2023')
+
+st.caption("Für weitere länderspezifische Informationen besuchen Sie: \
+            Schweiz: Bundesamt für Gesundheit (BAG) \
+            Deutschland:  Robert Koch-Institut (RKI) \
+            Österreich:  Bundesministerium für Soziales, Gesundheit, Pflege und Konsumentenschutz (BMSGPK)")
