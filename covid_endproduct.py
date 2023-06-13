@@ -148,7 +148,9 @@ p.add_tools(hover)
 script, div = components(p)
 
 # korrekte Darstellung auf Smartphone sicherstellen
+p.toolbar.active_drag = None
 st.bokeh_chart(p, use_container_width=True)
+
 
 
 st.header('Die tödliche Wirkung von COVID-19')
@@ -662,8 +664,9 @@ p.legend.location = "top_left"
 p.xaxis.axis_label = 'Datum'
 p.yaxis.axis_label = "Anzahl der Impfungen pro 100'000 Einwohner"
 
-# Streamlit-App erstellen
-st.bokeh_chart(p)
+# korrekte Darstellung auf Smartphone sicherstellen
+p.toolbar.active_drag = None
+st.bokeh_chart(p, use_container_width=True)
 
 
 st.header('Impfstoffe im Vergleich')
