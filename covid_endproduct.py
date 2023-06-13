@@ -107,7 +107,7 @@ austria_source = ColumnDataSource(data=austria_quarterly)
 
 # Create a figure object
 p = figure(x_axis_type='datetime', title='Kumulative COVID-19 Fälle in der Schweiz, Deutschland und Österreich',
-           x_axis_label='Datum', y_axis_label="Anzahl der COVID-Fälle pro 100'000 Einwohner")
+           x_axis_label='Datum', y_axis_label="Anzahl der COVID-19 Fälle pro 100'000 Einwohner")
 
 p.xaxis.axis_label_text_font_style = 'normal'
 p.yaxis.axis_label_text_font_style = 'normal'
@@ -144,8 +144,8 @@ st.bokeh_chart(p, use_container_width=True)
 
 st.header('Massnahmen')
 st.markdown('Im Verlaufe der Pandemie mussten die Massnahmen immer wieder angepasst werden, '
-            'um die effizientesten zu finden. Ein Lockdown beispielsweise ist wirtschaftlich gesehen sehr '
-            'schlecht und Social Distancing sowie Home-Office schlagen der Gesellschaft auf die Psyche. Die '
+            'um die effizientesten zu finden. Ein Lockdown beispielsweise wirkt sich negativ auf das wirtschaftliche Geschehen aus '
+            'und Social Distancing sowie Home-Office schlagen der Gesellschaft auf die Psyche. Die '
             'Regierungen setzten daher stark auf die Impfungen, um die anderen Massnahmen schrittweise lockern '
             'zu können. Was rückblickend die effizientesten Massnahmen waren, wird am Ende des Artikels erläutert.')
 
@@ -157,11 +157,11 @@ st.markdown('Wie grausam der Virus ist, hörte man täglich in den Nachrichten. 
             'auswählen und es werden Ihnen die Todesfälle pro Altersgruppe ab 2021 bis '
             'heute dargestellt. Dunklere Felder bedeuten eine höhere Anzahl von COVID-19-bedingten '
             'Todesfällen. '
-            'In der Schweiz starben hauptäschlich ältere Menschen an COVID-19. '
+            'In der Schweiz starben hauptsächlich ältere Menschen an COVID-19. '
             'Dank der verbesserten Massnahmen und den Impfungen konnten die Todeszahlen'
             ' reduziert werden. '
-            'Deutschland weist einen ähnlichen Verlauf wie die Schweiz auf. In Österreich hingegen'
-            ' steigen die Todesfälle im Laufe der Jahre. Aber auch hier sind hauptsächlich ältere'
+            'Deutschland weiste einen ähnlichen Verlauf wie die Schweiz auf. In Österreich hingegen'
+            ' stiegen die Todesfälle im Laufe der Jahre. Aber auch hier waren hauptsächlich ältere'
             ' Menschen betroffen.'
             )
 
@@ -362,7 +362,7 @@ Können Sie einen Unterschied zwischen den Kantonen bzw. Bundesländern ausmache
 Gibt es einen Unterschied zwischen dem Land und der Stadt?')
 
 st.markdown('In den Karten sind die Todesfälle, die Bevölkerungsanzahl, und die Sterberate der einzelnen Kantonen bzw. Bundesländern in den Tooltips ersichtlich. '
-            'Durch einen Klick auf die Karte, werden die Tooltips automatisch angezeigt.'
+            'Durch einen Klick auf die Karte werden die Tooltips automatisch angezeigt.'
             )
 
 
@@ -622,7 +622,7 @@ st.markdown('Anfangs 2021, ungefähr ein Jahr nach Ausbruch des Virus, wurden di
             'hauptsächlich daher, da zuerst die älteren und gefärdeteren Generationen geimpft wurden. '
             'In allen drei Ländern stieg die Anzahl der Impfungen anschliessend stark an. Im Sommer 2021 wurden in '
             'der Schweiz die meisten Impfungen aufgezeichnet. In Österreich hingegen im ersten Quartal '
-            '2022, als die Fallzahlen erneut stark anstiegen (Vergleich Grafik 1). In Deutschland stagnieren '
+            '2022 als die Fallzahlen erneut stark anstiegen (Vergleich Grafik 1). In Deutschland stagnieren '
             'die Impfzahlen seit Beginn des Jahres 2022.')
             
 st.markdown('Die folgende Grafik bezieht sich ausschliesslich auf die ersten Impfungen (ohne Booster etc.).')
@@ -1033,10 +1033,10 @@ st.markdown(
     'sind die effektivsten Massnahmen Lockdowns und Schulschliessungen. Da sich dies allerdings negativ auf die '
     'Wirtschaft ausübt, wird das wenn möglich vermieden. Eine weitere effiziente Massnahme ist das '
     'Tragen von Masken, da das Infektionsgeschehen dadurch effektiv beeinflusst werden konnte. '
-    'Weitere sinnvolle Massnahmen sind Social Distancing und Homeoffice.')
+    'Ausserdem zeigten sich Social Distancing und Homeoffice ebenfalls als effizient.')
 st.markdown( 'Gemäss den oberen Auswertungen werden die Fallzahlen voraussichtlich in den Wintermonaten '
     'erneut steigen, da die Gesellschaft in der kalten Saison anfälliger auf Krankheiten ist und sich öfters in geschlossenen Innenräumen '
-    'aufhält. Durch Home-Office Pläne, Einhaltung des Abstands (ein bis zwei Metern) sowie der Hygienemassnahmen sollten die Fallzahlen gebändigt '
+    'aufhält. Durch Home-Office-Pläne, Einhaltung des Abstands (ein bis zwei Metern) sowie der Hygienemassnahmen sollten die Fallzahlen gebändigt '
     'werden können. Auch das freiwillige Tragen einer Maske wird von Ärzten empfohlen. ')
 
 # Quellenangabe
