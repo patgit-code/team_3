@@ -643,7 +643,7 @@ de_vacc = pd.read_csv('data//Aktuell_Deutschland_Bundeslaender_COVID-19-Impfunge
 de_vacc = de_vacc[de_vacc['Impfserie'] == 1]
 # Sortieren Sie den DataFrame nach dem Impfdatum
 de_vacc_sorted = de_vacc.sort_values('Impfdatum')
-# Gruppieren Sie den DataFrame nach dem Impfdatum und summiere die Anzahl
+# Gruppiere den DataFrame nach dem Impfdatum und summiere die Anzahl
 de_vacc_grouped = de_vacc_sorted.groupby('Impfdatum')['Anzahl'].sum().reset_index()
 # Berechne die kumulierten Impfungen pro Tag
 de_vacc_grouped['kumulierte Impfungen'] = de_vacc_grouped['Anzahl'].cumsum()
