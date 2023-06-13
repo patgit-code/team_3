@@ -36,20 +36,17 @@ st.subheader(
 
 # Umstände
 st.title('COVID-19 Fälle in der Schweiz, Deutschland und Österreich')
+#st.subheader('')
 
-# Erläuterung zur Grafik
+#Erläuterung zur Grafik
 st.markdown("Die Schweiz implementierte im Vergleich zu Österreich und Deutschland als letzte "
         "erste Coronamassnahmen. Auch im Verlaufe der Pandemie waren die Massnahmen "
         "verglichen mit den Nachbarsländern stets weniger streng. In Betracht auf "
         "die Fallzahlen, war die Schweiz auf Platz zwei mit durchschnittlich 50'573 Fällen "
         "auf 100'000 Einwohner.")
-st.markdown("Anfang des Jahres 2022 gab es in allen drei Ländern eine drastische Steigung der "
-        "Fallzahlen. Dies vor allem deswegen, weil die Massnahmen gelockert wurden und " 
-        "die Bevölkerung fahrlässiger handelte. Da zu diesem Zeitpunkt die Impfungen schon " 
-        "recht fortgeschritten waren, nahm man die Situation etwas lockerer.")
+st.markdown("Anfang des Jahres 2022 gab es in allen drei Ländern einen drastischen Anstieg der "
+        "Fallzahlen, welcher sich innerhalb des letzte Jahres allerdings wieder etwas einpendelte.")
 
-
-# TODO Get Info how many tests were made at start and end of pandemic
 
 # Schweiz
 
@@ -146,9 +143,6 @@ script, div = components(p)
 # korrekte Darstellung auf Smartphone sicherstellen
 p.toolbar.active_drag = None
 st.bokeh_chart(p, use_container_width=True)
-
-# Quellenangabe
-st.caption('Datenquelle: World Health Organization (WHO), Stand: 26.04.2023')
 
 
 st.header('Die tödliche Wirkung von COVID-19')
@@ -946,6 +940,7 @@ if selected_country == 'Schweiz':
     ax.set_xticklabels([str(int(year)) for year in years_ch.flatten()])
     ax.set_ylim(bottom=0)
     ax.grid(True)
+    ax.set_axisbelow(True)
     p.grid.grid_line_color = 'gray'
     p.grid.grid_line_alpha = 0.5
     p.legend.border_line_color = 'black'  # Farbe der Umrandung
@@ -985,6 +980,11 @@ elif selected_country == 'Deutschland':
     ax.set_xticks(years_de.flatten())
     ax.set_xticklabels([str(int(year)) for year in years_de.flatten()])
     ax.set_ylim(bottom=0)
+    ax.set_ylim(bottom=0)
+    ax.grid(True)
+    ax.set_axisbelow(True)
+    p.grid.grid_line_color = 'gray'
+    p.grid.grid_line_alpha = 0.5
     st.pyplot(fig)
 
     # Quellenangabe
@@ -1016,10 +1016,12 @@ elif selected_country == 'Österreich':
     ax.set_xticks(years_at.flatten())
     ax.set_xticklabels([str(int(year)) for year in years_at.flatten()])
     ax.set_ylim(bottom=0)
+    ax.set_ylim(bottom=0)
+    ax.grid(True)
+    ax.set_axisbelow(True)
+    p.grid.grid_line_color = 'gray'
+    p.grid.grid_line_alpha = 0.5
     st.pyplot(fig)
-
-    # Quellenangabe
-    st.caption('Datenquelle: World Health Organization (WHO), Stand: 26.04.2023')
 
 st.write("Trendanalyse:", trend)
 
