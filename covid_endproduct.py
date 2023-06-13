@@ -118,6 +118,9 @@ austria_source = ColumnDataSource(data=austria_quarterly)
 p = figure(x_axis_type='datetime', title='COVID-19 Fälle in der Schweiz, Deutschland und Österreich',
            x_axis_label='Datum', y_axis_label="Anzahl der COVID-Fälle pro 100'000 Einwohner")
 
+p.xaxis.axis_label_text_font_style = 'normal'
+p.yaxis.axis_label_text_font_style = 'normal'
+
 # Lines for Switzerland
 switzerland_line = p.line(x='date', y='Cumulative_cases', source=switzerland_source, color='tomato', line_width=2.5,
                           legend_label='Schweiz')
@@ -639,6 +642,8 @@ source_austria = ColumnDataSource(data=dict(date=total_vaccinations.index, impfu
 
 # Figure-Objekt erstellen
 p = figure(x_axis_type='datetime', y_axis_type='auto', plot_width=600, plot_height=600, title="COVID-19 Impfungen pro 100'000 Einwohner")
+p.xaxis.axis_label_text_font_style = 'normal'
+p.yaxis.axis_label_text_font_style = 'normal'
 
 # Entfernen der Scientific (e+...) Formatierung auf der Y-Achse
 p.left[0].formatter.use_scientific = False
