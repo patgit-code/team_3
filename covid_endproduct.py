@@ -535,7 +535,7 @@ def create_map_germany():
     st.bokeh_chart(bokeh_germany)
 
     # Quellenangabe
-    st.caption('Todesfälle Datenquelle: Statista, Stand: 25.01.2023')
+    st.caption('Todesfälle Datenquelle: Statista, Robert Koch-Institut (RKI), Stand: 25.01.2023')
     st.caption('Bevölkerung Datenquelle: Destatis, Stand: 31.12.2021')
 
 # Österreich
@@ -599,7 +599,7 @@ def create_map_austria():
     st.bokeh_chart(bokeh_austria)
 
     # Quellenangabe
-    st.caption('Todesfälle Datenquelle: Statista, Stand: 31.05.2023')
+    st.caption('Todesfälle Datenquelle: Statista, Bundesministerium für Soziales, Gesundheit, Pflege und Konsumentenschutz, Stand: 31.05.2023')
     st.caption('Bevölkerung Datenquelle: Google, Stand: 2022/2023')
 
 # Dropdown-Widget für Länderauswahl erstellen
@@ -748,7 +748,7 @@ def create_vaccinetype_bar_switzerland():
     st.pyplot(fig)
 
     # Quellenangabe
-    st.caption('Datenquelle: , Stand:')
+    st.caption('Datenquelle: Bundesamt für Gesundheit (BAG), Stand: 2023')
 
 # Deutschland
 
@@ -783,7 +783,7 @@ def create_vaccinetype_bar_germany():
     st.pyplot(fig)
 
     # Quellenangabe
-    st.caption('Datenquelle: , Stand:')
+    st.caption('Datenquelle: Statista, Robert Koch-Institut (RKI), Stand: 27.05.2022')
 
 # Österreich
 #st.subheader('Österreich')
@@ -821,7 +821,7 @@ def create_vaccinetype_bar_austria():
     st.pyplot(fig)
 
     # Quellenangabe
-    st.caption('Datenquelle: , Stand:')
+    st.caption('Datenquelle: Österreichisches COVID-19 Open Data Informationsportal, Stand: 17.05.2023')
 
 country_dropdown_vacctypebar = st.selectbox(
     'Wählen Sie ein Land aus: ',
@@ -946,7 +946,7 @@ if selected_country == 'Schweiz':
     st.pyplot(fig)
 
     # Quellenangabe
-    st.caption('Datenquelle: , Stand:')
+    st.caption('Datenquelle: World Health Organization (WHO), Stand: 26.04.2023')
 
 elif selected_country == 'Deutschland':
 
@@ -979,7 +979,7 @@ elif selected_country == 'Deutschland':
     st.pyplot(fig)
 
     # Quellenangabe
-    st.caption('Datenquelle: , Stand:')
+    st.caption('Datenquelle: World Health Organization (WHO), Stand: 26.04.2023')
 
 elif selected_country == 'Österreich':
     # Lineare Regression
@@ -1010,7 +1010,7 @@ elif selected_country == 'Österreich':
     st.pyplot(fig)
 
     # Quellenangabe
-    st.caption('Datenquelle: , Stand:')
+    st.caption('Datenquelle: World Health Organization (WHO), Stand: 26.04.2023')
 
 st.write("Trendanalyse:", trend)
 
