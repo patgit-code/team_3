@@ -891,6 +891,7 @@ if selected_country == 'Schweiz':
     ax.set_xticklabels([str(int(year)) for year in years_ch.flatten()])
     ax.set_ylim(bottom=0)
     ax.grid(True)
+    ax.set_axisbelow(True)
     p.grid.grid_line_color = 'gray'
     p.grid.grid_line_alpha = 0.5
     p.legend.border_line_color = 'black'  # Farbe der Umrandung
@@ -927,6 +928,11 @@ elif selected_country == 'Deutschland':
     ax.set_xticks(years_de.flatten())
     ax.set_xticklabels([str(int(year)) for year in years_de.flatten()])
     ax.set_ylim(bottom=0)
+    ax.set_ylim(bottom=0)
+    ax.grid(True)
+    ax.set_axisbelow(True)
+    p.grid.grid_line_color = 'gray'
+    p.grid.grid_line_alpha = 0.5
     st.pyplot(fig)
 
 elif selected_country == 'Österreich':
@@ -955,6 +961,11 @@ elif selected_country == 'Österreich':
     ax.set_xticks(years_at.flatten())
     ax.set_xticklabels([str(int(year)) for year in years_at.flatten()])
     ax.set_ylim(bottom=0)
+    ax.set_ylim(bottom=0)
+    ax.grid(True)
+    ax.set_axisbelow(True)
+    p.grid.grid_line_color = 'gray'
+    p.grid.grid_line_alpha = 0.5
     st.pyplot(fig)
 
 st.write("Berechnungsgrundlage / Trendanalyse:", trend)
