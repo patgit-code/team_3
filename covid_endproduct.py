@@ -824,23 +824,15 @@ switzerland['Date_reported'] = switzerland['Date_reported'].astype(str)
 switzerland['year'] = switzerland['Date_reported'].str[0:4]
 year_ch = switzerland.groupby('year')['New_cases'].sum()
 
-# Daten von years
+# Daten von years_ch
 years_ch = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1) # von year_ch
 cases_ch = np.array([451142, 883690, 3045631, 20909])
 
-# Lineare Regression
-regressor = LinearRegression()
-regressor.fit(years_ch, cases_ch)
-
 #Deutschland
 
-# Daten
+# Daten DE
 years_de = np.array([2020, 2021, 2022, 2023]).reshape(-1, 1)
 cases_de = np.array([1734444, 5430604, 30220321, 1011090])
-
-# Lineare Regression
-regressor = LinearRegression()
-regressor.fit(years_de, cases_de)
 
 
 #Österreich
@@ -849,21 +841,6 @@ austria_process_data['Date_reported'] = austria_process_data['Date_reported'].as
 austria_process_data['year'] = austria_process_data['Date_reported'].str[0:4]
 year_at = austria_process_data.groupby('year')['New_cases'].sum()
 
-
-#TODO DROPDOWN EINFÜGEN FÜR AUSBLICK
-
-# Funktion zur Durchführung der linearen Regression und Prognose
-def perform_linear_regression(years, cases, future_year):
-    regressor = LinearRegression()
-    regressor.fit(years, cases)
-    
-    slope = regressor.coef_[0]
-    intercept = regressor.intercept_
-    trend = f"y = {slope:.2f}x + {intercept:.2f}"
-    
-    future_cases = regressor.predict([[future_year]])
-    
-    return trend, future_cases
 
 # Schweiz
 
@@ -895,7 +872,20 @@ selected_country = st.selectbox('Wählen Sie ein Land aus:', ['Schweiz', 'Deutsc
 
 # Ausblick basierend auf dem ausgewählten Land
 if selected_country == 'Schweiz':
-    trend, future_cases = perform_linear_regression(years_ch, cases_ch, 2024)
+    # Lineare Regression
+    regressor = LinearRegression()
+    regressor.fit(years_ch, cases_ch)
+
+    # Trendanalyse
+    slope = regressor.coef_[0]
+    intercept = regressor.intercept_
+    trend = f"y = {slope:.2f}x + {intercept:.2f}"
+
+    # Prognose erstellen
+    future_year = np.array([2024]).reshape(-1, 1)
+    future_cases = regressor.predict(future_year)
+
+    # Visualisierung erstellen
     fig, ax = plt.subplots()
     ax.scatter(years_ch, cases_ch, color='orange', s=50, label='Bisherige Zahlen')
     ax.plot(years_ch, regressor.predict(years_ch), color='tomato', linewidth=2.5, label='Lineare Regression')
@@ -911,7 +901,21 @@ if selected_country == 'Schweiz':
     st.pyplot(fig)
 
 elif selected_country == 'Deutschland':
-    trend, future_cases = perform_linear_regression(years_de, cases_de, 2024)
+
+    # Lineare Regression
+    regressor = LinearRegression()
+    regressor.fit(years_de, cases_de)
+
+    # Trendanalyse
+    slope = regressor.coef_[0]
+    intercept = regressor.intercept_
+    trend = f"y = {slope:.2f}x + {intercept:.2f}"
+
+    # Prognose erstellen
+    future_year = np.array([2024]).reshape(-1, 1)
+    future_cases = regressor.predict(future_year)
+
+    # Visualisierung erstellen
     fig, ax = plt.subplots()
     ax.scatter(years_de, cases_de, color='orange', s=50, label='Bisherige Zahlen')
     ax.plot(years_de, regressor.predict(years_de), color='tomato', linewidth=2.5, label='Lineare Regression')
@@ -927,7 +931,19 @@ elif selected_country == 'Deutschland':
     st.pyplot(fig)
 
 elif selected_country == 'Österreich':
-    trend, future_cases = perform_linear_regression(years_at, cases_at, 2024)
+    # Lineare Regression
+    regressor = LinearRegression()
+    regressor.fit(years_at, cases_at)
+
+    # Trendanalyse
+    slope = regressor.coef_[0]
+    intercept = regressor.intercept_
+    trend = f"y = {slope:.2f}x + {intercept:.2f}"
+
+    # Prognose erstellen
+    future_year = np.array([2024]).reshape(-1, 1)
+    future_cases = regressor.predict(future_year)
+
     fig, ax = plt.subplots()
     ax.scatter(years_at, cases_at, color='orange', s=50, label='Bisherige Zahlen')
     ax.plot(years_at, regressor.predict(years_at), color='tomato', linewidth=2.5, label='Lineare Regression')
@@ -955,3 +971,5 @@ st.markdown(
 #TODO - Vorschläge für effizientere Massnahmen
 
 st.caption('Autoren: Céline Felix, Katharina Azevedo, Kirishana Kiritharan, Patrick Häusermann')
+st.caption('Veröffentlichung Artikel: Juni 2023')
+st.caption('Daten bis April 2023')
