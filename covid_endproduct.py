@@ -472,7 +472,6 @@ def create_map_switzerland():
     st.caption('Bevölkerung Datenquelle: Statista, Bundesamt für Statistik (Schweiz), Stand: 31.12.2021')
 
 # Deutschland
-#st.subheader('Deutschland')
 
 def create_map_germany():
 
@@ -1048,3 +1047,7 @@ st.caption("Für weitere länderspezifische Informationen können folgende Webse
 st.caption('Autoren: Céline Felix, Katharina Azevedo, Kirishana Kiritharan, Patrick Häusermann')
 st.caption('Veröffentlichung Artikel: Juni 2023')
 
+st.caption("Für weitere länderspezifische Informationen besuchen Sie: \
+            Schweiz: Bundesamt für Gesundheit (BAG) \
+            Deutschland:  Robert Koch-Institut (RKI) \
+            Österreich:  Bundesministerium für Soziales, Gesundheit, Pflege und Konsumentenschutz (BMSGPK)")
