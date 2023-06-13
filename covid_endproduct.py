@@ -39,14 +39,12 @@ st.title('COVID-19 Fälle in der Schweiz, Deutschland und Österreich')
 #st.subheader('')
 
 #Erläuterung zur Grafik
-st.markdown("Die Schweiz implementierte im Vergleich zu Österreich und Deutschland als letzte "
-        "erste Coronamassnahmen. Auch im Verlaufe der Pandemie waren die Massnahmen "
-        "verglichen mit den Nachbarsländern stets weniger streng. In Betracht auf "
-        "die Fallzahlen, war die Schweiz auf Platz zwei mit durchschnittlich 50'573 Fällen "
-        "auf 100'000 Einwohner.")
-st.markdown("Anfang des Jahres 2022 gab es in allen drei Ländern einen drastischen Anstieg der "
-        "Fallzahlen, welcher sich innerhalb des letzte Jahres allerdings wieder etwas einpendelte.")
-
+st.markdown("Die Pandemie erreichte Europa im Februar 2020. Kurz darauf wurden die "
+            "ersten Fälle entdeckt und im März 2020 die ersten Massnahmen implementiert. "
+            "Trotz der ergriffenen Massnahmen, stiegen die Zahlen weiterhin.  "
+            "Vor allem Anfang des Jahres 2022 gab es einen drastischen Anstieg der Zahlen. \
+            In Betracht auf die gesamten Fallzahlen war die Schweiz auf Platz zwei mit bis dato"
+             " 50'573 Fällen auf 100'000 Einwohner.")
 
 # Schweiz
 
@@ -144,22 +142,28 @@ script, div = components(p)
 p.toolbar.active_drag = None
 st.bokeh_chart(p, use_container_width=True)
 
+st.header('Massnahmen')
+st.markdown('Im Verlaufe der Pandemie mussten die Massnahmen immer wieder angepasst werden, '
+            'um die effizientesten zu finden. Ein Lockdown beispielsweise ist wirtschaftlich gesehen sehr '
+            'schelcht und Social Distancing sowie Home-Office schlagen der Gesellschaft auf die Psyche. Die '
+            'Regierungen setzten daher stark auf die Impfungen, um die anderen Massnahmen schrittweise lockern '
+            'zu können.')
 
 st.header('Die tödliche Wirkung von COVID-19')
-st.subheader('Ein Blick auf Quartal und Altersgruppe in der Schweiz, Deutschland und Österreich')
-
-st.markdown('In den Heatmaps werden die Todesfälle nach Quartal und Altersgruppe in der Schweiz, '
-        'Deutschland und Österreich dargestellt. Mittels Dropdown-Menü können Sie '
-        'das gewünschte Land anwählen und es werden die Todesfälle pro Altersgruppe ab 2021 bis '
-        'heute dargestellt. Dunklere Felder bedeuten eine höhere Anzahl von COVID-19-bedingten '
-        'Todesfällen. '
-        'In der Schweiz, starben hauptäschlich ältere Menschen an COVID-19. '
-        'Dank der implementierten Massnahmen und den Impfungen konnten die Todeszahlen'
-        ' reduziert werden. '
-        'Deutschland weist einen ähnlichen Verlauf auf wie die Schweiz. In Österreich hingegen'
-        ' steigen die Todesfälle im Laufe der Jahre. Aber auch hier sind hauptsächlich ältere'
-        ' Menschen betroffen.'
-        )
+#st.subheader('Ein Blick auf Quartal und Altersgruppe in der Schweiz, Deutschland und Österreich')
+st.markdown('Wie grausam der Virus ist, hörte man täglich in den Nachrichten. Die folgenden '
+            'Heatmaps visualisieren die Todesfälle nach Quartal und Altersgruppe. Mittels '
+            'Dropdown-Menü können Sie zwischen den Ländern Schweiz, Österreich und Deutschland '
+            'auswählen und es werden Ihnen die Todesfälle pro Altersgruppe ab 2021 bis '
+            'heute dargestellt. Dunklere Felder bedeuten eine höhere Anzahl von COVID-19-bedingten '
+            'Todesfällen. '
+            'In der Schweiz starben hauptäschlich ältere Menschen an COVID-19. '
+            'Dank der verbesserten Massnahmen und den Impfungen konnten die Todeszahlen'
+            ' reduziert werden. '
+            'Deutschland weist einen ähnlichen Verlauf wie die Schweiz auf. In Österreich hingegen'
+            ' steigen die Todesfälle im Laufe der Jahre. Aber auch hier sind hauptsächlich ältere'
+            ' Menschen betroffen.'
+            )
 
 # Funktionen zur Erstellung der Heatmaps
 def create_heatmap_switzerland():
@@ -352,8 +356,8 @@ on_country_dropdown_change(country_dropdown_heatmap)
 
 
 
-st.header('Geografische Verteilung')
-st.subheader('In den folgenden Grafiken sind die Todeszahlen pro Kanton, resp. Bundesland ersichtlich. \
+st.header('Geografische Verteilung der Todesfälle')
+st.markdown('In den folgenden Grafiken sind die Todeszahlen pro Kanton, resp. pro Bundesland ersichtlich. \
 Können Sie einen Unterschied zwischen den Kantonen bzw. Bundesländern sehen? \
 Gibt es einen Unterschied zwischen dem Land und der Stadt?')
 
@@ -613,9 +617,17 @@ def on_country_dropdown_map_change(country):
 
 on_country_dropdown_map_change(country_dropdown_map)
 
-st.header('Impfungen')
+st.header('Impfungen im Vergleich')
 
-st.markdown('In allen drei Ländern stieg die Anzahl der Impfungen stark an. Die folgende Grafik bezieht sich ausschliesselich auf die ersten Impfungen (ohne Booster etc.).')
+st.markdown('Anfangs 2021, ungefähr ein Jahr nach Ausbruch des Virus, wurden die ersten Impfungen durchgeführt. '
+            'Wie man den folgenden Grafik entnehmen kann, verhielten sich die Kurven zu beginn etwas verhaltener. Dies '
+            'hauptsächlich daher, da zuerst die älteren und gefärdeteren Generationen geimpft wurden. '
+            'In allen drei Ländern stieg die Anzahl der Impfungen anschliessend stark an. Im Sommer 2021 wurde in '
+            'der Schweiz die meisten Impfungen aufgezeichnet. In Österreich hingegen im ersten Quaral '
+            '2022, als die Fallzahlen erneut stark anstiegen (Vergleich Grafik 1). In Deutschland stagnieren '
+            'die Impfzahlen seit Beginn des Jahres 2022.')
+            
+st.markdown('Die folgende Grafik bezieht sich ausschliesselich auf die ersten Impfungen (ohne Booster etc.).')
 
 
 #Schweiz
@@ -694,14 +706,14 @@ st.caption('Österreich Datenquelle: Epidemiologischen Meldesystem (EMS), Stand:
 
 st.header('Impfstoffe im Vergleich')
 
-st.markdown('Obwohl alle drei Länder täglich Impfungen durchführte, setzte jedes Land auf andere Impfstoffe. ' 
+st.markdown('Obwohl alle drei Länder täglich Impfungen durchführten, setzte jedes Land auf andere Impfstoffe. ' 
             'Ein Grund, weshalb bestimmte Impfstoffe mehr geimpft wurden, war das Zulassungsdatum. '
             'So war Novavax beispielsweise in der EU ab dem 4. August 2021 und in der Schweiz erst ab dem 13. April 2022 zugelassen. '
-            "Am meisten wurde der Pfizer Biontech Impfstoff, mit 137'755'538 Impfdosen über alle drei Länder geimpft. "
+            "Am meisten wurde der Pfizer Biontech Impfstoff mit 137'755'538 Impfdosen über alle drei Länder hinaus geimpft. "
             "Pfizer Biontech war der erste Impfstoff, der in der EU und der Schweiz zugelassen wurde."
             )
-st.markdown('Bitte beachten Sie, dass die Anzahl der Impfdosen an der gesamten Bevölkerungszahl gemessen wird und die Zahlen der drei Grafiken '
-            'somit nicht direkt miteinander vergleichbar sind.')
+st.markdown('In den folgenden Grafiken wird die Anzahl der Impfdosen an der gesamten Bevölkerungszahl gemessen und die Zahlen der drei Grafiken '
+            'sind somit nicht direkt miteinander vergleichbar.')
 
 # Schweiz
 vaccine_swiss = pd.read_csv('data//COVID19VaccPersons_AKL10_vaccine_w.csv')
@@ -836,10 +848,10 @@ on_country_dropdown_vacctypebar_change(country_dropdown_vacctypebar)
 
 #Ausblick
 st.header('Ausblick der Fallzahlen')
-st.markdown("Die folgenden Grafiken zeigen den Ausblick der Fallzahlen im Jahr 2024."
-            "Die Trendanalysen wurden anhand der bisher gesammelten Daten erstellt und sind somit nur eine Annahme der Fallzahlen. "
+st.markdown("Die folgenden Grafiken zeigen den Ausblick der Fallzahlen im Jahr 2024. "
+            "Die Trendanalysen wurden anhand der bisher gesammelten Daten erstellt und die Prognosen der Fallzahlen sind somit nur eine Annahme. "
             "Die tatsächlichen Fallzahlen können sich anders entwickeln.")
-st.write("Die Vorhersage wurde auf Basis der Bevölkerungsanzahl des jeweiligen Landes gemessen. Ein direkter Vergleich ist somit nicht möglich.")
+st.write("Die Vorhersage wurde auf Basis der Bevölkerungsanzahl des jeweiligen Landes gemessen. Ein direkter Vergleich der Grafiken ist somit nicht möglich.")
 
 #Schweiz
 
@@ -867,20 +879,6 @@ cases_de = np.array([1734444, 5430604, 30220321, 1011090])
 austria_process_data['Date_reported'] = austria_process_data['Date_reported'].astype(str)
 austria_process_data['year'] = austria_process_data['Date_reported'].str[0:4]
 year_at = austria_process_data.groupby('year')['New_cases'].sum()
-
-
-# Funktion zur Durchführung der linearen Regression und Prognose
-def perform_linear_regression(years, cases, future_year):
-    regressor = LinearRegression()
-    regressor.fit(years, cases)
-    
-    slope = regressor.coef_[0]
-    intercept = regressor.intercept_
-    trend = f"y = {slope:.2f}x + {intercept:.2f}"
-    
-    future_cases = regressor.predict([[future_year]])
-    
-    return trend, future_cases
 
 # Schweiz
 
@@ -1024,23 +1022,29 @@ elif selected_country == 'Österreich':
     p.grid.grid_line_alpha = 0.5
     st.pyplot(fig)
 
-st.write("Trendanalyse:", trend)
+st.write("Berechnungsgrundlage / Trendanalyse:", trend)
 
 # Fazit
 st.header('Fazit')
 st.markdown(
     'Durch die gewonnenen Erkenntnisse kann die Bevölkerung beruhigt werden. Auch wenn die Fallzahlen im nächsten Jahr nochmals steigen sollten, '
-    'ist jedes Land mit Impfdosen und den passenden Massnahmen vorbereitet. '
-    'Mit dem analytischen Rückblick auf die vergangenen Jahre können bei zukünftigen Pandemien die besten Massnahmen ergriffen werden, welche '
-    'die Gesundheit der Bevölkerung sicherstellt und die wirtschaftlichen Leistungen beibehält.')
+    'ist jedes Land mit Impfdosen und den passenden Massnahmen vorbereitet. Die Impfungen werden fortlaufend weiterentwickelt und bereits ein '
+    'Grossteil der Bevölkerungen ist geimpft oder genesen und besitzt somit Antikörper des Virus. '
+    'Durch die Impfung wird das Risiko einer schweren COVID-19-Erkrankung reduziert und die Immunität aufgebaut. Dadurch ist man auch auf Varianten des Virus weniger anfällig. '
+    'Gemäss einer Studie des Eidgenössischen Departements für Wirtschaft, Bildung und Forschung (WBF) '
+    'sind die effektivsten Massnahmen Lockdowns und Schulschliessungen. Da sich dies allerdings negativ auf die '
+    'Wirtschaft ausübt, wird das wenn möglich vermieden. Eine weitere effiziente Massnahme ist das '
+    'Tragen von Masken, da das Infektionsgeschehen dadurch effektiv beeinflusst wurden konnte. '
+    'Weitere sinnvolle Massnahmen sind Social Distancing und Homeoffice.')
+st.markdown( 'Gemäss den oberen Auswertungen werden die Fallzahlen voraussichtlich in den Wintermonaten '
+    'erneut steigen, da die Gesellschaft in der kalten Saison anfälliger auf Krankheiten ist und uns sich öfters in geschlossenen Innenräumen '
+    'aufhält. Durch Home-Office Pläne, Einhaltung des Abstands (ein bis zwei Metern) sowie der Hygienemassnahmen sollten die Fallzahlen gebändigt '
+    'werden können. Auch das freiwille Tragen einer Maske wird von Ärzten empfohlen. ')
 
-#TODO - Vorschläge für effizientere Massnahmen
+
+st.caption("Für weitere länderspezifische Informationen können folgende Webseiten aufgesucht werden: \
+            Schweiz: Bundesamt für Gesundheit (BAG),  Deutschland:  Robert Koch-Institut (RKI), Österreich:  Bundesministerium für Soziales, Gesundheit, Pflege und Konsumentenschutz (BMSGPK)")
 
 st.caption('Autoren: Céline Felix, Katharina Azevedo, Kirishana Kiritharan, Patrick Häusermann')
 st.caption('Veröffentlichung Artikel: Juni 2023')
-st.caption('Daten bis April 2023')
 
-st.caption("Für weitere länderspezifische Informationen besuchen Sie: \
-            Schweiz: Bundesamt für Gesundheit (BAG) \
-            Deutschland:  Robert Koch-Institut (RKI) \
-            Österreich:  Bundesministerium für Soziales, Gesundheit, Pflege und Konsumentenschutz (BMSGPK)")
